@@ -256,11 +256,11 @@ namespace EML
                     }
             }
             #endregion
-            /// <summary>Create a new instance of the PrecisionExponent struct.</summary>
-            /// <param name="inputValue">The value that will be processed in the PrecisionExponent.</param>
-            /// <param name="inputExponent">The exponent that will be processed in the PrecisionExponent.</param>
-            /// <param name="value">The output value as changed in the PrecisionExponent.</param>
-            /// <param name="exponent">The output exponent as changed in the PrecisionExponent.</param>
+            /// <summary>Sets the parsed values as they are supposed to be in the <see cref="PrecisionExponent"/> struct and returns them.</summary>
+            /// <param name="inputValue">The value that will be processed in the <see cref="PrecisionExponent"/>.</param>
+            /// <param name="inputExponent">The exponent that will be processed in the <see cref="PrecisionExponent"/>.</param>
+            /// <param name="value">The output value as changed in the <see cref="PrecisionExponent"/>.</param>
+            /// <param name="exponent">The output exponent as changed in the <see cref="PrecisionExponent"/>.</param>
             static void GetPrecisionExponentInfo(decimal inputValue, BigInteger inputExponent, out decimal value, out BigInteger exponent)
             {
                 value = inputValue;
@@ -276,6 +276,25 @@ namespace EML
                     {
                         value *= 10;
                         exponent--;
+                    }
+            }
+            /// <summary>Returns a new <see cref="PrecisionExponent"/> object with the proper values.</summary>
+            /// <param name="input">The <see cref="PrecisionExponent"/> to get the info from.</param>
+            /// <param name="output">The <see cref="PrecisionExponent"/> that will be changed.</param>
+            static void GetPrecisionExponentInfo(PrecisionExponent input, out PrecisionExponent output)
+            {
+                output = input;
+                if (output.Value >= 10)
+                    while (output.Value >= 10)
+                    {
+                        output.Value /= 10;
+                        output.Exponent++;
+                    }
+                else if (output.Value < 1)
+                    while (output.Value < 1)
+                    {
+                        output.Value *= 10;
+                        output.Exponent--;
                     }
             }
             #region Operators
@@ -351,6 +370,23 @@ namespace EML
             {
                 return left.Exponent != right.Exponent && left.Value != right.Value;
             }
+            #endregion
+
+            #region Operations
+            public static PrecisionExponent Power(PrecisionExponent p, double power)
+            {
+                PrecisionExponent result = p;
+                result.Value = (decimal)Math.Pow((double)result.Value, power);
+                result.Value *= (decimal)Math.Pow(10, power - (int)power);
+                result.Exponent *= (int)power;
+                GetPrecisionExponentInfo(result, out PrecisionExponent res);
+                return res;
+            }
+            public static PrecisionExponent Reverse(PrecisionExponent p) => One / p;
+            #endregion
+            #region Constant Fields
+            public static PrecisionExponent Zero { get { return new PrecisionExponent(0); } }
+            public static PrecisionExponent One { get { return new PrecisionExponent(1); } }
             #endregion
         }
     }
