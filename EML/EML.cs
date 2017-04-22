@@ -373,6 +373,9 @@ namespace EML
             #endregion
 
             #region Operations
+            /// <summary>Returns the result of the power of a number.</summary>
+            /// <param name="p">The <see cref="PrecisionExponent"/> to elevate to a power.</param>
+            /// <param name="power">The power to elevate the number to.</param>
             public static PrecisionExponent Power(PrecisionExponent p, double power)
             {
                 PrecisionExponent result = p;
@@ -382,10 +385,14 @@ namespace EML
                 GetPrecisionExponentInfo(result, out PrecisionExponent res);
                 return res;
             }
+            /// <summary>Returns one or greater from the value that is specified.</summary>
+            /// <param name="p">The <see cref="PrecisionExponent"/> to examine.</param>
             public static PrecisionExponent Reverse(PrecisionExponent p) => One / p;
             #endregion
             #region Constant Fields
+            /// <summary>Represents a <see cref="PrecisionExponent"/> with the value of zero.</summary>
             public static PrecisionExponent Zero { get { return new PrecisionExponent(0); } }
+            /// <summary>Represents a <see cref="PrecisionExponent"/> with the value of one.</summary>
             public static PrecisionExponent One { get { return new PrecisionExponent(1); } }
             #endregion
         }
