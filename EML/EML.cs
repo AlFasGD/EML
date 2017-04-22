@@ -109,7 +109,7 @@ namespace EML
                 return result;
             }
         }
-        /// <summary>An unlimited integer that is stored as plain text.</summary>
+        /// <summary>An unlimited decimal that is stored as plain text.</summary>
         public struct BigDecimalS
         {
             string Value
