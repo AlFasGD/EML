@@ -280,10 +280,9 @@ namespace EML
             }
             /// <summary>Returns a new <see cref="PrecisionExponent"/> object with the proper values.</summary>
             /// <param name="input">The <see cref="PrecisionExponent"/> to get the info from.</param>
-            /// <param name="output">The <see cref="PrecisionExponent"/> that will be changed.</param>
-            static void GetPrecisionExponentInfo(PrecisionExponent input, out PrecisionExponent output)
+            static PrecisionExponent GetPrecisionExponentInfo(PrecisionExponent input)
             {
-                output = input;
+                PrecisionExponent output = input;
                 if (output.Value >= 10)
                     while (output.Value >= 10)
                     {
@@ -296,6 +295,7 @@ namespace EML
                         output.Value *= 10;
                         output.Exponent--;
                     }
+                return output;
             }
             #region Operators
             /// <summary>Adds the values of the two <see cref="PrecisionExponent"/> objects and returns their sum.</summary>
@@ -304,8 +304,7 @@ namespace EML
                 BigInteger times = right.Exponent - left.Exponent;
                 for (BigInteger i = 1; i < times; i++)
                     right.Value /= 10;
-                PrecisionExponent result = new PrecisionExponent(left.Value + right.Value, left.Exponent);
-                return result;
+                return new PrecisionExponent(left.Value + right.Value, left.Exponent);
             }
             /// <summary>Subtracts the value of the second <see cref="PrecisionExponent"/> object from the value of the first <see cref="PrecisionExponent"/> object and returns their difference.</summary>
             public static PrecisionExponent operator -(PrecisionExponent left, PrecisionExponent right)
@@ -313,25 +312,20 @@ namespace EML
                 BigInteger times = right.Exponent - left.Exponent;
                 for (BigInteger i = 1; i < times; i++)
                     right.Value /= 10;
-                PrecisionExponent result = new PrecisionExponent(left.Value - right.Value, left.Exponent);
-                return result;
+                return new PrecisionExponent(left.Value - right.Value, left.Exponent);
             }
             /// <summary>Multiplies the value of the first <see cref="PrecisionExponent"/> object with the value of the second <see cref="PrecisionExponent"/> object and returns the product.</summary>
-            public static PrecisionExponent operator *(PrecisionExponent left, PrecisionExponent right)
-            {
-                PrecisionExponent result = new PrecisionExponent(left.Value * right.Value, left.Exponent + right.Exponent);
-                return result;
-            }
+            public static PrecisionExponent operator *(PrecisionExponent left, PrecisionExponent right) => new PrecisionExponent(left.Value * right.Value, left.Exponent + right.Exponent);
             /// <summary>Divides the value of the first <see cref="PrecisionExponent"/>object by the value of the second <see cref="PrecisionExponent"/> object and returns the result.</summary>
             public static PrecisionExponent operator /(PrecisionExponent left, PrecisionExponent right)
             {
-                if (right.Value != 0)
-                {
-                    PrecisionExponent result = new PrecisionExponent(left.Value / right.Value, left.Exponent - right.Exponent);
-                    return result;
-                }
+                if (right.Value != 0) return new PrecisionExponent(left.Value / right.Value, left.Exponent - right.Exponent);
                 else throw new DivideByZeroException("Cannot divide by zero.");
             }
+            /// <summary>Adds one to the <see cref="PrecisionExponent"/>.</summary>
+            public static PrecisionExponent operator ++(PrecisionExponent p) => p + One;
+            /// <summary>Subtracts one from the <see cref="PrecisionExponent"/>.</summary>
+            public static PrecisionExponent operator --(PrecisionExponent p) => p - One;
             /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is greater than the value of the second <see cref="PrecisionExponent"/> object.</summary>
             public static bool operator >(PrecisionExponent left, PrecisionExponent right)
             {
@@ -382,12 +376,14 @@ namespace EML
                 result.Value = (decimal)Math.Pow((double)result.Value, power);
                 result.Value *= (decimal)Math.Pow(10, power - (int)power);
                 result.Exponent *= (int)power;
-                GetPrecisionExponentInfo(result, out PrecisionExponent res);
-                return res;
+                return GetPrecisionExponentInfo(result);
             }
+            /// <summary>Reverses the number that is specified.</summary>
+            /// <param name="p">The <see cref="PrecisionExponent"/> to reverse.</param>
+            public static PrecisionExponent Reverse(PrecisionExponent p) => One / p;
             /// <summary>Returns one or greater from the value that is specified.</summary>
             /// <param name="p">The <see cref="PrecisionExponent"/> to examine.</param>
-            public static PrecisionExponent Reverse(PrecisionExponent p) => One / p;
+            public static PrecisionExponent OneOrGreater(PrecisionExponent p) => (p = GetPrecisionExponentInfo(p)).Exponent >= 0 ? p : One;
             #endregion
             #region Constant Fields
             /// <summary>Represents a <see cref="PrecisionExponent"/> with the value of zero.</summary>
