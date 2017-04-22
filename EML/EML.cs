@@ -216,44 +216,22 @@ namespace EML
             BigInteger Exponent { get; set; }
 
             #region Constructors
-            /// <summary>Create a new instance of the PrecisionExponent struct.</summary>
-            /// <param name="value">The value to parse to the PrecisionExponent.</param>
+            /// <summary>Create a new instance of the <see cref="PrecisionExponent"/> struct.</summary>
+            /// <param name="value">The value to parse to the <see cref="PrecisionExponent"/>.</param>
             public PrecisionExponent(decimal value)
             {
-                Value = value;
-                Exponent = 0;
-                if (Value >= 10)
-                    while (Value >= 10)
-                    {
-                        Value /= 10;
-                        Exponent++;
-                    }
-                else if (Value < 1)
-                    while (Value < 1)
-                    {
-                        Value *= 10;
-                        Exponent--;
-                    }
+                GetPrecisionExponentInfo(value, 0, out var v, out var e);
+                Value = v;
+                Exponent = e;
             }
-            /// <summary>Create a new instance of the PrecisionExponent struct.</summary>
-            /// <param name="value">The value to parse to the PrecisionExponent.</param>
-            /// <param name="exponent">The exponent of the value to parse to the PrecisionExponent.</param>
+            /// <summary>Create a new instance of the <see cref="PrecisionExponent"/> struct.</summary>
+            /// <param name="value">The value to parse to the <see cref="PrecisionExponent"/>.</param>
+            /// <param name="exponent">The exponent of the value to parse to the <see cref="PrecisionExponent"/>.</param>
             public PrecisionExponent(decimal value, BigInteger exponent)
             {
-                Value = value;
-                Exponent = exponent;
-                if (Value >= 10)
-                    while (Value >= 10)
-                    {
-                        Value /= 10;
-                        Exponent++;
-                    }
-                else if (Value < 1)
-                    while (Value < 1)
-                    {
-                        Value *= 10;
-                        Exponent--;
-                    }
+                GetPrecisionExponentInfo(value, exponent, out var v, out var e);
+                Value = v;
+                Exponent = e;
             }
             #endregion
             /// <summary>Sets the parsed values as they are supposed to be in the <see cref="PrecisionExponent"/> struct and returns them.</summary>
@@ -366,6 +344,21 @@ namespace EML
             }
             #endregion
 
+            #region Implicit Convertions
+            public static implicit operator PrecisionExponent(byte b) => new PrecisionExponent(b);
+            public static implicit operator PrecisionExponent(sbyte sb) => new PrecisionExponent(sb);
+            public static implicit operator PrecisionExponent(ushort us) => new PrecisionExponent(us);
+            public static implicit operator PrecisionExponent(short s) => new PrecisionExponent(s);
+            public static implicit operator PrecisionExponent(uint ui) => new PrecisionExponent(ui);
+            public static implicit operator PrecisionExponent(int i) => new PrecisionExponent(i);
+            public static implicit operator PrecisionExponent(ulong ul) => new PrecisionExponent(ul);
+            public static implicit operator PrecisionExponent(long l) => new PrecisionExponent(l);
+            public static implicit operator PrecisionExponent(decimal d) => new PrecisionExponent(d);
+            public static implicit operator PrecisionExponent(double d) => new PrecisionExponent((decimal)d);
+            public static implicit operator PrecisionExponent(float f) => new PrecisionExponent((decimal)f);
+            public static implicit operator PrecisionExponent(string s) => new PrecisionExponent(decimal.Parse(s));
+            #endregion
+
             #region Operations
             /// <summary>Returns the result of the power of a number.</summary>
             /// <param name="p">The <see cref="PrecisionExponent"/> to elevate to a power.</param>
@@ -384,6 +377,11 @@ namespace EML
             /// <summary>Returns one or greater from the value that is specified.</summary>
             /// <param name="p">The <see cref="PrecisionExponent"/> to examine.</param>
             public static PrecisionExponent OneOrGreater(PrecisionExponent p) => (p = GetPrecisionExponentInfo(p)).Exponent >= 0 ? p : One;
+            public static PrecisionExponent Arrow(int b, PrecisionExponent arrows, int exponent)
+            {
+                // Implement this shit dammit
+                PrecisionExponent result = b;
+            }
             #endregion
             #region Constant Fields
             /// <summary>Represents a <see cref="PrecisionExponent"/> with the value of zero.</summary>
