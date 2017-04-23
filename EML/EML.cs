@@ -351,14 +351,26 @@ namespace EML
             {
                 if (left.Exponent == right.Exponent)
                     return left.Value >= right.Value;
-                return left.Exponent >= right.Exponent;
+                else
+                {
+                    if (HaveSameSign(left, right))
+                        return left.Exponent >= right.Exponent;
+                    else
+                        return left.Value >= 0;
+                }
             }
             /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is smaller than or equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
             public static bool operator <=(PrecisionExponent left, PrecisionExponent right)
             {
                 if (left.Exponent == right.Exponent)
                     return left.Value <= right.Value;
-                return left.Exponent <= right.Exponent;
+                else
+                {
+                    if (HaveSameSign(left, right))
+                        return left.Exponent <= right.Exponent;
+                    else
+                        return left.Value <= 0;
+                }
             }
             /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
             public static bool operator ==(PrecisionExponent left, PrecisionExponent right)
