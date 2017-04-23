@@ -325,14 +325,26 @@ namespace EML
             {
                 if (left.Exponent == right.Exponent)
                     return left.Value > right.Value;
-                return left.Exponent > right.Exponent;
+                else
+                {
+                    if (HaveSameSign(left, right))
+                        return left.Exponent > right.Exponent;
+                    else
+                        return left.Value > 0;
+                }
             }
             /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is smaller than the value of the second <see cref="PrecisionExponent"/> object.</summary>
             public static bool operator <(PrecisionExponent left, PrecisionExponent right)
             {
                 if (left.Exponent == right.Exponent)
                     return left.Value < right.Value;
-                return left.Exponent < right.Exponent;
+                else
+                {
+                    if (HaveSameSign(left, right))
+                        return left.Exponent < right.Exponent;
+                    else
+                        return left.Value < 0;
+                }
             }
             /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is greater than or equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
             public static bool operator >=(PrecisionExponent left, PrecisionExponent right)
@@ -417,6 +429,7 @@ namespace EML
                 else if (a == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
                 else if (n == 0) return a * b;
                 else if (n >= 1 && b == 0) return 1;
+                else if (n == 1) return Math.Pow(a, b);
                 else
                 {
                     PrecisionExponent result = a;
@@ -430,6 +443,10 @@ namespace EML
             /// <summary>Returns the absolute value of the <see cref="PrecisionExponent"/>.</summary>
             /// <param name="p">The <see cref="PrecisionExponent"/> to get the absolute value of.</param>
             public static PrecisionExponent Abs(PrecisionExponent p) => (p.Value < 0) ? p * -1 : p;
+            /// <summary>Determines whether the two <see cref="PrecisionExponent"/> objects' values have the same sign.</summary>
+            /// <param name="a">The first <see cref="PrecisionExponent"/> to examine.</param>
+            /// <param name="b">The second <see cref="PrecisionExponent"/> to examine.</param>
+            public static bool HaveSameSign(PrecisionExponent a, PrecisionExponent b) => (a.Value < 0 && b.Value < 0) || (a.Value > 0 && b.Value > 0);
             #endregion
 
             #region Constant Fields
