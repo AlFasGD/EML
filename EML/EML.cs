@@ -221,7 +221,7 @@ namespace EML
                 return result;
             }
         }
-        /// <summary>A number represented as an exponent.</summary>
+        /// <summary>Represents a number stored with precision multiplied by 10 powered to an exponent.</summary>
         public struct PrecisionExponent
         {
             decimal Value { get; set; }
@@ -232,18 +232,26 @@ namespace EML
             /// <param name="value">The value to parse to the <see cref="PrecisionExponent"/>.</param>
             public PrecisionExponent(decimal value)
             {
-                GetPrecisionExponentInfo(value, 0, out var v, out var e);
-                Value = v;
-                Exponent = e;
+                if (value != 0)
+                {
+                    GetPrecisionExponentInfo(value, 0, out var v, out var e);
+                    Value = v;
+                    Exponent = e;
+                }
+                else { Value = 0; Exponent = 1; }
             }
             /// <summary>Create a new instance of the <see cref="PrecisionExponent"/> struct.</summary>
             /// <param name="value">The value to parse to the <see cref="PrecisionExponent"/>.</param>
             /// <param name="exponent">The exponent of the value to parse to the <see cref="PrecisionExponent"/>.</param>
             public PrecisionExponent(decimal value, BigInteger exponent)
             {
-                GetPrecisionExponentInfo(value, exponent, out var v, out var e);
-                Value = v;
-                Exponent = e;
+                if (value != 0)
+                {
+                    GetPrecisionExponentInfo(value, exponent, out var v, out var e);
+                    Value = v;
+                    Exponent = e;
+                }
+                else { Value = 0; Exponent = 1; }
             }
             #endregion
 
@@ -401,7 +409,7 @@ namespace EML
             {
                 if (p.Value == 0 && power == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
                 else if (power == 1) return p;
-                else if (p.Value == 1 && p.Exponent == 0) return 1;
+                else if (p == 1) return 1;
                 else
                 {
                     PrecisionExponent result = p;
@@ -417,8 +425,8 @@ namespace EML
             public static PrecisionExponent Power(PrecisionExponent p, PrecisionExponent power)
             {
                 if (p.Value == 0 && power.Value == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
-                else if (power.Value == 1 && power.Exponent == 0) return p;
-                else if (p.Value == 1 && p.Exponent == 0) return 1;
+                else if (power == 1) return p;
+                else if (p == 1) return 1;
                 else
                 {
                     BigInteger doubleMaxExponentCount = BigInteger.Abs(p.Exponent) / 308;
@@ -465,6 +473,10 @@ namespace EML
             /// <param name="a">The first <see cref="PrecisionExponent"/> to examine.</param>
             /// <param name="b">The second <see cref="PrecisionExponent"/> to examine.</param>
             public static bool HaveSameSign(PrecisionExponent a, PrecisionExponent b) => (a.Value < 0 && b.Value < 0) || (a.Value > 0 && b.Value > 0);
+            #endregion
+
+            #region Overrdides
+            public override string ToString() => Value.ToString() + " * 10 ^ " + Exponent.ToString();
             #endregion
 
             #region Constant Fields
