@@ -4,6 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Runtime.Versioning;
+using System.Diagnostics;
+using System.Security.Permissions;
+using System.Security;
+using System.IO;
+using System.Reflection;
+using System.Collections;
+using System.Globalization;
+using System.Diagnostics.Contracts;
 
 namespace EML
 {
@@ -234,6 +246,8 @@ namespace EML
                 Exponent = e;
             }
             #endregion
+
+            #region Valid PrecisionExponent Conversion Functions
             /// <summary>Sets the parsed values as they are supposed to be in the <see cref="PrecisionExponent"/> struct and returns them.</summary>
             /// <param name="inputValue">The value that will be processed in the <see cref="PrecisionExponent"/>.</param>
             /// <param name="inputExponent">The exponent that will be processed in the <see cref="PrecisionExponent"/>.</param>
@@ -243,14 +257,14 @@ namespace EML
             {
                 value = inputValue;
                 exponent = inputExponent;
-                if (value >= 10)
-                    while (value >= 10)
+                if (Math.Abs(value) >= 10)
+                    while (Math.Abs(value) >= 10)
                     {
                         value /= 10;
                         exponent++;
                     }
-                else if (value < 1)
-                    while (value < 1)
+                else if (Math.Abs(value) < 1)
+                    while (Math.Abs(value) < 1)
                     {
                         value *= 10;
                         exponent--;
@@ -261,20 +275,22 @@ namespace EML
             static PrecisionExponent GetPrecisionExponentInfo(PrecisionExponent input)
             {
                 PrecisionExponent output = input;
-                if (output.Value >= 10)
-                    while (output.Value >= 10)
+                if (Math.Abs(output.Value) >= 10)
+                    while (Math.Abs(output.Value) >= 10)
                     {
                         output.Value /= 10;
                         output.Exponent++;
                     }
-                else if (output.Value < 1)
-                    while (output.Value < 1)
+                else if (Math.Abs(output.Value) < 1)
+                    while (Math.Abs(output.Value) < 1)
                     {
                         output.Value *= 10;
                         output.Exponent--;
                     }
                 return output;
             }
+            #endregion
+
             #region Operators
             /// <summary>Adds the values of the two <see cref="PrecisionExponent"/> objects and returns their sum.</summary>
             public static PrecisionExponent operator +(PrecisionExponent left, PrecisionExponent right)
@@ -371,24 +387,72 @@ namespace EML
                 result.Exponent *= (int)power;
                 return GetPrecisionExponentInfo(result);
             }
+            /// <summary>Returns the result of the power of a number.</summary>
+            /// <param name="p">The <see cref="PrecisionExponent"/> to elevate to a power.</param>
+            /// <param name="power">The power to elevate the number to.</param>
+            public static PrecisionExponent Power(PrecisionExponent p, PrecisionExponent power)
+            {
+                BigInteger doubleMaxExponentCount = BigInteger.Abs(p.Exponent) / 308;
+                int lastExponent = (int)(BigInteger.Abs(p.Exponent) % 308);
+                PrecisionExponent result = p;
+                for (BigInteger i = 0; i < doubleMaxExponentCount; i++)
+                    result = Power(result, 308);
+                result = Power(result, lastExponent);
+                return GetPrecisionExponentInfo(result);
+            }
             /// <summary>Reverses the number that is specified.</summary>
             /// <param name="p">The <see cref="PrecisionExponent"/> to reverse.</param>
             public static PrecisionExponent Reverse(PrecisionExponent p) => One / p;
             /// <summary>Returns one or greater from the value that is specified.</summary>
             /// <param name="p">The <see cref="PrecisionExponent"/> to examine.</param>
             public static PrecisionExponent OneOrGreater(PrecisionExponent p) => (p = GetPrecisionExponentInfo(p)).Exponent >= 0 ? p : One;
-            public static PrecisionExponent Arrow(int b, PrecisionExponent arrows, int exponent)
+            /// <summary>Returns the result of the arrows hyperoperation.</summary>
+            /// <param name="a">The base number which is also going to be used as the exponent.</param>
+            /// <param name="n">The number of arrows. Must be a non-negative number.</param>
+            /// <param name="b">The stack of operations. Must be a non-negative number.</param>
+            public static PrecisionExponent Arrow(int a, PrecisionExponent n, int b)
             {
-                // Implement this shit dammit
-                PrecisionExponent result = b;
+                if (n < 0) throw new ArgumentException("The number of arrows cannot be a negative number.", "n");
+                else if (b < 0) throw new ArgumentException("The stack cannot be a negative number.", "b");
+                else if (a == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
+                else if (n == 0) return a * b;
+                else if (n >= 1 && b == 0) return 1;
+                else
+                {
+                    PrecisionExponent result = a;
+                    for (int i = 1; i < b; i++)
+                    {
+                        // What the fuck can you do to avoid StackOverflowException?!
+                    }
+                    return result;
+                }
             }
+            /// <summary>Returns the absolute value of the <see cref="PrecisionExponent"/>.</summary>
+            /// <param name="p">The <see cref="PrecisionExponent"/> to get the absolute value of.</param>
+            public static PrecisionExponent Abs(PrecisionExponent p) => (p.Value < 0) ? p * -1 : p;
             #endregion
+
             #region Constant Fields
             /// <summary>Represents a <see cref="PrecisionExponent"/> with the value of zero.</summary>
             public static PrecisionExponent Zero { get { return new PrecisionExponent(0); } }
             /// <summary>Represents a <see cref="PrecisionExponent"/> with the value of one.</summary>
             public static PrecisionExponent One { get { return new PrecisionExponent(1); } }
             #endregion
+        }
+        /// <summary>The exception that is thrown when trying to elevate zero to the power of zero.</summary>
+        [ComVisible(true)]
+        [Serializable]
+        public class ElevateZeroToThePowerOfZeroException : ArithmeticException
+        {
+            /// <summary>Initializes a new instance of the <see cref="ElevateZeroToThePowerOfZeroException"/> class.</summary>
+            public ElevateZeroToThePowerOfZeroException() : base() { }
+            /// <summary>Initializes a new instance of the <see cref="ElevateZeroToThePowerOfZeroException"/> class with a specified error message.</summary>
+            /// <param name="message">A string that describes the error.</param>
+            public ElevateZeroToThePowerOfZeroException(String message) : base(message) { }
+            /// <summary>Initializes a new instance of the <see cref="ElevateZeroToThePowerOfZeroException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.</summary>
+            /// <param name="message">The error message that explains the reason for the exception.</param>
+            /// <param name="innerException">The exception that is the cause of the current exception. If the innerException parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
+            public ElevateZeroToThePowerOfZeroException(String message, Exception innerException) : base(message, innerException) { }
         }
     }
 }
