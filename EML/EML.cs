@@ -373,15 +373,9 @@ namespace EML
                 }
             }
             /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
-            public static bool operator ==(PrecisionExponent left, PrecisionExponent right)
-            {
-                return left.Exponent == right.Exponent && left.Value == right.Value;
-            }
+            public static bool operator ==(PrecisionExponent left, PrecisionExponent right) => left.Exponent == right.Exponent && left.Value == right.Value;
             /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is not equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
-            public static bool operator !=(PrecisionExponent left, PrecisionExponent right)
-            {
-                return left.Exponent != right.Exponent && left.Value != right.Value;
-            }
+            public static bool operator !=(PrecisionExponent left, PrecisionExponent right) => left.Exponent != right.Exponent && left.Value != right.Value;
             #endregion
 
             #region Implicit Convertions
