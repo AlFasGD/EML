@@ -399,24 +399,36 @@ namespace EML
             /// <param name="power">The power to elevate the number to.</param>
             public static PrecisionExponent Power(PrecisionExponent p, double power)
             {
-                PrecisionExponent result = p;
-                result.Value = (decimal)Math.Pow((double)result.Value, power);
-                result.Value *= (decimal)Math.Pow(10, power - (int)power);
-                result.Exponent *= (int)power;
-                return GetPrecisionExponentInfo(result);
+                if (p.Value == 0 && power == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
+                else if (power == 1) return p;
+                else if (p.Value == 1 && p.Exponent == 0) return 1;
+                else
+                {
+                    PrecisionExponent result = p;
+                    result.Value = (decimal)Math.Pow((double)result.Value, power);
+                    result.Value *= (decimal)Math.Pow(10, power - (int)power);
+                    result.Exponent *= (int)power;
+                    return GetPrecisionExponentInfo(result);
+                }
             }
             /// <summary>Returns the result of the power of a number.</summary>
             /// <param name="p">The <see cref="PrecisionExponent"/> to elevate to a power.</param>
             /// <param name="power">The power to elevate the number to.</param>
             public static PrecisionExponent Power(PrecisionExponent p, PrecisionExponent power)
             {
-                BigInteger doubleMaxExponentCount = BigInteger.Abs(p.Exponent) / 308;
-                int lastExponent = (int)(BigInteger.Abs(p.Exponent) % 308);
-                PrecisionExponent result = p;
-                for (BigInteger i = 0; i < doubleMaxExponentCount; i++)
-                    result = Power(result, 308);
-                result = Power(result, lastExponent);
-                return GetPrecisionExponentInfo(result);
+                if (p.Value == 0 && power.Value == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
+                else if (power.Value == 1 && power.Exponent == 0) return p;
+                else if (p.Value == 1 && p.Exponent == 0) return 1;
+                else
+                {
+                    BigInteger doubleMaxExponentCount = BigInteger.Abs(p.Exponent) / 308;
+                    int lastExponent = (int)(BigInteger.Abs(p.Exponent) % 308);
+                    PrecisionExponent result = p;
+                    for (BigInteger i = 0; i < doubleMaxExponentCount; i++)
+                        result = Power(result, 308);
+                    result = Power(result, lastExponent);
+                    return GetPrecisionExponentInfo(result);
+                }
             }
             /// <summary>Reverses the number that is specified.</summary>
             /// <param name="p">The <see cref="PrecisionExponent"/> to reverse.</param>
