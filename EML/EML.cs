@@ -384,7 +384,7 @@ namespace EML
         public static bool operator !=(PrecisionExponent left, PrecisionExponent right) => left.Exponent != right.Exponent && left.Value != right.Value;
         #endregion
 
-        #region Implicit Convertions
+        #region Implicit Conversions
         public static implicit operator PrecisionExponent(byte b) => new PrecisionExponent(b);
         public static implicit operator PrecisionExponent(sbyte sb) => new PrecisionExponent(sb);
         public static implicit operator PrecisionExponent(ushort us) => new PrecisionExponent(us);
@@ -396,7 +396,6 @@ namespace EML
         public static implicit operator PrecisionExponent(decimal d) => new PrecisionExponent(d);
         public static implicit operator PrecisionExponent(double d) => new PrecisionExponent((decimal)d);
         public static implicit operator PrecisionExponent(float f) => new PrecisionExponent((decimal)f);
-        public static implicit operator PrecisionExponent(string s) => new PrecisionExponent(decimal.Parse(s));
         #endregion
 
         #region Operations
@@ -467,6 +466,20 @@ namespace EML
         /// <summary>Returns the absolute value of the <see cref="PrecisionExponent"/>.</summary>
         /// <param name="p">The <see cref="PrecisionExponent"/> to get the absolute value of.</param>
         public static PrecisionExponent Abs(PrecisionExponent p) => (p.Value < 0) ? p * -1 : p;
+        /// <summary>Returns the result of a power tower consisting of n copies of a.</summary>
+        /// <param name="a">The base value that will be used in the power tower.</param>
+        /// <param name="n">The number of copies to return.</param>
+        /// <returns></returns>
+        public static PrecisionExponent PowerTower(int a, int n)
+        {
+            if (a <= 0) throw new ArgumentException("The base cannot be a negative number or zero.", "a");
+            else if (n < 0) throw new ArgumentException("The number of copies cannot be a negative number.", "n");
+            else if (n == 0) return 1;
+            PrecisionExponent result = a;
+            for (int i = 1; i < n; i++)
+                result = Power(a, result);
+            return result;
+        }
         /// <summary>Determines whether the two <see cref="PrecisionExponent"/> objects' values have the same sign.</summary>
         /// <param name="a">The first <see cref="PrecisionExponent"/> to examine.</param>
         /// <param name="b">The second <see cref="PrecisionExponent"/> to examine.</param>
