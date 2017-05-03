@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LargeDecimal.cs" />
+    <Compile Include="LargeInteger.cs" />
     <Compile Include="ElevateZeroToThePowerOfZeroException.cs" />
     <Compile Include="PrecisionExponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

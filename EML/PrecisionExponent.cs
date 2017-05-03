@@ -23,7 +23,7 @@ namespace EML
     public struct PrecisionExponent
     {
         decimal Value { get; set; }
-        BigInteger Exponent { get; set; }
+        LargeInteger Exponent { get; set; }
 
         #region Constructors
         /// <summary>Create a new instance of the <see cref="PrecisionExponent"/> struct.</summary>
@@ -41,7 +41,7 @@ namespace EML
         /// <summary>Create a new instance of the <see cref="PrecisionExponent"/> struct.</summary>
         /// <param name="value">The value to parse to the <see cref="PrecisionExponent"/>.</param>
         /// <param name="exponent">The exponent of the value to parse to the <see cref="PrecisionExponent"/>.</param>
-        public PrecisionExponent(decimal value, BigInteger exponent)
+        public PrecisionExponent(decimal value, LargeInteger exponent)
         {
             if (value != 0)
             {
@@ -59,7 +59,7 @@ namespace EML
         /// <param name="inputExponent">The exponent that will be processed in the <see cref="PrecisionExponent"/>.</param>
         /// <param name="value">The output value as changed in the <see cref="PrecisionExponent"/>.</param>
         /// <param name="exponent">The output exponent as changed in the <see cref="PrecisionExponent"/>.</param>
-        static void GetPrecisionExponentInfo(decimal inputValue, BigInteger inputExponent, out decimal value, out BigInteger exponent)
+        static void GetPrecisionExponentInfo(decimal inputValue, LargeInteger inputExponent, out decimal value, out LargeInteger exponent)
         {
             value = inputValue;
             exponent = inputExponent;
@@ -101,16 +101,16 @@ namespace EML
         /// <summary>Adds the values of the two <see cref="PrecisionExponent"/> objects and returns their sum.</summary>
         public static PrecisionExponent operator +(PrecisionExponent left, PrecisionExponent right)
         {
-            BigInteger times = right.Exponent - left.Exponent;
-            for (BigInteger i = 1; i < times; i++)
+            LargeInteger times = right.Exponent - left.Exponent;
+            for (LargeInteger i = 1; i < times; i++)
                 right.Value /= 10;
             return new PrecisionExponent(left.Value + right.Value, left.Exponent);
         }
         /// <summary>Subtracts the value of the second <see cref="PrecisionExponent"/> object from the value of the first <see cref="PrecisionExponent"/> object and returns their difference.</summary>
         public static PrecisionExponent operator -(PrecisionExponent left, PrecisionExponent right)
         {
-            BigInteger times = right.Exponent - left.Exponent;
-            for (BigInteger i = 1; i < times; i++)
+            LargeInteger times = right.Exponent - left.Exponent;
+            for (LargeInteger i = 1; i < times; i++)
                 right.Value /= 10;
             return new PrecisionExponent(left.Value - right.Value, left.Exponent);
         }
@@ -226,10 +226,10 @@ namespace EML
             else if (p == 1) return 1;
             else
             {
-                BigInteger doubleMaxExponentCount = BigInteger.Abs(p.Exponent) / 308;
-                int lastExponent = (int)(BigInteger.Abs(p.Exponent) % 308);
+                LargeInteger doubleMaxExponentCount = LargeInteger.Abs(p.Exponent) / 308;
+                int lastExponent = (int)(LargeInteger.Abs(p.Exponent) % 308);
                 PrecisionExponent result = p;
-                for (BigInteger i = 0; i < doubleMaxExponentCount; i++)
+                for (LargeInteger i = 0; i < doubleMaxExponentCount; i++)
                     result = Power(result, 308);
                 result = Power(result, lastExponent);
                 return GetPrecisionExponentInfo(result);
@@ -241,28 +241,28 @@ namespace EML
         /// <summary>Returns one or greater from the value that is specified.</summary>
         /// <param name="p">The <see cref="PrecisionExponent"/> to examine.</param>
         public static PrecisionExponent OneOrGreater(PrecisionExponent p) => (p = GetPrecisionExponentInfo(p)).Exponent >= 0 ? p : One;
-        /// <summary>Returns the result of the arrows hyperoperation.</summary>
-        /// <param name="a">The base number which is also going to be used as the exponent.</param>
-        /// <param name="n">The number of arrows. Must be a non-negative number.</param>
-        /// <param name="b">The stack of operations. Must be a non-negative number.</param>
-        public static PrecisionExponent Arrow(int a, PrecisionExponent n, int b)
-        {
-            if (n < 0) throw new ArgumentException("The number of arrows cannot be a negative number.", "n");
-            else if (b < 0) throw new ArgumentException("The stack cannot be a negative number.", "b");
-            else if (a == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
-            else if (n == 0) return a * b;
-            else if (n >= 1 && b == 0) return 1;
-            else if (n == 1) return Math.Pow(a, b);
-            else
-            {
-                PrecisionExponent result = a;
-                for (int i = 1; i < b; i++)
-                {
-                    // What the fuck can you do to avoid StackOverflowException?!
-                }
-                return result;
-            }
-        }
+        ///// <summary>Returns the result of the arrows hyperoperation.</summary>
+        ///// <param name="a">The base number which is also going to be used as the exponent.</param>
+        ///// <param name="n">The number of arrows. Must be a non-negative number.</param>
+        ///// <param name="b">The stack of operations. Must be a non-negative number.</param>
+        //public static PrecisionExponent Arrow(int a, PrecisionExponent n, int b)
+        //{
+        //    if (n < 0) throw new ArgumentException("The number of arrows cannot be a negative number.", "n");
+        //    else if (b < 0) throw new ArgumentException("The stack cannot be a negative number.", "b");
+        //    else if (a == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
+        //    else if (n == 0) return a * b;
+        //    else if (n >= 1 && b == 0) return 1;
+        //    else if (n == 1) return Math.Pow(a, b);
+        //    else
+        //    {
+        //        PrecisionExponent result = a;
+        //        for (int i = 1; i < b; i++)
+        //        {
+        //            // What the fuck can you do to avoid StackOverflowException?!
+        //        }
+        //        return result;
+        //    }
+        //}
         /// <summary>Returns the absolute value of the <see cref="PrecisionExponent"/>.</summary>
         /// <param name="p">The <see cref="PrecisionExponent"/> to get the absolute value of.</param>
         public static PrecisionExponent Abs(PrecisionExponent p) => (p.Value < 0) ? p * -1 : p;
