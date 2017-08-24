@@ -23,7 +23,7 @@ namespace EML
     public struct PrecisionExponent
     {
         decimal Value { get; set; }
-        LargeInteger Exponent { get; set; }
+        BigInteger Exponent { get; set; }
 
         #region Constructors
         /// <summary>Create a new instance of the <see cref="PrecisionExponent"/> struct.</summary>
@@ -41,7 +41,7 @@ namespace EML
         /// <summary>Create a new instance of the <see cref="PrecisionExponent"/> struct.</summary>
         /// <param name="value">The value to parse to the <see cref="PrecisionExponent"/>.</param>
         /// <param name="exponent">The exponent of the value to parse to the <see cref="PrecisionExponent"/>.</param>
-        public PrecisionExponent(decimal value, LargeInteger exponent)
+        public PrecisionExponent(decimal value, BigInteger exponent)
         {
             if (value != 0)
             {
@@ -59,7 +59,7 @@ namespace EML
         /// <param name="inputExponent">The exponent that will be processed in the <see cref="PrecisionExponent"/>.</param>
         /// <param name="value">The output value as changed in the <see cref="PrecisionExponent"/>.</param>
         /// <param name="exponent">The output exponent as changed in the <see cref="PrecisionExponent"/>.</param>
-        static void GetPrecisionExponentInfo(decimal inputValue, LargeInteger inputExponent, out decimal value, out LargeInteger exponent)
+        static void GetPrecisionExponentInfo(decimal inputValue, BigInteger inputExponent, out decimal value, out BigInteger exponent)
         {
             value = inputValue;
             exponent = inputExponent;
@@ -101,16 +101,16 @@ namespace EML
         /// <summary>Adds the values of the two <see cref="PrecisionExponent"/> objects and returns their sum.</summary>
         public static PrecisionExponent operator +(PrecisionExponent left, PrecisionExponent right)
         {
-            LargeInteger times = right.Exponent - left.Exponent;
-            for (LargeInteger i = 1; i < times; i++)
+            BigInteger times = right.Exponent - left.Exponent;
+            for (BigInteger i = 1; i < times; i++)
                 right.Value /= 10;
             return new PrecisionExponent(left.Value + right.Value, left.Exponent);
         }
         /// <summary>Subtracts the value of the second <see cref="PrecisionExponent"/> object from the value of the first <see cref="PrecisionExponent"/> object and returns their difference.</summary>
         public static PrecisionExponent operator -(PrecisionExponent left, PrecisionExponent right)
         {
-            LargeInteger times = right.Exponent - left.Exponent;
-            for (LargeInteger i = 1; i < times; i++)
+            BigInteger times = right.Exponent - left.Exponent;
+            for (BigInteger i = 1; i < times; i++)
                 right.Value /= 10;
             return new PrecisionExponent(left.Value - right.Value, left.Exponent);
         }
@@ -226,10 +226,10 @@ namespace EML
             else if (p == 1) return 1;
             else
             {
-                LargeInteger doubleMaxExponentCount = LargeInteger.Abs(p.Exponent) / 308;
-                int lastExponent = (int)(LargeInteger.Abs(p.Exponent) % 308);
+                BigInteger doubleMaxExponentCount = BigInteger.Abs(p.Exponent) / 308;
+                int lastExponent = (int)(BigInteger.Abs(p.Exponent) % 308);
                 PrecisionExponent result = p;
-                for (LargeInteger i = 0; i < doubleMaxExponentCount; i++)
+                for (BigInteger i = 0; i < doubleMaxExponentCount; i++)
                     result = Power(result, 308);
                 result = Power(result, lastExponent);
                 return GetPrecisionExponentInfo(result);
