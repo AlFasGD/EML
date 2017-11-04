@@ -41,11 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Expression.cs" />
+    <Compile Include="Infinity.cs" />
     <Compile Include="LargeDecimal.cs" />
     <Compile Include="LargeInteger.cs" />
     <Compile Include="ElevateZeroToThePowerOfZeroException.cs" />
+    <Compile Include="NumberExpression.cs" />
+    <Compile Include="NumberInterval.cs" />
+    <Compile Include="Operation.cs" />
     <Compile Include="PrecisionExponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RealNumberExpression.cs" />
+    <Compile Include="SpecialNumberSet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

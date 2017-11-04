@@ -9,9 +9,9 @@ namespace EML
     /// <summary>Represents an arbitrarily large integer.</summary>
     public struct LargeInteger
     {
-        List<byte> Bytes { get; set; }
-        bool Sign { get; set; } // True = positive
-        int Length { get { return Bytes.Count; } }
+        public List<byte> Bytes { get; set; }
+        public bool Sign { get; set; } // True = positive
+        public int Length { get { return Bytes.Count; } }
 
         #region Constructors
         public LargeInteger(byte b)
@@ -199,30 +199,50 @@ namespace EML
             }
             return result;
         }
-        public static LargeInteger operator -(LargeInteger left, LargeInteger right)
-        {
-            LargeInteger result = 0;
-            // Code
-            return result;
-        }
+        public static LargeInteger operator -(LargeInteger left, LargeInteger right) => left + (-right);
         public static LargeInteger operator *(LargeInteger left, LargeInteger right)
         {
             LargeInteger result = 0;
-            // Code
+            result.Sign = left.Sign == right.Sign;
+            left = AbsoluteValue(left);
+            right = AbsoluteValue(right);
+            while (right > 0)
+            {
+                LargeInteger temp = (right >> 1) << 1;
+                if (temp != right) result += left;
+                left = left << 1;
+                right = right >> 1;
+            }
             return result;
         }
         public static LargeInteger operator /(LargeInteger left, LargeInteger right)
         {
-            LargeInteger result = 0;
-            // Code
-            return result;
+            if (right != 0)
+            {
+                LargeInteger result = 0;
+                result.Sign = left.Sign == right.Sign;
+                left = AbsoluteValue(left);
+                right = AbsoluteValue(right);
+                // Code
+                return result;
+            }
+            else throw new DivideByZeroException("Cannot divide by zero.");
         }
         public static LargeInteger operator %(LargeInteger left, LargeInteger right)
         {
-            LargeInteger result = 0;
-            // Code
-            return result;
+            if (right != 0)
+            {
+                LargeInteger result = 0;
+                result.Sign = left.Sign == right.Sign;
+                left = AbsoluteValue(left);
+                right = AbsoluteValue(right);
+                // Code
+                return result;
+            }
+            else throw new DivideByZeroException("Cannot divide by zero.");
         }
+        public static LargeInteger operator ++(LargeInteger l) => l + 1;
+        public static LargeInteger operator --(LargeInteger l) => l - 1;
         public static LargeInteger operator >>(LargeInteger left, int right)
         {
             LargeInteger result = left;
@@ -269,6 +289,11 @@ namespace EML
                 remainingShifts -= shifts;
             }
             return result;
+        }
+        public static LargeInteger operator -(LargeInteger l)
+        {
+            l.Sign = !l.Sign;
+            return l;
         }
         public static bool operator >(LargeInteger left, LargeInteger right)
         {
@@ -320,14 +345,8 @@ namespace EML
             else
                 return false;
         }
-        public static bool operator >=(LargeInteger left, LargeInteger right)
-        {
-            return left > right || left == right;
-        }
-        public static bool operator <=(LargeInteger left, LargeInteger right)
-        {
-            return left < right || left == right;
-        }
+        public static bool operator >=(LargeInteger left, LargeInteger right) => left > right || left == right;
+        public static bool operator <=(LargeInteger left, LargeInteger right) => left < right || left == right;
         public static bool operator ==(LargeInteger left, LargeInteger right)
         {
             if (left.Length != right.Length)
@@ -351,12 +370,30 @@ namespace EML
         #endregion
 
         #region Operations
+        public static LargeInteger AbsoluteValue(LargeInteger l) => l >= 0 ? l : -l;
+        public static LargeInteger Invert(LargeInteger l) => 1 / l;
+        public static LargeInteger Power(LargeInteger b, LargeInteger power)
+        {
+            if (power != 0)
+            {
+                LargeInteger brainPower = AbsoluteValue(power);
+                LargeInteger result = b;
+                for (LargeInteger i = 2; i <= brainPower; i++)
+                    result *= b;
+                if (power < 0)
+                    result = Invert(result);
+                return result;
+            }
+            else if (b != 0) return 1;
+            else throw new ElevateZeroToThePowerOfZeroException("Cannot perform the operation 0^0.");
+        }
         #endregion
 
         #region Overrides
         public override string ToString()
         {
             string result = "";
+            if (Sign == false) result = "-";
             LargeInteger currentIntPart = this;
             for (LargeInteger i = 1; (currentIntPart = this / i) > 0; i *= 10)
                 result = (char)((currentIntPart % 10) + 48) + result;
