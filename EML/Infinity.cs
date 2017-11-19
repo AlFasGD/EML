@@ -31,7 +31,7 @@ namespace EML
         public static Infinity operator -(LargeInteger left, Infinity right) => left + (-right);
         public static Infinity operator -(Infinity left, LargeInteger right) => left + (-right);
         public static Infinity operator *(LargeInteger left, Infinity right) => new Infinity(left.Sign == right.Sign);
-        public static Infinity operator *(Infinity left, LargeInteger right) => new Infinity(left.Sign == right.Sign);
+        public static Infinity operator *(Infinity left, LargeInteger right) => right != 0 ? new Infinity(left.Sign == right.Sign) : throw new ArithmeticException("Cannot multiply infinity and zero.");
         public static Infinity operator /(LargeInteger left, Infinity right) => new Infinity(left.Sign == right.Sign);
         public static Infinity operator /(Infinity left, LargeInteger right) => new Infinity(left.Sign == right.Sign);
 

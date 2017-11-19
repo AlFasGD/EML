@@ -8,8 +8,9 @@ namespace EML
 {
     public class RealNumberExpression : Expression
     {
-        LargeDecimal[] Literals { get; set; }
-        Operation[] Operations { get; set; }
+        public string Name { get; set; }
+        public LargeDecimal[] Literals { get; set; }
+        public Operation[] Operations { get; set; }
 
     }
 }
