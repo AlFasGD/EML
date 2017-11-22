@@ -10,7 +10,7 @@ namespace EML
     public struct LargeInteger
     {
         public List<byte> Bytes { get; set; }
-        public bool Sign { get; set; } // True = positive
+        public bool Sign { get; set; } // True if number is positive
         public int Length { get { return Bytes.Count; } }
 
         #region Constructors
@@ -80,6 +80,11 @@ namespace EML
             Bytes = n.Bytes;
             Sign = n.Sign;
         }
+        public LargeInteger(LargeDecimal d)
+        {
+            Bytes = d.RightBytes;
+            Sign = d.Sign;
+        }
         public LargeInteger(byte[] b)
         {
             Bytes = new List<byte>();
@@ -87,7 +92,6 @@ namespace EML
             Sign = true;
         }
         #endregion
-
         #region Implicit Conversions
         public static implicit operator LargeInteger(byte a) => new LargeInteger(a);
         public static implicit operator LargeInteger(short a) => new LargeInteger(a);
@@ -98,13 +102,12 @@ namespace EML
         public static implicit operator LargeInteger(uint a) => new LargeInteger(a);
         public static implicit operator LargeInteger(ulong a) => new LargeInteger(a);
         #endregion
-
         #region Explicit Conversions
         public static explicit operator LargeInteger(float a) => new LargeInteger(a);
         public static explicit operator LargeInteger(double a) => new LargeInteger(a);
         public static explicit operator LargeInteger(decimal a) => new LargeInteger(a);
+        public static explicit operator LargeInteger(LargeDecimal a) => new LargeInteger(a);
         #endregion
-
         #region Type Casts
         public static explicit operator byte(LargeInteger a)
         {
@@ -128,7 +131,6 @@ namespace EML
         }
         // Add more casts
         #endregion
-        
         #region Operators
         public static LargeInteger operator +(LargeInteger left, LargeInteger right)
         {
@@ -187,18 +189,27 @@ namespace EML
                 if (sum >= 256 - result.Bytes[i] && sum > 0) // If the sum is positive and bigger than the max value of a byte
                 {
                     sum -= 256;
-                    if (i < result.Length - 1) // If the next byte already exists in the list
-                        result.Bytes[i + 1] += 1;
-                    else if (i == result.Length - 1) // If there is a need for a new byte in the list
+                    int j = i + 1;
+                    do
+                    {
+                        result.Bytes[j]++;
+                        j++;
+                    }
+                    while (result.Bytes[j] == 0 && j < result.Length);
+                    if (result.Bytes[result.Length - 1] == 0 && j == result.Length) // If there is a need for a new byte in the list
                         result.Bytes.Add(1);
                 }
                 else if (Math.Abs(sum) >= 256 - result.Bytes[i] && sum < 0) // If the sum is negative and its absolute value is bigger than the max value of a byte
                 {
                     sum = Math.Abs(sum);
-                    sum -= 256;
-                    if (i < result.Length - 1) // If the next byte already exists in the list
-                        result.Bytes[i + 1] += 1;
-                    else if (i == result.Length - 1) // If there is a need for a new byte in the list
+                    int j = i + 1;
+                    do
+                    {
+                        result.Bytes[j]++;
+                        j++;
+                    }
+                    while (result.Bytes[j] == 0 && j < result.Length);
+                    if (result.Bytes[result.Length - 1] == 0 && j == result.Length) // If there is a need for a new byte in the list
                         result.Bytes.Add(1);
                 }
                 result.Bytes[i] += (byte)sum;
@@ -216,8 +227,8 @@ namespace EML
             {
                 LargeInteger temp = (right >> 1) << 1;
                 if (temp != right) result += left;
-                left = left << 1;
-                right = right >> 1;
+                left <<= 1;
+                right >>= 1;
             }
             return result;
         }
@@ -252,12 +263,12 @@ namespace EML
                     result.Sign = left.Sign == right.Sign;
                     left = AbsoluteValue(left);
                     right = AbsoluteValue(right);
-                    LargeInteger t, num_bits = 32;
-                    LargeInteger q, bit, d = 0;
+                    LargeInteger num_bits = left.Length * 8;
+                    LargeInteger t, q, bit, d = 0;
                     LargeInteger remainder = 0;
                     while (remainder < right)
                     {
-                        bit = (left & 0x80000000) >> 31;
+                        bit = (left & 0x80000000) >> (left.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         d = left;
                         left = left << 1;
@@ -274,10 +285,10 @@ namespace EML
 
                     for (LargeInteger i = 0; i < num_bits; i++)
                     {
-                        bit = (left & 0x80000000) >> 31;
+                        bit = (left & 0x80000000) >> (left.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         t = remainder - right;
-                        q = ~((t & 0x80000000) >> 31);
+                        q = ~((t & 0x80000000) >> (left.Length * 8 - 1));
                         left = left << 1;
                         result = (result << 1) | q;
                         if (q != 0)
@@ -307,12 +318,12 @@ namespace EML
                     result.Sign = left.Sign == right.Sign;
                     left = AbsoluteValue(left);
                     right = AbsoluteValue(right);
-                    LargeInteger t, num_bits = 32;
-                    LargeInteger q, bit, d = 0;
+                    LargeInteger num_bits = left.Length * 8;
+                    LargeInteger t, q, bit, d = 0;
                     LargeInteger remainder = 0;
                     while (remainder < right)
                     {
-                        bit = (left & 0x80000000) >> 31;
+                        bit = (left & 0x80000000) >> (left.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         d = left;
                         left = left << 1;
@@ -329,10 +340,10 @@ namespace EML
 
                     for (LargeInteger i = 0; i < num_bits; i++)
                     {
-                        bit = (left & 0x80000000) >> 31;
+                        bit = (left & 0x80000000) >> (left.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         t = remainder - right;
-                        q = ~((t & 0x80000000) >> 31);
+                        q = ~((t & 0x80000000) >> (left.Length * 8 - 1));
                         left = left << 1;
                         result = (result << 1) | q;
                         if (q != 0)
@@ -348,47 +359,41 @@ namespace EML
         public static LargeInteger operator >>(LargeInteger left, int right)
         {
             LargeInteger result = left;
-            int remainingShifts = right;
-            while (remainingShifts > 0)
+            int shifts = right % 8;
+            int fullShifts = right / 8;
+            if (fullShifts > 0)
             {
-                int shifts = Math.Min(remainingShifts, 8);
-                if (shifts < 8)
-                {
-                    for (int i = 0; i < result.Length - 1; i++)
-                        result.Bytes[i] = (byte)(result.Bytes[i] >> shifts + result.Bytes[i + 1] << 8 - shifts);
-                    result.Bytes[result.Length] = (byte)(result.Bytes[result.Length] >> shifts);
-                }
-                else if (shifts == 8)
-                {
-                    for (int i = 0; i < result.Length - 1; i++)
-                        result.Bytes[i] = result.Bytes[i + 1];
-                    result.Bytes.RemoveAt(result.Length);
-                }
-                remainingShifts -= shifts;
+                for (int i = 0; i < result.Length - fullShifts; i++)
+                    result.Bytes[i] = result.Bytes[i + fullShifts];
+                result.Bytes.RemoveRange(result.Length - fullShifts, fullShifts);
+            }
+            if (shifts > 0)
+            {
+                for (int i = 0; i < result.Length - 1; i++)
+                    result.Bytes[i] = (byte)((result.Bytes[i] >> shifts) + (result.Bytes[i + 1] << (8 - shifts)));
+                result.Bytes[result.Length] = (byte)(result.Bytes[result.Length] >> shifts);
             }
             return result;
         }
         public static LargeInteger operator <<(LargeInteger left, int right)
         {
             LargeInteger result = left;
-            int remainingShifts = right;
-            while (remainingShifts > 0)
+            int shifts = right % 8;
+            int fullShifts = right / 8;
+            for (int i = 0; i < fullShifts; i++)
+                result.Bytes.Add(result.Bytes[i - fullShifts]);
+            if (fullShifts > 0)
             {
-                int shifts = Math.Min(remainingShifts, 8);
-                result.Bytes.Add(0);
-                if (shifts < 8)
-                {
-                    for (int i = result.Length - 1; i > 0; i--)
-                        result.Bytes[i] = (byte)(result.Bytes[i - 1] << shifts + result.Bytes[i] >> 8 - shifts);
-                    result.Bytes[0] = (byte)(result.Bytes[0] << shifts);
-                }
-                else if (shifts == 8)
-                {
-                    for (int i = result.Length - 1; i > 0; i--)
-                        result.Bytes[i] = result.Bytes[i - 1];
-                    result.Bytes[0] = 0;
-                }
-                remainingShifts -= shifts;
+                for (int i = result.Length - fullShifts; i > fullShifts; i--)
+                    result.Bytes[i] = result.Bytes[i - fullShifts];
+                result.Bytes[fullShifts] = 0;
+                fullShifts++;
+            }
+            if (shifts > 0)
+            {
+                for (int i = result.Length - 1; i > fullShifts; i--)
+                    result.Bytes[i] = (byte)((result.Bytes[i - 1] << shifts) + (result.Bytes[i] >> (8 - shifts)));
+                result.Bytes[fullShifts] = (byte)(result.Bytes[fullShifts] << shifts);
             }
             return result;
         }
@@ -412,6 +417,22 @@ namespace EML
             byte[] bytes = new byte[maxLength];
             for (int i = 0; i < minLength; i++)
                 bytes[i] = (byte)(left.Bytes[i] | right.Bytes[i]);
+            if (left.Length > right.Length)
+                for (int i = minLength; i < maxLength; i++)
+                    bytes[i] = left.Bytes[i];
+            else
+                for (int i = minLength; i < maxLength; i++)
+                    bytes[i] = right.Bytes[i];
+
+            return new LargeInteger(bytes);
+        }
+        public static LargeInteger operator ^(LargeInteger left, LargeInteger right)
+        {
+            int minLength = Math.Min(left.Length, right.Length);
+            int maxLength = Math.Max(left.Length, right.Length);
+            byte[] bytes = new byte[maxLength];
+            for (int i = 0; i < minLength; i++)
+                bytes[i] = (byte)(left.Bytes[i] ^ right.Bytes[i]);
             if (left.Length > right.Length)
                 for (int i = minLength; i < maxLength; i++)
                     bytes[i] = left.Bytes[i];
@@ -512,7 +533,6 @@ namespace EML
             return true;
         }
         #endregion
-
         #region Operations
         public static bool IsPrime(LargeInteger l)
         {
@@ -662,7 +682,6 @@ namespace EML
         }
         
         #endregion
-
         #region Overrides
         public override string ToString()
         {
