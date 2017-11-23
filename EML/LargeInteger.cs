@@ -423,7 +423,6 @@ namespace EML
             else
                 for (int i = minLength; i < maxLength; i++)
                     bytes[i] = right.Bytes[i];
-
             return new LargeInteger(bytes);
         }
         public static LargeInteger operator ^(LargeInteger left, LargeInteger right)
@@ -439,7 +438,6 @@ namespace EML
             else
                 for (int i = minLength; i < maxLength; i++)
                     bytes[i] = right.Bytes[i];
-
             return new LargeInteger(bytes);
         }
         public static LargeInteger operator ~(LargeInteger l)
