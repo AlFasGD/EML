@@ -291,22 +291,80 @@ namespace EML
             }
             return result;
         }
+        /*
+           Copyright stuff
+
+           Use of this program, for any purpose, is granted the author,
+           Ian Kaplan, as long as this copyright notice is included in
+           the source code or any source code derived from this program.
+           The user assumes all responsibility for using this code.
+
+           Ian Kaplan, October 1996
+        */
+        // The division and modulus operations are using copyrighted code form the owner as stated in the previously pasted claim by Ian Kaplan
+        // This is a transcription in C# from the source as written in C++, however copyright applies for the algorithm expressed as code
         public static LargeDecimal operator /(LargeDecimal left, LargeDecimal right)
         {
-            // TODO: Work on this
-            LargeDecimal result = 0;
-            result.Sign = left.Sign == right.Sign;
-            left = AbsoluteValue(left);
-            right = AbsoluteValue(right);
-            while (right > 0)
+            if (right != 0)
             {
-                LargeDecimal temp = (right >> 1) << 1;
-                if (temp != right) result += left;
-                left <<= 1;
-                right >>= 1;
+                if (AbsoluteValue(left) == AbsoluteValue(right))
+                {
+                    if (left.Sign == right.Sign)
+                        return 1;
+                    else
+                        return -1;
+                }
+                else if (AbsoluteValue(left) < AbsoluteValue(right))
+                    return 0;
+                else
+                {
+                    LargeInteger leftInt = new LargeInteger(left << left.RightLength * 8);
+                    LargeInteger rightInt = new LargeInteger(right << right.RightLength * 8);
+                    LargeDecimal result = 0;
+                    result.Sign = left.Sign == right.Sign;
+                    leftInt = LargeInteger.AbsoluteValue(leftInt);
+                    rightInt = LargeInteger.AbsoluteValue(rightInt);
+                    LargeInteger num_bits = leftInt.Length * 8;
+                    LargeInteger t, q, bit, d = 0;
+                    LargeInteger remainder = 0;
+                    while (remainder < rightInt)
+                    {
+                        bit = (leftInt & 0x80000000) >> (leftInt.Length * 8 - 1);
+                        remainder = (remainder << 1) | bit;
+                        d = leftInt;
+                        leftInt = leftInt << 1;
+                        num_bits--;
+                    }
+
+                    // Make something that also finds the decimal points of the division
+                    // Implement something to handle the case where the division never ends (when the remainder loops through specific values)
+
+                    /* The loop, above, always goes one iteration too far.
+                       To avoid inserting an "if" statement inside the loop
+                       the last iteration is simply reversed. */
+
+                    leftInt = d;
+                    remainder = remainder >> 1;
+                    num_bits++;
+
+                    for (LargeInteger i = 0; i < num_bits; i++)
+                    {
+                        bit = (leftInt & 0x80000000) >> (leftInt.Length * 8 - 1);
+                        remainder = (remainder << 1) | bit;
+                        t = remainder - rightInt;
+                        q = ~((t & 0x80000000) >> (leftInt.Length * 8 - 1));
+                        leftInt = leftInt << 1;
+                        result = (result << 1) | q;
+                        if (q != 0)
+                            remainder = t;
+                    }
+                    return result;
+                }
             }
-            return result;
+            else throw new DivideByZeroException("Cannot divide by zero.");
         }
+        public static LargeDecimal operator ++(LargeDecimal l) => l + 1;
+        public static LargeDecimal operator --(LargeDecimal l) => l - 1;
         public static LargeDecimal operator >>(LargeDecimal left, int right)
         {
             LargeDecimal result = left;
@@ -591,11 +649,20 @@ namespace EML
             else throw new FormatException("The string represents no numerical value.");
             return result;
         }
-        public static LargeDecimal Power(LargeDecimal b, LargeDecimal power)
+        public static LargeDecimal Power(LargeDecimal b, LargeInteger power)
         {
-            LargeDecimal result = 1;
-            // Algorithm to return the power of a number
-            return result;
+            if (power != 0)
+            {
+                LargeInteger brainPower = LargeInteger.AbsoluteValue(power);
+                LargeDecimal result = b;
+                for (LargeInteger i = 2; i <= brainPower; i++)
+                    result *= b;
+                if (!power.Sign)
+                    result = Invert(result);
+                return result;
+            }
+            else if (b != 0) return 1;
+            else throw new ElevateZeroToThePowerOfZeroException("Cannot perform the operation 0^0.");
         }
         #endregion
     }

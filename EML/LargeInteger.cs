@@ -606,16 +606,16 @@ namespace EML
         }
         public static LargeInteger Power(LargeInteger b, LargeInteger power)
         {
-            if (power != 0)
+            if (power.Sign)
             {
                 LargeInteger brainPower = AbsoluteValue(power);
                 LargeInteger result = b;
                 for (LargeInteger i = 2; i <= brainPower; i++)
                     result *= b;
-                if (power < 0)
-                    result = Invert(result);
                 return result;
             }
+            else if (!power.Sign)
+                return 0;
             else if (b != 0) return 1;
             else throw new ElevateZeroToThePowerOfZeroException("Cannot perform the operation 0^0.");
         }
@@ -624,8 +624,9 @@ namespace EML
             LargeInteger result = new LargeInteger();
             Random shit = new Random();
             result.Bytes = new List<byte>(length);
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < length - 1; i++)
                 result.Bytes[i] = (byte)shit.Next(0, 255);
+            result.Bytes[length - 1] = (byte)shit.Next(1, 255);
             return result;
         }
         public static LargeInteger Random(int minLength, int maxLength)
@@ -634,9 +635,59 @@ namespace EML
             Random shit = new Random();
             int length = shit.Next(minLength, maxLength);
             result.Bytes = new List<byte>(length);
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < length - 1; i++)
                 result.Bytes[i] = (byte)shit.Next(0, 255);
+            result.Bytes[length - 1] = (byte)shit.Next(1, 255);
             return result;
+        }
+        public static LargeInteger Random(LargeInteger min, LargeInteger max)
+        {
+            if (min != max)
+            {
+                LargeInteger result = new LargeInteger();
+                min = RemoveUnnecessaryBytes(min); // Clean the useless zeroes
+                max = RemoveUnnecessaryBytes(max);
+                Random shit = new Random();
+                bool matchesMin = false;
+                bool matchesMax = false;
+                int length = shit.Next(min.Length, max.Length);
+                result.Bytes = new List<byte>(length);
+                if (length == min.Length)
+                {
+                    result.Bytes[length - 1] = (byte)shit.Next(min.Bytes[length - 1], 255);
+                    matchesMin = result.Bytes[length - 1] == min.Bytes[length - 1];
+                }
+                else if (length == max.Length)
+                {
+                    result.Bytes[length - 1] = (byte)shit.Next(1, max.Bytes[length - 1]);
+                    matchesMax = result.Bytes[length - 1] == max.Bytes[length - 1];
+                }
+                for (int i = length - 2; i >= 0; i--)
+                {
+                    if (matchesMin)
+                    {
+                        result.Bytes[i] = (byte)shit.Next(min.Bytes[i], 255);
+                        matchesMin = result.Bytes[i] == min.Bytes[i];
+                    }
+                    else if (matchesMax)
+                    {
+                        result.Bytes[i] = (byte)shit.Next(min.Bytes[i], 255);
+                        matchesMin = result.Bytes[i] == min.Bytes[i];
+                    }
+                    else
+                        result.Bytes[i] = (byte)shit.Next(0, 255);
+                }
+                return result;
+            }
+            else return min;
+        }
+        private static LargeInteger RemoveUnnecessaryBytes(LargeInteger l)
+        {
+            int i = l.Length - 1;
+            while (l.Bytes[i] == 0)
+                i--;
+            l.Bytes.RemoveRange(i, l.Length - 1 - i);
+            return l;
         }
         public static LargeInteger Root(LargeInteger b, LargeInteger rootClass)
         {
@@ -678,7 +729,6 @@ namespace EML
             }
             return middle;
         }
-        
         #endregion
         #region Overrides
         public override string ToString()
