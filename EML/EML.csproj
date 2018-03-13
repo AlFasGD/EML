@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparison.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="Expression.cs" />
     <Compile Include="Infinity.cs" />

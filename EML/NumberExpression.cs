@@ -10,7 +10,31 @@ namespace EML
     {
         Expression[] Expressions { get; set; }
         SpecialNumberSet ExpressionDomain { get; set; }
-
-
+         
+        // Only needed for compilation
+        public static bool operator ==(NumberExpression left, NumberExpression right)
+        {
+            return false;
+        }
+        public static bool operator !=(NumberExpression left, NumberExpression right)
+        {
+            return false;
+        }
+        public static bool operator <(NumberExpression left, NumberExpression right)
+        {
+            return false;
+        }
+        public static bool operator >(NumberExpression left, NumberExpression right)
+        {
+            return false;
+        }
+        public static bool operator <=(NumberExpression left, NumberExpression right)
+        {
+            return false;
+        }
+        public static bool operator >=(NumberExpression left, NumberExpression right)
+        {
+            return false;
+        }
     }
 }

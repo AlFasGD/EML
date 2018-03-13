@@ -297,7 +297,7 @@ namespace EML
                     return result;
                 }
             }
-            else throw new DivideByZeroException("Cannot divide by zero.");
+            else throw new DivideByZeroException("Cannot divide by zero. HAHA GAY /");
         }
         public static LargeInteger operator %(LargeInteger left, LargeInteger right)
         {
@@ -352,7 +352,7 @@ namespace EML
                     return remainder;
                 }
             }
-            else throw new DivideByZeroException("Cannot divide by zero.");
+            else throw new DivideByZeroException("Cannot divide by zero. HAHA GAY %");
         }
         public static LargeInteger operator ++(LargeInteger l) => l + 1;
         public static LargeInteger operator --(LargeInteger l) => l - 1;
@@ -532,6 +532,7 @@ namespace EML
         }
         #endregion
         #region Operations
+        // Need to write documentation for the functions and their parameters
         public static bool IsPrime(LargeInteger l)
         {
             bool result = false;
@@ -558,6 +559,16 @@ namespace EML
             return digCount;
         }
         public static LargeInteger AbsoluteValue(LargeInteger l) => l >= 0 ? l : -l;
+        public static Comparison GetComparison(LargeInteger a, LargeInteger b)
+        {
+            if (a < b)
+                return Comparison.LessThan;
+            else if (a == b)
+                return Comparison.EqualTo;
+            else
+                return Comparison.GreaterThan;
+            // Simple implementation, might need to optimize a bit
+        }
         public static LargeInteger GreatestCommonDivisor(LargeInteger a, LargeInteger b)
         {
             LargeInteger max = Max(a, b);
@@ -733,12 +744,12 @@ namespace EML
         #region Overrides
         public override string ToString()
         {
-            string result = "";
-            if (Sign == false) result = "-";
+            StringBuilder result = new StringBuilder();
+            if (Sign == false) result.Append("-");
             LargeInteger currentIntPart = this;
             for (LargeInteger i = 1; (currentIntPart = this / i) > 0; i *= 10)
-                result = (char)((currentIntPart % 10) + 48) + result;
-            return result;
+                result.Insert(0, (char)((currentIntPart % 10) + 48));
+            return result.ToString();
         }
         #endregion
     }

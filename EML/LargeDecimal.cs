@@ -14,7 +14,13 @@ namespace EML
         //public int Length { get { return LeftBytes.Count + RightBytes.Count; } }
         public int LeftLength { get { return LeftBytes.Count; } }
         public int RightLength { get { return RightBytes.Count; } }
-        
+
+        #region Constants
+        /// <summary>The constant π with a 100-digit precision.</summary>
+        public static readonly LargeDecimal PI = new LargeDecimal("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679");
+        /// <summary>The constant π with a 250-digit precision. Especially made with lots of love and care for the grecophiles.</summary>
+        public static readonly LargeDecimal π = new LargeDecimal("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091");
+        #endregion
         #region Constructors
         public LargeDecimal(byte b)
         {
@@ -106,6 +112,10 @@ namespace EML
             RightBytes = new List<byte>();
             RightBytes.AddRange(rightBytes);
             Sign = true;
+        }
+        public LargeDecimal(string s)
+        {
+            this = Parse(s);
         }
         #endregion
         #region Implicit Conversions
@@ -627,6 +637,16 @@ namespace EML
             return true;
         }
         public static LargeDecimal AbsoluteValue(LargeDecimal l) => l >= 0 ? l : -l;
+        public static Comparison GetComparison(LargeDecimal a, LargeDecimal b)
+        {
+            if (a < b)
+                return Comparison.LessThan;
+            else if (a == b)
+                return Comparison.EqualTo;
+            else
+                return Comparison.GreaterThan;
+            // Simple implementation, might need to optimize a bit
+        }
         public static LargeDecimal Invert(LargeDecimal l) => 1 / l;
         public static LargeDecimal Parse(string str)
         {
@@ -663,6 +683,27 @@ namespace EML
             }
             else if (b != 0) return 1;
             else throw new ElevateZeroToThePowerOfZeroException("Cannot perform the operation 0^0.");
+        }
+        #endregion
+        #region Overrides
+        public override string ToString()
+        {
+            StringBuilder result = new StringBuilder();
+            if (Sign == false) result.Append("-");
+            LargeInteger rightIntPart = new LargeInteger();
+            rightIntPart.Bytes = RightBytes;
+            LargeInteger leftIntPart = new LargeInteger();
+            rightIntPart.Bytes = LeftBytes;
+            LargeInteger currentIntPart = leftIntPart;
+            for (LargeInteger i = 1; (currentIntPart = leftIntPart / i) > 0; i *= 10)
+                result.Insert(0, (char)((currentIntPart % 10) + 48));
+            if (rightIntPart > 0)
+            {
+                result.Append(".");
+                for (LargeInteger i = 1; (currentIntPart = rightIntPart / i) > 0; i *= 10)
+                    result.Append((char)((currentIntPart % 10) + 48));
+            }
+            return result.ToString();
         }
         #endregion
     }
