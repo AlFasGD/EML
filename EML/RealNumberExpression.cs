@@ -9,8 +9,12 @@ namespace EML
     public class RealNumberExpression : Expression
     {
         public string Name { get; set; }
-        public LargeDecimal[] Literals { get; set; }
-        public Operation[] Operations { get; set; }
 
+        /// <summary>Initializes a new instance of the <seealso cref="RealNumberExpression"/> class.</summary>
+        public RealNumberExpression(string name, LargeDecimal[] literals, Operation[] operations)
+            : base(literals, operations)
+        {
+            Name = name;
+        }
     }
 }

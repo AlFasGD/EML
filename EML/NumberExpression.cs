@@ -10,7 +10,14 @@ namespace EML
     {
         Expression[] Expressions { get; set; }
         SpecialNumberSet ExpressionDomain { get; set; }
-         
+        
+        public NumberExpression(Expression[] expressions, SpecialNumberSet expressionDomain, LargeDecimal[] literals, Operation[] operations)
+            : base(literals, operations)
+        {
+            Expressions = expressions;
+            ExpressionDomain = expressionDomain;
+        }
+
         // Only needed for compilation
         public static bool operator ==(NumberExpression left, NumberExpression right)
         {

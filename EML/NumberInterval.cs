@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace EML
 {
     /// <summary>Represents a number interval.</summary>
-    public class RealNumberInterval : NumberSet
+    public class RealNumberInterval
     {
         public SpecialNumberSet IntervalDomain { get; set; }
         public bool IsCompleteIntervalDomain { get; set; }

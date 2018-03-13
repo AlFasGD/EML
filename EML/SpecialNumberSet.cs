@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EML
 {
+    /// <summary>Provides values for the different special number sets.</summary>
     public enum SpecialNumberSet
     {
         Natural = 0x1,

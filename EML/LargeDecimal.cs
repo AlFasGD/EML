@@ -629,6 +629,7 @@ namespace EML
         }
         #endregion
         #region Operations
+        // Need to write documentation for the functions and their parameters
         public static bool TryParse(string str, out LargeDecimal result)
         {
             result = 0;
