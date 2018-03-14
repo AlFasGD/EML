@@ -11,81 +11,115 @@ namespace EML
     {
         public List<byte> Bytes { get; set; }
         public bool Sign { get; set; } // True if number is positive
-        public int Length { get { return Bytes.Count; } }
+        public int Length => Bytes.Count;
 
         #region Constructors
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="byte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(byte b)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)b));
             Sign = true;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="short"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(short s)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)s));
             Sign = s >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="int"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(int i)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)i));
             Sign = i >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="long"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(long l)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(l));
             Sign = l >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="sbyte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(sbyte b)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)b));
             Sign = b >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="ushort"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(ushort s)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)s));
             Sign = s >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="uint"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(uint i)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)i));
             Sign = i >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="ulong"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(ulong l)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)l));
             Sign = l >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="float"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(float f)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)f));
             Sign = f >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="double"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(double d)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes((long)d));
             Sign = d >= 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="decimal"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(decimal d)
         {
             LargeInteger n = Parse(d.ToString());
             Bytes = n.Bytes;
             Sign = n.Sign;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="LargeDecimal"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(LargeDecimal d)
         {
             Bytes = d.RightBytes;
             Sign = d.Sign;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="byte"/> array to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(byte[] b)
+        {
+            Bytes = new List<byte>();
+            Bytes.AddRange(b);
+            Sign = true;
+        }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="byte"/> list to create the <seealso cref="LargeInteger"/> from.</param>
+        public LargeInteger(List<byte> b)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(b);
@@ -533,6 +567,8 @@ namespace EML
         #endregion
         #region Operations
         // Need to write documentation for the functions and their parameters
+        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is a prime or not.</summary>
+        /// <param name="l">The instance of <seealso cref="LargeInteger"/> to check for being a prime.</param>
         public static bool IsPrime(LargeInteger l)
         {
             bool result = false;
@@ -543,6 +579,9 @@ namespace EML
                 else result = i == sqrt;
             return result;
         }
+        /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeInteger"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeInteger"/>, otherwise <see langword="false"/>.</summary>
+        /// <param name="str">The string to parse.</param>
+        /// <param name="result">The variable to return the converted instance of <seealso cref="LargeInteger"/> to.</param>
         public static bool TryParse(string str, out LargeInteger result)
         {
             result = 0;
@@ -550,16 +589,10 @@ namespace EML
             catch { return false; }
             return true;
         }
-        public static int GetDecimalDigitCount(LargeInteger l)
-        {
-            int digCount = (l.Length - 1) * 2 + 1;
-            for (int i = digCount; i < l.Length * 3; i++)
-                if (l % Power(10, i) > 0)
-                    digCount = i;
-            return digCount;
-        }
-        public static LargeInteger AbsoluteValue(LargeInteger l) => l >= 0 ? l : -l;
-        public static Comparison GetComparison(LargeInteger a, LargeInteger b)
+        /// <summary>Returns the relation between two instances of <seealso cref="LargeInteger"/>. The result is the relation based on the left <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The left instance of <seealso cref="LargeInteger"/> to compare.</param>
+        /// <param name="b">The right instance of <seealso cref="LargeInteger"/> to compare.</param>
+        public static Comparison GetRelation(LargeInteger a, LargeInteger b)
         {
             if (a < b)
                 return Comparison.LessThan;
@@ -569,6 +602,31 @@ namespace EML
                 return Comparison.GreaterThan;
             // Simple implementation, might need to optimize a bit
         }
+        /// <summary>Gets the decimal digit count of an instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The instance of <seealso cref="LargeInteger"/> whose decimal digits to get.</param>
+        public static int GetDecimalDigitCount(LargeInteger l)
+        {
+            int digCount = (l.Length - 1) * 2 + 1;
+            for (int i = digCount; i < l.Length * 3; i++)
+                if (l % Power(10, i) > 0)
+                    digCount = i;
+            return digCount;
+        }
+        /// <summary>Returns the absolute value of a <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> whose absolute value to get.</param>
+        public static LargeInteger AbsoluteValue(LargeInteger l) => l >= 0 ? l : -l;
+        /// <summary>Returns the factorial of a <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> whose factorial to get.</param>
+        public static LargeInteger Factorial(LargeInteger l)
+        {
+            LargeInteger result = 1;
+            for (LargeInteger i = l; i > 1; i--) // It's prefered to do the comparison between the LargeInteger and 1 simply because 1 is converted to a LargeInteger which is compared really fast due to its small length
+                result *= i;
+            return result;
+        }
+        /// <summary>Returns the greatest common divisor of a number of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The left instance of <seealso cref="LargeInteger"/>.</param>
+        /// <param name="b">The right instance of <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger GreatestCommonDivisor(LargeInteger a, LargeInteger b)
         {
             LargeInteger max = Max(a, b);
@@ -576,6 +634,22 @@ namespace EML
             for (LargeInteger i = 1; i < max / 2; i++)
                 if (a % i == 0 && b % i == 0)
                     GCD = i;
+            return GCD;
+        }
+        /// <summary>Returns the greatest common divisor of a number of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The array of instances of <seealso cref="LargeInteger"/>.</param>
+        public static LargeInteger GreatestCommonDivisor(params LargeInteger[] l)
+        {
+            LargeInteger max = Max(l);
+            LargeInteger GCD = 1;
+            bool isDivisible = true;
+            for (LargeInteger i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
             return GCD;
         }
         public static LargeInteger Invert(LargeInteger l) => 1 / l;
@@ -702,43 +776,53 @@ namespace EML
         }
         public static LargeInteger Root(LargeInteger b, LargeInteger rootClass)
         {
-            int digCount = GetDecimalDigitCount(b);
-            int maxSqrtCount = digCount / 2 + 1;
-            int minSqrtCount = Math.Max((digCount / 2 - 1), 1);
-            LargeInteger start = Power(10, (minSqrtCount - 1));
-            LargeInteger end = Power(10, maxSqrtCount) - 1;
-            LargeInteger middle = (start + end) / 2;
-            LargeInteger power = 0;
-            LargeInteger lastPower = 0;
-            while ((power = Power(middle, rootClass)) != b && power != lastPower)
+            if (b > 0)
             {
-                if (power < b)
-                    middle = (end + middle) / 2;
-                else
-                    middle = (start + middle) / 2;
-                lastPower = power;
+                int digCount = GetDecimalDigitCount(b);
+                int maxRootCount = digCount / 2 + 1;
+                int minRootCount = Math.Max((digCount / 2 - 1), 1);
+                LargeInteger start = Power(10, (minRootCount - 1));
+                LargeInteger end = Power(10, maxRootCount) - 1;
+                LargeInteger middle = (start + end) / 2;
+                LargeInteger power = 0;
+                LargeInteger lastPower = 0;
+                while ((power = Power(middle, rootClass)) != b && power != lastPower)
+                {
+                    if (power < b)
+                        middle = (end + middle) / 2;
+                    else
+                        middle = (start + middle) / 2;
+                    lastPower = power;
+                }
+                return middle;
             }
-            return middle;
+            else if (b == 0) return 0;
+            else throw new ArgumentException("Negative numbers don't have a square root.");
         }
-        public static LargeInteger SquareRoot(LargeInteger l)
+        public static LargeInteger SquareRoot(LargeInteger b)
         {
-            int digCount = GetDecimalDigitCount(l);
-            int maxSqrtCount = digCount / 2 + 1;
-            int minSqrtCount = Math.Max((digCount / 2 - 1), 1);
-            LargeInteger start = Power(10, (minSqrtCount - 1));
-            LargeInteger end = Power(10, maxSqrtCount) - 1;
-            LargeInteger middle = (start + end) / 2;
-            LargeInteger sq = 0;
-            LargeInteger lastSq = 0;
-            while ((sq = Power(middle, 2)) != l && sq != lastSq)
+            if (b > 0)
             {
-                if (sq < l)
-                    middle = (end + middle) / 2;
-                else
-                    middle = (start + middle) / 2;
-                lastSq = sq;
+                int digCount = GetDecimalDigitCount(b);
+                int maxSqrtCount = digCount / 2 + 1;
+                int minSqrtCount = Math.Max((digCount / 2 - 1), 1);
+                LargeInteger start = Power(10, (minSqrtCount - 1));
+                LargeInteger end = Power(10, maxSqrtCount) - 1;
+                LargeInteger middle = (start + end) / 2;
+                LargeInteger sq = 0;
+                LargeInteger lastSq = 0;
+                while ((sq = Power(middle, 2)) != b && sq != lastSq)
+                {
+                    if (sq < b)
+                        middle = (end + middle) / 2;
+                    else
+                        middle = (start + middle) / 2;
+                    lastSq = sq;
+                }
+                return middle;
             }
-            return middle;
+            else if (b == 0) return 0;
+            else throw new ArgumentException("Negative numbers don't have a square root.");
         }
         #endregion
         #region Overrides
