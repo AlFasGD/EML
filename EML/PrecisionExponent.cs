@@ -210,8 +210,8 @@ namespace EML
             else
             {
                 PrecisionExponent result = p;
-                result.Value = (decimal)Math.Pow((double)result.Value, power);
-                result.Value *= (decimal)Math.Pow(10, power - (int)power);
+                result.Value = (decimal)doublePow((double)result.Value, power);
+                result.Value *= (decimal)doublePow(10, power - (int)power);
                 result.Exponent *= (int)power;
                 return GetPrecisionExponentInfo(result);
             }
@@ -252,7 +252,7 @@ namespace EML
         //    else if (a == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
         //    else if (n == 0) return a * b;
         //    else if (n >= 1 && b == 0) return 1;
-        //    else if (n == 1) return Math.Pow(a, b);
+        //    else if (n == 1) return doublePow(a, b);
         //    else
         //    {
         //        PrecisionExponent result = a;
