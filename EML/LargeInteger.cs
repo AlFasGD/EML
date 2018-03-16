@@ -9,8 +9,11 @@ namespace EML
     /// <summary>Represents an arbitrarily large integer.</summary>
     public struct LargeInteger
     {
+        /// <summary>The <seealso cref="byte"/> list representing the digits of the number.</summary>
         public List<byte> Bytes { get; set; }
+        /// <summary>The sign of the instance of <seealso cref="LargeInteger"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
         public bool Sign { get; set; } // True if number is positive
+        /// <summary>The length of the instance of <seealso cref="LargeInteger"/>.</summary>
         public int Length => Bytes.Count;
 
         #region Constructors

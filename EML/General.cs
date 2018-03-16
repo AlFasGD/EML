@@ -9,6 +9,11 @@ namespace EML
     /// <summary>Contains general operations in mathematics.</summary>
     public static class General
     {
+        #region Constants
+        /// <summary>The constant π with 39-digit precision. This precision is enough for precise calculations in an atomic scale.</summary>
+        public const decimal Pi = 3.141592653589793238462643383279502884197m;
+        #endregion
+
         #region Min
         /// <summary>Returns the smallest value of a <seealso cref="char"/> array.</summary>
         /// <param name="a">The <seealso cref="char"/> array.</param>
@@ -492,6 +497,323 @@ namespace EML
                 if (power != 0) return 0;
                 else throw new ElevateZeroToThePowerOfZeroException();
             }
+        }
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static decimal Power(float b, int power)
+        {
+            if (b != 0)
+            {
+                if (power != 0)
+                {
+                    int absolutePower = AbsoluteValue(power);
+                    decimal result = 1;
+                    for (int i = 1; i <= absolutePower; i++)
+                        result *= (decimal)b;
+                    return power > 0 ? result : Invert(result);
+                }
+                else return 1;
+            }
+            else
+            {
+                if (power != 0) return 0;
+                else throw new ElevateZeroToThePowerOfZeroException();
+            }
+        }
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static decimal Power(double b, int power)
+        {
+            if (b != 0)
+            {
+                if (power != 0)
+                {
+                    int absolutePower = AbsoluteValue(power);
+                    decimal result = 1;
+                    for (int i = 1; i <= absolutePower; i++)
+                        result *= (decimal)b;
+                    return power > 0 ? result : Invert(result);
+                }
+                else return 1;
+            }
+            else
+            {
+                if (power != 0) return 0;
+                else throw new ElevateZeroToThePowerOfZeroException();
+            }
+        }
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static decimal Power(decimal b, int power)
+        {
+            if (b != 0)
+            {
+                if (power != 0)
+                {
+                    int absolutePower = AbsoluteValue(power);
+                    decimal result = 1;
+                    for (int i = 1; i <= absolutePower; i++)
+                        result *= b;
+                    return power > 0 ? result : Invert(result);
+                }
+                else return 1;
+            }
+            else
+            {
+                if (power != 0) return 0;
+                else throw new ElevateZeroToThePowerOfZeroException();
+            }
+        }
+        #endregion
+        #region Factorial
+        /// <summary>Returns the factorial of a number.</summary>
+        /// <param name="b">The base number to get the factorial of.</param>
+        public static decimal Factorial(byte b)
+        {
+            if (b == 0) return 1;
+            else // Always positive; byte ranges from 0 to 255
+            {
+                decimal result = 1;
+                for (byte i = 2; i <= b; i++)
+                    result *= i;
+                return result;
+            }
+        }
+        /// <summary>Returns the factorial of a number.</summary>
+        /// <param name="b">The base number to get the factorial of.</param>
+        public static decimal Factorial(short b)
+        {
+            if (b == 0) return 1;
+            else if (b > 0)
+            {
+                decimal result = 1;
+                for (short i = 2; i <= b; i++)
+                    result *= i;
+                return result;
+            }
+            else throw new NegativeNumberFactorialException();
+        }
+        /// <summary>Returns the factorial of a number.</summary>
+        /// <param name="b">The base number to get the factorial of.</param>
+        public static decimal Factorial(int b)
+        {
+            if (b == 0) return 1;
+            else if (b > 0)
+            {
+                decimal result = 1;
+                for (int i = 2; i <= b; i++)
+                    result *= i;
+                return result;
+            }
+            else throw new NegativeNumberFactorialException();
+        }
+        /// <summary>Returns the factorial of a number.</summary>
+        /// <param name="b">The base number to get the factorial of.</param>
+        public static decimal Factorial(long b)
+        {
+            if (b == 0) return 1;
+            else if (b > 0)
+            {
+                decimal result = 1;
+                for (long i = 2; i <= b; i++)
+                    result *= i;
+                return result;
+            }
+            else throw new NegativeNumberFactorialException();
+        }
+        /// <summary>Returns the factorial of a number.</summary>
+        /// <param name="b">The base number to get the factorial of.</param>
+        public static decimal Factorial(sbyte b)
+        {
+            if (b == 0) return 1;
+            else if (b > 0)
+            {
+                decimal result = 1;
+                for (sbyte i = 2; i <= b; i++)
+                    result *= i;
+                return result;
+            }
+            else throw new NegativeNumberFactorialException();
+        }
+        /// <summary>Returns the factorial of a number.</summary>
+        /// <param name="b">The base number to get the factorial of.</param>
+        public static decimal Factorial(ushort b)
+        {
+            if (b == 0) return 1;
+            else // Unsigned, always positive
+            {
+                decimal result = 1;
+                for (ushort i = 2; i <= b; i++)
+                    result *= i;
+                return result;
+            }
+        }
+        /// <summary>Returns the factorial of a number.</summary>
+        /// <param name="b">The base number to get the factorial of.</param>
+        public static decimal Factorial(uint b)
+        {
+            if (b == 0) return 1;
+            else // Unsigned, always positive
+            {
+                decimal result = 1;
+                for (uint i = 2; i <= b; i++)
+                    result *= i;
+                return result;
+            }
+        }
+        /// <summary>Returns the factorial of a number.</summary>
+        /// <param name="b">The base number to get the factorial of.</param>
+        public static decimal Factorial(ulong b)
+        {
+            if (b == 0) return 1;
+            else // Unsigned, always positive
+            {
+                decimal result = 1;
+                for (ulong i = 2; i <= b; i++)
+                    result *= i;
+                return result;
+            }
+        }
+        #endregion
+        #region Factorization
+        /// <summary>Returns the factorization of two numbers.</summary>
+        /// <param name="start">The starting number to get the factorization of.</param>
+        /// <param name="end">The ending number to get the factorization of.</param>
+        public static decimal Factorization(byte start, byte end)
+        {
+            if (start < end)
+            {
+                decimal result = 1;
+                for (byte i = start; i <= end; i++)
+                    result *= i;
+                return result;
+            }
+            else if (start == end) return 1;
+            else throw new InvalidFactorizationVariableOrderException();
+        }
+        /// <summary>Returns the factorization of two numbers.</summary>
+        /// <param name="start">The starting number to get the factorization of.</param>
+        /// <param name="end">The ending number to get the factorization of.</param>
+        public static decimal Factorization(short start, short end)
+        {
+            if (start < end)
+            {
+                if (start >= 0 && end >= 0)
+                {
+                    decimal result = 1;
+                    for (short i = start; i <= end; i++)
+                        result *= i;
+                    return result;
+                }
+                else throw new NegativeNumberFactorialException();
+            }
+            else if (start == end) return 1;
+            else throw new InvalidFactorizationVariableOrderException();
+        }
+        /// <summary>Returns the factorization of two numbers.</summary>
+        /// <param name="start">The starting number to get the factorization of.</param>
+        /// <param name="end">The ending number to get the factorization of.</param>
+        public static decimal Factorization(int start, int end)
+        {
+            if (start < end)
+            {
+                if (start >= 0 && end >= 0)
+                {
+                    decimal result = 1;
+                    for (int i = start; i <= end; i++)
+                        result *= i;
+                    return result;
+                }
+                else throw new NegativeNumberFactorialException();
+            }
+            else if (start == end) return 1;
+            else throw new InvalidFactorizationVariableOrderException();
+        }
+        /// <summary>Returns the factorization of two numbers.</summary>
+        /// <param name="start">The starting number to get the factorization of.</param>
+        /// <param name="end">The ending number to get the factorization of.</param>
+        public static decimal Factorization(long start, long end)
+        {
+            if (start < end)
+            {
+                if (start >= 0 && end >= 0)
+                {
+                    decimal result = 1;
+                    for (long i = start; i <= end; i++)
+                        result *= i;
+                    return result;
+                }
+                else throw new NegativeNumberFactorialException();
+            }
+            else if (start == end) return 1;
+            else throw new InvalidFactorizationVariableOrderException();
+        }
+        /// <summary>Returns the factorization of two numbers.</summary>
+        /// <param name="start">The starting number to get the factorization of.</param>
+        /// <param name="end">The ending number to get the factorization of.</param>
+        public static decimal Factorization(sbyte start, sbyte end)
+        {
+            if (start < end)
+            {
+                if (start >= 0 && end >= 0)
+                {
+                    decimal result = 1;
+                    for (sbyte i = start; i <= end; i++)
+                        result *= i;
+                    return result;
+                }
+                else throw new NegativeNumberFactorialException();
+            }
+            else if (start == end) return 1;
+            else throw new InvalidFactorizationVariableOrderException();
+        }
+        /// <summary>Returns the factorization of two numbers.</summary>
+        /// <param name="start">The starting number to get the factorization of.</param>
+        /// <param name="end">The ending number to get the factorization of.</param>
+        public static decimal Factorization(ushort start, ushort end)
+        {
+            if (start < end)
+            {
+                decimal result = 1;
+                for (ushort i = start; i <= end; i++)
+                    result *= i;
+                return result;
+            }
+            else if (start == end) return 1;
+            else throw new InvalidFactorizationVariableOrderException();
+        }
+        /// <summary>Returns the factorization of two numbers.</summary>
+        /// <param name="start">The starting number to get the factorization of.</param>
+        /// <param name="end">The ending number to get the factorization of.</param>
+        public static decimal Factorization(uint start, uint end)
+        {
+            if (start < end)
+            {
+                decimal result = 1;
+                for (uint i = start; i <= end; i++)
+                    result *= i;
+                return result;
+            }
+            else if (start == end) return 1;
+            else throw new InvalidFactorizationVariableOrderException();
+        }
+        /// <summary>Returns the factorization of two numbers.</summary>
+        /// <param name="start">The starting number to get the factorization of.</param>
+        /// <param name="end">The ending number to get the factorization of.</param>
+        public static decimal Factorization(ulong start, ulong end)
+        {
+            if (start < end)
+            {
+                decimal result = 1;
+                for (ulong i = start; i <= end; i++)
+                    result *= i;
+                return result;
+            }
+            else if (start == end) return 1;
+            else throw new InvalidFactorizationVariableOrderException();
         }
         #endregion
     }
