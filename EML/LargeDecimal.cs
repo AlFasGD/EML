@@ -8,12 +8,19 @@ namespace EML
 {
     public struct LargeDecimal
     {
+        /// <summary>The <seealso cref="byte"/> list representing the digits on the left side of the number from the decimal point (the integral part).</summary>
         public List<byte> LeftBytes { get; set; } // The bytes for the left part of the decimal number
+        /// <summary>The <seealso cref="byte"/> list representing the digits on the right side of the number from the decimal point (the decimal part).</summary>
         public List<byte> RightBytes { get; set; } // The bytes for the right part of the decimal number (after the decimal point)
+        /// <summary>The sign of the instance of <seealso cref="LargeDecimal"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
         public bool Sign { get; set; } // True = positive
         //public int Length { get { return LeftBytes.Count + RightBytes.Count; } }
+        /// <summary>The length of the left part of the instance of <seealso cref="LargeDecimal"/>.</summary>
         public int LeftLength { get { return LeftBytes.Count; } }
+        /// <summary>The length of the right part of the instance of <seealso cref="LargeDecimal"/>.</summary>
         public int RightLength { get { return RightBytes.Count; } }
+        /// <summary>The period part of the instance of <seealso cref="LargeDecimal"/>. The first item represents the period's beginning point</summary>
+        public (int, int) Period { get; }
 
         #region Constants
         /// <summary>The constant π with a 100-digit precision.</summary>
@@ -25,58 +32,66 @@ namespace EML
         public LargeDecimal(byte b)
         {
             LeftBytes = new List<byte>();
-            LeftBytes.AddRange(BitConverter.GetBytes((long)b));
+            LeftBytes.Add(b);
             RightBytes = new List<byte>();
             Sign = true;
+            Period = (0, 0);
         }
         public LargeDecimal(short s)
         {
             LeftBytes = new List<byte>();
-            LeftBytes.AddRange(BitConverter.GetBytes((long)s));
+            LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(s)));
             RightBytes = new List<byte>();
             Sign = s >= 0;
+            Period = (0, 0);
         }
         public LargeDecimal(int i)
         {
             LeftBytes = new List<byte>();
-            LeftBytes.AddRange(BitConverter.GetBytes((long)i));
+            LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(i)));
             RightBytes = new List<byte>();
             Sign = i >= 0;
+            Period = (0, 0);
         }
         public LargeDecimal(long l)
+        {
+            LeftBytes = new List<byte>();
+            LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(l)));
+            RightBytes = new List<byte>();
+            Sign = l >= 0;
+            Period = (0, 0);
+        }
+        public LargeDecimal(sbyte b)
+        {
+            LeftBytes = new List<byte>();
+            LeftBytes.Add((byte)General.AbsoluteValue(b));
+            RightBytes = new List<byte>();
+            Sign = b >= 0;
+            Period = (0, 0);
+        }
+        public LargeDecimal(ushort s)
+        {
+            LeftBytes = new List<byte>();
+            LeftBytes.AddRange(BitConverter.GetBytes(s));
+            RightBytes = new List<byte>();
+            Sign = s >= 0;
+            Period = (0, 0);
+        }
+        public LargeDecimal(uint i)
+        {
+            LeftBytes = new List<byte>();
+            LeftBytes.AddRange(BitConverter.GetBytes(i));
+            RightBytes = new List<byte>();
+            Sign = i >= 0;
+            Period = (0, 0);
+        }
+        public LargeDecimal(ulong l)
         {
             LeftBytes = new List<byte>();
             LeftBytes.AddRange(BitConverter.GetBytes(l));
             RightBytes = new List<byte>();
             Sign = l >= 0;
-        }
-        public LargeDecimal(sbyte b)
-        {
-            LeftBytes = new List<byte>();
-            LeftBytes.AddRange(BitConverter.GetBytes((long)b));
-            RightBytes = new List<byte>();
-            Sign = b >= 0;
-        }
-        public LargeDecimal(ushort s)
-        {
-            LeftBytes = new List<byte>();
-            LeftBytes.AddRange(BitConverter.GetBytes((long)s));
-            RightBytes = new List<byte>();
-            Sign = s >= 0;
-        }
-        public LargeDecimal(uint i)
-        {
-            LeftBytes = new List<byte>();
-            LeftBytes.AddRange(BitConverter.GetBytes((long)i));
-            RightBytes = new List<byte>();
-            Sign = i >= 0;
-        }
-        public LargeDecimal(ulong l)
-        {
-            LeftBytes = new List<byte>();
-            LeftBytes.AddRange(BitConverter.GetBytes((long)l));
-            RightBytes = new List<byte>();
-            Sign = l >= 0;
+            Period = (0, 0);
         }
         public LargeDecimal(float f)
         {
@@ -84,6 +99,7 @@ namespace EML
             LeftBytes = a.LeftBytes;
             RightBytes = a.RightBytes;
             Sign = a.Sign;
+            Period = (0, 0);
         }
         public LargeDecimal(double d)
         {
@@ -91,6 +107,7 @@ namespace EML
             LeftBytes = a.LeftBytes;
             RightBytes = a.RightBytes;
             Sign = a.Sign;
+            Period = (0, 0);
         }
         public LargeDecimal(decimal d)
         {
@@ -98,12 +115,14 @@ namespace EML
             LeftBytes = a.LeftBytes;
             RightBytes = a.RightBytes;
             Sign = a.Sign;
+            Period = (0, 0);
         }
         public LargeDecimal(LargeInteger l)
         {
             LeftBytes = l.Bytes;
             RightBytes = new List<byte>();
             Sign = l.Sign;
+            Period = (0, 0);
         }
         public LargeDecimal(byte[] leftBytes, byte[] rightBytes)
         {
@@ -112,6 +131,7 @@ namespace EML
             RightBytes = new List<byte>();
             RightBytes.AddRange(rightBytes);
             Sign = true;
+            Period = (0, 0);
         }
         public LargeDecimal(string s)
         {
@@ -136,8 +156,8 @@ namespace EML
         public static LargeDecimal operator +(LargeDecimal left, LargeDecimal right)
         {
             LargeDecimal result = new LargeDecimal();
-            result.LeftBytes.AddRange(new byte[Math.Max(left.LeftLength, right.LeftLength)]); // Add as many left bytes as needed for both the decimals
-            result.RightBytes.AddRange(new byte[Math.Max(left.RightLength, right.RightLength)]); // Add as many right bytes as needed for both the decimals
+            result.LeftBytes.AddRange(new byte[General.Max(left.LeftLength, right.LeftLength)]); // Add as many left bytes as needed for both the decimals
+            result.RightBytes.AddRange(new byte[General.Max(left.RightLength, right.RightLength)]); // Add as many right bytes as needed for both the decimals
             if (!left.Sign && !right.Sign)
                 result.Sign = false;
             else if (left.Sign && right.Sign)
@@ -215,9 +235,9 @@ namespace EML
                             result.LeftBytes.Add(1);
                     }
                 }
-                else if (Math.Abs(sum) >= 256 - result.RightBytes[i] && sum < 0) // If the sum is negative and its absolute value is bigger than the max value of a byte
+                else if (General.AbsoluteValue(sum) >= 256 - result.RightBytes[i] && sum < 0) // If the sum is negative and its absolute value is bigger than the max value of a byte
                 {
-                    sum = Math.Abs(sum);
+                    sum = General.AbsoluteValue(sum);
                     sum -= 256;
                     if (i > 0) // If the next byte is still on the right side
                         result.RightBytes[i - 1]++;
@@ -267,9 +287,9 @@ namespace EML
                     else if (i == result.LeftLength - 1) // If there is a need for a new byte in the list
                         result.LeftBytes.Add(1);
                 }
-                else if (Math.Abs(sum) >= 256 - result.LeftBytes[i] && sum < 0) // If the sum is negative and its absolute value is bigger than the max value of a byte
+                else if (General.AbsoluteValue(sum) >= 256 - result.LeftBytes[i] && sum < 0) // If the sum is negative and its absolute value is bigger than the max value of a byte
                 {
-                    sum = Math.Abs(sum);
+                    sum = General.AbsoluteValue(sum);
                     int j = i + 1;
                     do
                     {
@@ -463,8 +483,8 @@ namespace EML
         }
         public static LargeDecimal operator &(LargeDecimal left, LargeDecimal right)
         {
-            int minLeftLength = Math.Min(left.LeftLength, right.LeftLength);
-            int minRightLength = Math.Min(left.RightLength, right.RightLength);
+            int minLeftLength = General.Min(left.LeftLength, right.LeftLength);
+            int minRightLength = General.Min(left.RightLength, right.RightLength);
             byte[] leftBytes = new byte[minLeftLength];
             byte[] rightBytes = new byte[minRightLength];
             for (int i = 0; i < minLeftLength; i++)
@@ -475,10 +495,10 @@ namespace EML
         }
         public static LargeDecimal operator |(LargeDecimal left, LargeDecimal right)
         {
-            int minLeftLength = Math.Min(left.LeftLength, right.LeftLength);
-            int minRightLength = Math.Min(left.RightLength, right.RightLength);
-            int maxLeftLength = Math.Max(left.LeftLength, right.LeftLength);
-            int maxRightLength = Math.Max(left.RightLength, right.RightLength);
+            int minLeftLength = General.Min(left.LeftLength, right.LeftLength);
+            int minRightLength = General.Min(left.RightLength, right.RightLength);
+            int maxLeftLength = General.Max(left.LeftLength, right.LeftLength);
+            int maxRightLength = General.Max(left.RightLength, right.RightLength);
             byte[] leftBytes = new byte[minLeftLength];
             byte[] rightBytes = new byte[minRightLength];
             for (int i = 0; i < minLeftLength; i++)
@@ -501,10 +521,10 @@ namespace EML
         }
         public static LargeDecimal operator ^(LargeDecimal left, LargeDecimal right)
         {
-            int minLeftLength = Math.Min(left.LeftLength, right.LeftLength);
-            int minRightLength = Math.Min(left.RightLength, right.RightLength);
-            int maxLeftLength = Math.Max(left.LeftLength, right.LeftLength);
-            int maxRightLength = Math.Max(left.RightLength, right.RightLength);
+            int minLeftLength = General.Min(left.LeftLength, right.LeftLength);
+            int minRightLength = General.Min(left.RightLength, right.RightLength);
+            int maxLeftLength = General.Max(left.LeftLength, right.LeftLength);
+            int maxRightLength = General.Max(left.RightLength, right.RightLength);
             byte[] leftBytes = new byte[minLeftLength];
             byte[] rightBytes = new byte[minRightLength];
             for (int i = 0; i < minLeftLength; i++)
@@ -668,7 +688,7 @@ namespace EML
         public static LargeDecimal Parse(string str)
         {
             LargeDecimal result = 0;
-            if (str[0] != 45) // If it's not a number character
+            if (str[0] == '-') // If it's the negative sign symbol
             {
                 str = str.Remove(0, 1);
                 result.Sign = false;
@@ -678,7 +698,7 @@ namespace EML
             {
                 result.LeftBytes = LargeInteger.Parse(split[0]).Bytes;
                 for (int i = 0; i < split[1].Length; i++)
-                    if (str[i] < 48 || str[i] > 57) // If it's not a number character
+                    if (str[i] < '0' || str[i] > '9') // If it's not a number character
                         throw new FormatException("The string is not a valid numerical value.");
                 for (int i = split[0].Length - 1; i >= 0; i--)
                     result += split[0][i] * Power(10, i - split[0].Length + 1);
@@ -711,7 +731,7 @@ namespace EML
             {
                 int digCount = GetDecimalDigitCount(b);
                 int maxRootCount = digCount / 2 + 1;
-                int minRootCount = Math.Max((digCount / 2 - 1), 1);
+                int minRootCount = General.Max((digCount / 2 - 1), 1);
                 LargeDecimal start = Power(10, (minRootCount - 1));
                 LargeDecimal end = Power(10, maxRootCount) - 1;
                 LargeDecimal middle = (start + end) / 2;
@@ -739,7 +759,7 @@ namespace EML
             {
                 int digCount = GetDecimalDigitCount(b);
                 int maxSqrtCount = digCount / 2 + 1;
-                int minSqrtCount = Math.Max((digCount / 2 - 1), 1);
+                int minSqrtCount = General.Max((digCount / 2 - 1), 1);
                 LargeDecimal start = Power(10, (minSqrtCount - 1));
                 LargeDecimal end = Power(10, maxSqrtCount) - 1;
                 LargeDecimal middle = (start + end) / 2;

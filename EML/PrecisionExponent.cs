@@ -63,14 +63,14 @@ namespace EML
         {
             value = inputValue;
             exponent = inputExponent;
-            if (Math.Abs(value) >= 10)
-                while (Math.Abs(value) >= 10)
+            if (General.AbsoluteValue(value) >= 10)
+                while (General.AbsoluteValue(value) >= 10)
                 {
                     value /= 10;
                     exponent++;
                 }
-            else if (Math.Abs(value) < 1)
-                while (Math.Abs(value) < 1)
+            else if (General.AbsoluteValue(value) < 1)
+                while (General.AbsoluteValue(value) < 1)
                 {
                     value *= 10;
                     exponent--;
@@ -81,14 +81,14 @@ namespace EML
         static PrecisionExponent GetPrecisionExponentInfo(PrecisionExponent input)
         {
             PrecisionExponent output = input;
-            if (Math.Abs(output.Value) >= 10)
-                while (Math.Abs(output.Value) >= 10)
+            if (General.AbsoluteValue(output.Value) >= 10)
+                while (General.AbsoluteValue(output.Value) >= 10)
                 {
                     output.Value /= 10;
                     output.Exponent++;
                 }
-            else if (Math.Abs(output.Value) < 1)
-                while (Math.Abs(output.Value) < 1)
+            else if (General.AbsoluteValue(output.Value) < 1)
+                while (General.AbsoluteValue(output.Value) < 1)
                 {
                     output.Value *= 10;
                     output.Exponent--;

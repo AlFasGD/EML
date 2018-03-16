@@ -33,6 +33,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0-preview1-26216-02\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +47,7 @@
     <Compile Include="Comparison.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="Expression.cs" />
+    <Compile Include="General.cs" />
     <Compile Include="Infinity.cs" />
     <Compile Include="LargeDecimal.cs" />
     <Compile Include="LargeInteger.cs" />
@@ -58,6 +62,9 @@
     <Compile Include="NumberSet.cs" />
     <Compile Include="SetOperation.cs" />
     <Compile Include="SpecialNumberSet.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
