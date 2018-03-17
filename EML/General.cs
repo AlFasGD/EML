@@ -317,14 +317,14 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(byte b, int power)
+        public static double Power(byte b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
                     return power > 0 ? result : Invert(result);
@@ -340,14 +340,14 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(short b, int power)
+        public static double Power(short b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
                     return power > 0 ? result : Invert(result);
@@ -363,14 +363,14 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(int b, int power)
+        public static double Power(int b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
                     return power > 0 ? result : Invert(result);
@@ -386,14 +386,14 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(long b, int power)
+        public static double Power(long b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
                     return power > 0 ? result : Invert(result);
@@ -409,14 +409,14 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(sbyte b, int power)
+        public static double Power(sbyte b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
                     return power > 0 ? result : Invert(result);
@@ -432,14 +432,14 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(ushort b, int power)
+        public static double Power(ushort b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
                     return power > 0 ? result : Invert(result);
@@ -455,14 +455,14 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(uint b, int power)
+        public static double Power(uint b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
                     return power > 0 ? result : Invert(result);
@@ -478,14 +478,14 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(ulong b, int power)
+        public static double Power(ulong b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
                     return power > 0 ? result : Invert(result);
@@ -501,62 +501,63 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(float b, int power)
+        public static double Power(float b, int power)
         {
             if (b != 0)
             {
                 if (power != 0)
                 {
                     int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= (decimal)b;
-                    return power > 0 ? result : Invert(result);
-                }
-                else return 1;
-            }
-            else
-            {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(double b, int power)
-        {
-            if (b != 0)
-            {
-                if (power != 0)
-                {
-                    int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= (decimal)b;
-                    return power > 0 ? result : Invert(result);
-                }
-                else return 1;
-            }
-            else
-            {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static decimal Power(decimal b, int power)
-        {
-            if (b != 0)
-            {
-                if (power != 0)
-                {
-                    int absolutePower = AbsoluteValue(power);
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = 1; i <= absolutePower; i++)
                         result *= b;
+                    return power > 0 ? result : Invert(result);
+                }
+                else return 1;
+            }
+            else
+            {
+                if (power != 0) return 0;
+                else throw new ElevateZeroToThePowerOfZeroException();
+            }
+        }
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(double b, int power)
+        {
+            if (b != 0)
+            {
+                if (power != 0)
+                {
+                    int absolutePower = AbsoluteValue(power);
+                    double result = 1;
+                    for (int i = 1; i <= absolutePower; i++)
+                        result *= b;
+                    return power > 0 ? result : Invert(result);
+                }
+                else return 1;
+            }
+            else
+            {
+                if (power != 0) return 0;
+                else throw new ElevateZeroToThePowerOfZeroException();
+            }
+        }
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(decimal b, int power)
+        {
+            if (b != 0)
+            {
+                double a = (double)b;
+                if (power != 0)
+                {
+                    int absolutePower = AbsoluteValue(power);
+                    double result = 1;
+                    for (int i = 1; i <= absolutePower; i++)
+                        result *= a;
                     return power > 0 ? result : Invert(result);
                 }
                 else return 1;
@@ -571,12 +572,12 @@ namespace EML
         #region Factorial
         /// <summary>Returns the factorial of a number.</summary>
         /// <param name="b">The base number to get the factorial of.</param>
-        public static decimal Factorial(byte b)
+        public static double Factorial(byte b)
         {
             if (b == 0) return 1;
             else // Always positive; byte ranges from 0 to 255
             {
-                decimal result = 1;
+                double result = 1;
                 for (byte i = 2; i <= b; i++)
                     result *= i;
                 return result;
@@ -584,12 +585,12 @@ namespace EML
         }
         /// <summary>Returns the factorial of a number.</summary>
         /// <param name="b">The base number to get the factorial of.</param>
-        public static decimal Factorial(short b)
+        public static double Factorial(short b)
         {
             if (b == 0) return 1;
             else if (b > 0)
             {
-                decimal result = 1;
+                double result = 1;
                 for (short i = 2; i <= b; i++)
                     result *= i;
                 return result;
@@ -598,12 +599,12 @@ namespace EML
         }
         /// <summary>Returns the factorial of a number.</summary>
         /// <param name="b">The base number to get the factorial of.</param>
-        public static decimal Factorial(int b)
+        public static double Factorial(int b)
         {
             if (b == 0) return 1;
             else if (b > 0)
             {
-                decimal result = 1;
+                double result = 1;
                 for (int i = 2; i <= b; i++)
                     result *= i;
                 return result;
@@ -612,12 +613,12 @@ namespace EML
         }
         /// <summary>Returns the factorial of a number.</summary>
         /// <param name="b">The base number to get the factorial of.</param>
-        public static decimal Factorial(long b)
+        public static double Factorial(long b)
         {
             if (b == 0) return 1;
             else if (b > 0)
             {
-                decimal result = 1;
+                double result = 1;
                 for (long i = 2; i <= b; i++)
                     result *= i;
                 return result;
@@ -626,12 +627,12 @@ namespace EML
         }
         /// <summary>Returns the factorial of a number.</summary>
         /// <param name="b">The base number to get the factorial of.</param>
-        public static decimal Factorial(sbyte b)
+        public static double Factorial(sbyte b)
         {
             if (b == 0) return 1;
             else if (b > 0)
             {
-                decimal result = 1;
+                double result = 1;
                 for (sbyte i = 2; i <= b; i++)
                     result *= i;
                 return result;
@@ -640,12 +641,12 @@ namespace EML
         }
         /// <summary>Returns the factorial of a number.</summary>
         /// <param name="b">The base number to get the factorial of.</param>
-        public static decimal Factorial(ushort b)
+        public static double Factorial(ushort b)
         {
             if (b == 0) return 1;
             else // Unsigned, always positive
             {
-                decimal result = 1;
+                double result = 1;
                 for (ushort i = 2; i <= b; i++)
                     result *= i;
                 return result;
@@ -653,12 +654,12 @@ namespace EML
         }
         /// <summary>Returns the factorial of a number.</summary>
         /// <param name="b">The base number to get the factorial of.</param>
-        public static decimal Factorial(uint b)
+        public static double Factorial(uint b)
         {
             if (b == 0) return 1;
             else // Unsigned, always positive
             {
-                decimal result = 1;
+                double result = 1;
                 for (uint i = 2; i <= b; i++)
                     result *= i;
                 return result;
@@ -666,12 +667,12 @@ namespace EML
         }
         /// <summary>Returns the factorial of a number.</summary>
         /// <param name="b">The base number to get the factorial of.</param>
-        public static decimal Factorial(ulong b)
+        public static double Factorial(ulong b)
         {
             if (b == 0) return 1;
             else // Unsigned, always positive
             {
-                decimal result = 1;
+                double result = 1;
                 for (ulong i = 2; i <= b; i++)
                     result *= i;
                 return result;
@@ -682,11 +683,11 @@ namespace EML
         /// <summary>Returns the factorization of two numbers.</summary>
         /// <param name="start">The starting number to get the factorization of.</param>
         /// <param name="end">The ending number to get the factorization of.</param>
-        public static decimal Factorization(byte start, byte end)
+        public static double Factorization(byte start, byte end)
         {
             if (start < end)
             {
-                decimal result = 1;
+                double result = 1;
                 for (byte i = start; i <= end; i++)
                     result *= i;
                 return result;
@@ -697,13 +698,13 @@ namespace EML
         /// <summary>Returns the factorization of two numbers.</summary>
         /// <param name="start">The starting number to get the factorization of.</param>
         /// <param name="end">The ending number to get the factorization of.</param>
-        public static decimal Factorization(short start, short end)
+        public static double Factorization(short start, short end)
         {
             if (start < end)
             {
                 if (start >= 0 && end >= 0)
                 {
-                    decimal result = 1;
+                    double result = 1;
                     for (short i = start; i <= end; i++)
                         result *= i;
                     return result;
@@ -716,13 +717,13 @@ namespace EML
         /// <summary>Returns the factorization of two numbers.</summary>
         /// <param name="start">The starting number to get the factorization of.</param>
         /// <param name="end">The ending number to get the factorization of.</param>
-        public static decimal Factorization(int start, int end)
+        public static double Factorization(int start, int end)
         {
             if (start < end)
             {
                 if (start >= 0 && end >= 0)
                 {
-                    decimal result = 1;
+                    double result = 1;
                     for (int i = start; i <= end; i++)
                         result *= i;
                     return result;
@@ -735,13 +736,13 @@ namespace EML
         /// <summary>Returns the factorization of two numbers.</summary>
         /// <param name="start">The starting number to get the factorization of.</param>
         /// <param name="end">The ending number to get the factorization of.</param>
-        public static decimal Factorization(long start, long end)
+        public static double Factorization(long start, long end)
         {
             if (start < end)
             {
                 if (start >= 0 && end >= 0)
                 {
-                    decimal result = 1;
+                    double result = 1;
                     for (long i = start; i <= end; i++)
                         result *= i;
                     return result;
@@ -754,13 +755,13 @@ namespace EML
         /// <summary>Returns the factorization of two numbers.</summary>
         /// <param name="start">The starting number to get the factorization of.</param>
         /// <param name="end">The ending number to get the factorization of.</param>
-        public static decimal Factorization(sbyte start, sbyte end)
+        public static double Factorization(sbyte start, sbyte end)
         {
             if (start < end)
             {
                 if (start >= 0 && end >= 0)
                 {
-                    decimal result = 1;
+                    double result = 1;
                     for (sbyte i = start; i <= end; i++)
                         result *= i;
                     return result;
@@ -773,11 +774,11 @@ namespace EML
         /// <summary>Returns the factorization of two numbers.</summary>
         /// <param name="start">The starting number to get the factorization of.</param>
         /// <param name="end">The ending number to get the factorization of.</param>
-        public static decimal Factorization(ushort start, ushort end)
+        public static double Factorization(ushort start, ushort end)
         {
             if (start < end)
             {
-                decimal result = 1;
+                double result = 1;
                 for (ushort i = start; i <= end; i++)
                     result *= i;
                 return result;
@@ -788,11 +789,11 @@ namespace EML
         /// <summary>Returns the factorization of two numbers.</summary>
         /// <param name="start">The starting number to get the factorization of.</param>
         /// <param name="end">The ending number to get the factorization of.</param>
-        public static decimal Factorization(uint start, uint end)
+        public static double Factorization(uint start, uint end)
         {
             if (start < end)
             {
-                decimal result = 1;
+                double result = 1;
                 for (uint i = start; i <= end; i++)
                     result *= i;
                 return result;
@@ -803,11 +804,11 @@ namespace EML
         /// <summary>Returns the factorization of two numbers.</summary>
         /// <param name="start">The starting number to get the factorization of.</param>
         /// <param name="end">The ending number to get the factorization of.</param>
-        public static decimal Factorization(ulong start, ulong end)
+        public static double Factorization(ulong start, ulong end)
         {
             if (start < end)
             {
-                decimal result = 1;
+                double result = 1;
                 for (ulong i = start; i <= end; i++)
                     result *= i;
                 return result;
@@ -815,6 +816,529 @@ namespace EML
             else if (start == end) return 1;
             else throw new InvalidFactorizationVariableOrderException();
         }
+        #endregion
+        #region Root
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(byte b, int rootClass)
+        {
+            if (b == 0 || b == 1) return b;
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 3; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 3; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+        }
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(short b, int rootClass)
+        {
+            bool negative = b < 0;
+            if (negative) b = (short)-b; // Already checked if it's a negative number, needless to work around with the stupid negative sign
+            if (b == 0 || b == 1) return b;
+            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 5; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return negative ? -middle : middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 5; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return negative ? -middle : middle;
+            }
+        }
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(int b, int rootClass)
+        {
+            bool negative = b < 0;
+            if (negative) b = -b; // Already checked if it's a negative number, needless to work around with the stupid negative sign
+            if (b == 0 || b == 1) return b;
+            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 10; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return negative ? -middle : middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 10; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return negative ? -middle : middle;
+            }
+        }
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(long b, int rootClass)
+        {
+            bool negative = b < 0;
+            if (negative) b = -b; // Already checked if it's a negative number, needless to work around with the stupid negative sign
+            if (b == 0 || b == 1) return b;
+            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 19; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return negative ? -middle : middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 19; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return negative ? -middle : middle;
+            }
+        }
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(sbyte b, int rootClass)
+        {
+            bool negative = b < 0;
+            if (negative) b = (sbyte)-b; // Already checked if it's a negative number, needless to work around with the stupid negative sign
+            if (b == 0 || b == 1) return b;
+            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 3; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return negative ? -middle : middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 3; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return negative ? -middle : middle;
+            }
+        }
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(ushort b, int rootClass)
+        {
+            if (b == 0 || b == 1) return b;
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 5; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 5; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+        }
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(uint b, int rootClass)
+        {
+            if (b == 0 || b == 1) return b;
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 10; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 10; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+        }
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(ulong b, int rootClass)
+        {
+            if (b == 0 || b == 1) return b;
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 19; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 19; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+        }
+        /// <summary>Returns the root of b number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static double Root(float b, int rootClass)
+        {
+            if (b == 0 || b == 1) return b;
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 38; // Maximum digit count
+                double start = Power(10, (minRootCount - 1));
+                double end = Power(10, maxRootCount) - 1;
+                double middle = (start + end) / 2;
+                double power;
+                while ((power = Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 38; // Maximum digit count
+                double start = Power(10, (minRootCount - 1));
+                double end = Power(10, maxRootCount) - 1;
+                double middle = (start + end) / 2;
+                double power;
+                while ((power = Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+        }
+        /// <summary>Returns the root of b number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static double Root(double b, int rootClass)
+        {
+            if (b == 0 || b == 1) return b;
+            else if (b > 1)
+            {
+                // Decimals can't hold anythihng too big
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 324; // Maximum digit count
+                double start = Power(10, (minRootCount - 1));
+                double end = Power(10, maxRootCount) - 1;
+                double middle = (start + end) / 2;
+                double power;
+                while ((power = Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 324; // Maximum digit count
+                double start = Power(10, (minRootCount - 1));
+                double end = Power(10, maxRootCount) - 1;
+                double middle = (start + end) / 2;
+                double power;
+                while ((power = Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+        }
+        /// <summary>Returns the root of a number.</summary>
+        /// <param name="b">The base number to get the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
+        public static decimal Root(decimal b, int rootClass)
+        {
+            if (b == 0 || b == 1) return b;
+            else if (b > 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 324; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+            else // if (0 < b < 1)
+            {
+                int maxRootCount = 1; // Minimum digit count
+                int minRootCount = 324; // Maximum digit count
+                decimal start = (decimal)Power(10, (minRootCount - 1));
+                decimal end = (decimal)Power(10, maxRootCount) - 1;
+                decimal middle = (start + end) / 2;
+                decimal power;
+                while ((power = (decimal)Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power < b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                return middle;
+            }
+        }
+        #endregion
+        #region Square Root
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(byte b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(short b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(int b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(long b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(sbyte b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(ushort b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(uint b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(ulong b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static double SquareRoot(float b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static double SquareRoot(double b) => Root(b, 2);
+        /// <summary>Returns the square root of a number.</summary>
+        /// <param name="b">The base number to get the square root of.</param>
+        public static decimal SquareRoot(decimal b) => Root(b, 2);
         #endregion
     }
 }

@@ -352,8 +352,16 @@ namespace EML
 
            Ian Kaplan, October 1996
         */
-        // The division and modulus operations are using copyrighted code form the owner as stated in the previously pasted claim by Ian Kaplan
+        // The division and modulus operations are using copyrighted code form the owner as stated in the aforementioned pasted claim by Ian Kaplan
         // This is a transcription in C# from the source as written in C++, however copyright applies for the algorithm expressed as code
+        // Ironically enough, the code contained a mistake causing false results that be way off the expected
+        // In fact, the error was the following:
+        // Original (C++):                   q = !((t & 0x80000000) >> 31);
+        // Original (C#):                    q = ~((t & 0x80000000) >> 31);
+        // Original (C# - General-purpose):  q = ~((t & (1 << (t.Length * 8 - 1))) >> (t.Length * 8 - 1));
+        // Fixed (C# - General-purpose):     q = ~(t & (1 << (t.Length * 8 - 1))) >> (t.Length * 8 - 1);
+        // The only results that would be produced from the original in C++ would either be 0xFFFFFFFF or 0x00000000 which is unwanted.
+        // That is, only if the compiler takes the parentheses into consideration properly
         public static LargeInteger operator /(LargeInteger left, LargeInteger right)
         {
             if (right != 0)
@@ -383,8 +391,8 @@ namespace EML
                     }
 
                     /* The loop, above, always goes one iteration too far.
-                        To avoid inserting an "if" statement inside the loop
-                        the last iteration is simply reversed. */
+                       To avoid inserting an "if" statement inside the loop
+                       the last iteration is simply reversed. */
 
                     absoluteLeft = d;
                     remainder = remainder >> 1;
@@ -431,8 +439,8 @@ namespace EML
                     }
 
                     /* The loop, above, always goes one iteration too far.
-                       To avoid inserting an "if" statement inside the loop
-                       the last iteration is simply reversed. */
+                        To avoid inserting an "if" statement inside the loop
+                        the last iteration is simply reversed. */
 
                     absoluteLeft = d;
                     remainder = remainder >> 1;
@@ -775,7 +783,7 @@ namespace EML
             else if (!power.Sign)
                 return 0;
             else if (b != 0) return 1;
-            else throw new ElevateZeroToThePowerOfZeroException("Cannot perform the operation 0^0.");
+            else throw new ElevateZeroToThePowerOfZeroException();
         }
         public static LargeInteger Random(int length)
         {
@@ -847,9 +855,16 @@ namespace EML
             l.Bytes.RemoveRange(i, l.Length - 1 - i);
             return l;
         }
+        /// <summary>Returns the square root of any number rounded to the closest integer. Since this is an approximation for decimal integers, it's suggested that this function is only used for integers whose n-th root is an integer.</summary>
+        /// <param name="b">The integer to find the root of.</param>
+        /// <param name="rootClass">The class of the root.</param>
         public static LargeInteger Root(LargeInteger b, LargeInteger rootClass)
         {
-            if (b > 0)
+            bool negative = b < 0;
+            b.Sign = true; // Already checked if it's a negative number, needless to work around with the stupid negative sign
+            if (b == 0 || b == 1) return b;
+            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (b > 1)
             {
                 int digCount = GetDecimalDigitCount(b);
                 int maxRootCount = digCount / 2 + 1;
@@ -857,46 +872,42 @@ namespace EML
                 LargeInteger start = Power(10, (minRootCount - 1));
                 LargeInteger end = Power(10, maxRootCount) - 1;
                 LargeInteger middle = (start + end) / 2;
-                LargeInteger power = 0;
-                LargeInteger lastPower = 0;
-                while ((power = Power(middle, rootClass)) != b && power != lastPower)
+                LargeInteger power;
+                while ((power = Power(middle, rootClass)) != b && start <= end)
                 {
                     if (power < b)
-                        middle = (end + middle) / 2;
+                        start = (end + middle) / 2;
                     else
-                        middle = (start + middle) / 2;
-                    lastPower = power;
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
                 }
+                middle.Sign = !negative;
                 return middle;
             }
-            else if (b == 0) return 0;
-            else throw new ArgumentException("Negative numbers don't have a square root.");
-        }
-        public static LargeInteger SquareRoot(LargeInteger b)
-        {
-            if (b > 0)
+            else // if (0 < b < 1)
             {
                 int digCount = GetDecimalDigitCount(b);
-                int maxSqrtCount = digCount / 2 + 1;
-                int minSqrtCount = General.Max((digCount / 2 - 1), 1);
-                LargeInteger start = Power(10, (minSqrtCount - 1));
-                LargeInteger end = Power(10, maxSqrtCount) - 1;
+                int maxRootCount = digCount / 2 + 1;
+                int minRootCount = General.Max((digCount / 2 - 1), 1);
+                LargeInteger start = Power(10, (minRootCount - 1));
+                LargeInteger end = Power(10, maxRootCount) - 1;
                 LargeInteger middle = (start + end) / 2;
-                LargeInteger sq = 0;
-                LargeInteger lastSq = 0;
-                while ((sq = Power(middle, 2)) != b && sq != lastSq)
+                LargeInteger power;
+                while ((power = Power(middle, rootClass)) != b && start <= end)
                 {
-                    if (sq < b)
-                        middle = (end + middle) / 2;
+                    if (power > b)
+                        start = (end + middle) / 2;
                     else
-                        middle = (start + middle) / 2;
-                    lastSq = sq;
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
                 }
+                middle.Sign = !negative;
                 return middle;
             }
-            else if (b == 0) return 0;
-            else throw new ArgumentException("Negative numbers don't have a square root.");
         }
+        /// <summary>Returns the square root of any number rounded to the closest integer. Since this is an approximation for decimal integers, it's suggested that this function is only used for perfect squares.</summary>
+        /// <param name="b">The integer to find the square root of.</param>
+        public static LargeInteger SquareRoot(LargeInteger b) => Root(b, 2);
         #endregion
         #region Overrides
         public override string ToString()

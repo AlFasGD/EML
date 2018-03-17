@@ -719,15 +719,19 @@ namespace EML
                 return result;
             }
             else if (b != 0) return 1;
-            else throw new ElevateZeroToThePowerOfZeroException("Cannot perform the operation 0^0.");
+            else throw new ElevateZeroToThePowerOfZeroException();
         }
         /// <summary>Returns an approximation of the root of a number. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>
         /// <param name="rootClass">The class of the root.</param>
         /// <param name="decimalDigits">The number of decimal digits of the approximation.</param>
-        public static LargeDecimal Root(LargeDecimal b, LargeInteger rootClass)
+        public static LargeDecimal Root(LargeDecimal b, LargeInteger rootClass, int decimalDigits)
         {
-            if (b > 0)
+            bool negative = b < 0;
+            b.Sign = true; // Already checked if it's a negative number, needless to work around with the stupid negative sign
+            if (b == 0 || b == 1) return b;
+            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (b > 1)
             {
                 int digCount = GetDecimalDigitCount(b);
                 int maxRootCount = digCount / 2 + 1;
@@ -735,49 +739,43 @@ namespace EML
                 LargeDecimal start = Power(10, (minRootCount - 1));
                 LargeDecimal end = Power(10, maxRootCount) - 1;
                 LargeDecimal middle = (start + end) / 2;
-                LargeDecimal power = 0;
-                LargeDecimal lastPower = 0;
-                while ((power = Power(middle, rootClass)) != b && power != lastPower)
+                LargeDecimal power;
+                while ((power = Power(middle, rootClass)) != b && start <= end)
                 {
                     if (power < b)
-                        middle = (end + middle) / 2;
+                        start = (end + middle) / 2;
                     else
-                        middle = (start + middle) / 2;
-                    lastPower = power;
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
                 }
+                middle.Sign = !negative;
                 return middle;
             }
-            else if (b == 0) return 0;
-            else throw new ArgumentException("Negative numbers don't have a square root.");
+            else // if (0 < b < 1)
+            {
+                int digCount = GetDecimalDigitCount(b);
+                int maxRootCount = digCount / 2 + 1;
+                int minRootCount = General.Max((digCount / 2 - 1), 1);
+                LargeDecimal start = Power(10, (minRootCount - 1));
+                LargeDecimal end = Power(10, maxRootCount) - 1;
+                LargeDecimal middle = (start + end) / 2;
+                LargeDecimal power;
+                while ((power = Power(middle, rootClass)) != b && start <= end)
+                {
+                    if (power > b)
+                        start = (end + middle) / 2;
+                    else
+                        end = (start + middle) / 2;
+                    middle = (start + end) / 2;
+                }
+                middle.Sign = !negative;
+                return middle;
+            }
         }
         /// <summary>Returns an approximation of the square root of a number. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>
         /// <param name="decimalDigits">The number of decimal digits of the approximation.</param>
-        public static LargeDecimal SquareRoot(LargeDecimal b, int decimalDigits)
-        {
-            if (b > 0)
-            {
-                int digCount = GetDecimalDigitCount(b);
-                int maxSqrtCount = digCount / 2 + 1;
-                int minSqrtCount = General.Max((digCount / 2 - 1), 1);
-                LargeDecimal start = Power(10, (minSqrtCount - 1));
-                LargeDecimal end = Power(10, maxSqrtCount) - 1;
-                LargeDecimal middle = (start + end) / 2;
-                LargeDecimal sq = 0;
-                LargeDecimal lastSq = 0;
-                while ((sq = Power(middle, 2)) != b && sq != lastSq)
-                {
-                    if (sq < b)
-                        middle = (end + middle) / 2;
-                    else
-                        middle = (start + middle) / 2;
-                    lastSq = sq;
-                }
-                return middle;
-            }
-            else if (b == 0) return 0;
-            else throw new ArgumentException("Negative numbers don't have a square root.");
-        }
+        public static LargeDecimal SquareRoot(LargeDecimal b, int decimalDigits) => Root(b, 2, decimalDigits);
         #endregion
         #region Overrides
         public override string ToString()

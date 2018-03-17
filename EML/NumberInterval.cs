@@ -47,11 +47,7 @@ namespace EML
         public static bool IsSubset(RealNumberInterval target, RealNumberInterval container)
         {
             if (target.IntervalDomain == container.IntervalDomain)
-            {
-                if (container.IsCompleteIntervalDomain) return true;
-                if (container.Left <= target.Left && container.Right >= target.Right) return true;
-                return false;
-            }
+                return container.IsCompleteIntervalDomain || container.Left <= target.Left && container.Right >= target.Right;
             else return false;
         }
 

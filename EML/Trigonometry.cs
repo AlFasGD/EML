@@ -35,16 +35,46 @@ namespace EML
         /// <summary>Returns the sine value of an angle.</summary>
         /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
         /// <param name="measurementUnit">The angle measurement unit to use.</param>
-        public static decimal Sine(decimal angle, AngleMeasurementUnit measurementUnit)
+        public static decimal Sine(decimal angle, AngleMeasurementUnit measurementUnit) => Sine(ConvertAngle(angle, measurementUnit, AngleMeasurementUnit.Radians));
+        /// <summary>Returns the cosine value of an angle.</summary>
+        /// <param name="radians">The value of the angle in radians.</param>
+        public static decimal Cosine(decimal radians) => General.SquareRoot(1 - General.Power(Sine(radians), 2));
+        /// <summary>Returns the cosine value of an angle.</summary>
+        /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
+        /// <param name="measurementUnit">The angle measurement unit to use.</param>
+        public static decimal Cosine(decimal angle, AngleMeasurementUnit measurementUnit) => General.SquareRoot(1 - General.Power(Sine(angle, measurementUnit), 2));
+        /// <summary>Returns the tangent value of an angle.</summary>
+        /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
+        /// <param name="measurementUnit">The angle measurement unit to use.</param>
+        public static decimal Tangent(decimal radians) => General.SquareRoot(1 - General.Power(Sine(radians), 2));
+        /// <summary>Returns the tangent value of an angle.</summary>
+        /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
+        /// <param name="measurementUnit">The angle measurement unit to use.</param>
+        public static decimal Tangent(decimal angle, AngleMeasurementUnit measurementUnit) => General.SquareRoot(1 - General.Power(Sine(angle, measurementUnit), 2));
+
+        /// <summary>Converts the angle from one measurement unit to another.</summary>
+        /// <param name="angle">The angle to convert.</param>
+        /// <param name="originalUnit">The unit the parsed angle is based on.</param>
+        /// <param name="conversionUnit">The unit the returned value is based on.</param>
+        public static decimal ConvertAngle(decimal angle, AngleMeasurementUnit originalUnit, AngleMeasurementUnit conversionUnit)
         {
-            decimal radians;
-            if (measurementUnit == AngleMeasurementUnit.Degrees)
-                radians = General.Pi / 180 * angle;
-            else if (measurementUnit == AngleMeasurementUnit.Gradians)
-                radians = General.Pi / 200 * angle;
-            else
-                radians = angle;
-            return Sine(radians);            
+            decimal result = angle;
+            if (originalUnit != conversionUnit) // Sorted based on estimated execution frequency
+            {
+                if (originalUnit == AngleMeasurementUnit.Degrees && conversionUnit == AngleMeasurementUnit.Radians)
+                    result *= General.Pi / 180;
+                else if (originalUnit == AngleMeasurementUnit.Radians && conversionUnit == AngleMeasurementUnit.Degrees)
+                    result *= 180 / General.Pi;
+                else if (originalUnit == AngleMeasurementUnit.Gradians && conversionUnit == AngleMeasurementUnit.Degrees)
+                    result *= 9 / 10;
+                else if (originalUnit == AngleMeasurementUnit.Degrees && conversionUnit == AngleMeasurementUnit.Gradians)
+                    result *= 10 / 9;
+                else if (originalUnit == AngleMeasurementUnit.Gradians && conversionUnit == AngleMeasurementUnit.Radians)
+                    result *= General.Pi / 200;
+                else if (originalUnit == AngleMeasurementUnit.Radians && conversionUnit == AngleMeasurementUnit.Gradians)
+                    result *= 200 / General.Pi;
+            }
+            return result;
         }
     }
 }
