@@ -16,10 +16,10 @@ namespace EML
             decimal result = radians;
             decimal previousResult = 0;
             int i = 1;
-            decimal currentFactorial = 1;
-            decimal currentPower = radians;
-            decimal radiansSquared = General.Power(radians, 2);
-            decimal currentSign = -1;
+            double currentFactorial = 1;
+            double currentPower = (double)radians;
+            double radiansSquared = General.Power(radians, 2);
+            double currentSign = -1;
             while (result != previousResult) // Quick way to check whether the precision is enough
             {
                 // Efficient progressive calculation
@@ -27,7 +27,7 @@ namespace EML
                 currentFactorial *= General.Factorization(2 * (i - 1) + 1, 2 * i + 1);
                 currentPower *= radiansSquared;
                 currentSign *= -1;
-                result += (currentSign / currentFactorial * currentPower);
+                result += (decimal)(currentSign / currentFactorial * currentPower);
                 i++;
             }
             return result;
@@ -38,19 +38,25 @@ namespace EML
         public static decimal Sine(decimal angle, AngleMeasurementUnit measurementUnit) => Sine(ConvertAngle(angle, measurementUnit, AngleMeasurementUnit.Radians));
         /// <summary>Returns the cosine value of an angle.</summary>
         /// <param name="radians">The value of the angle in radians.</param>
-        public static decimal Cosine(decimal radians) => General.SquareRoot(1 - General.Power(Sine(radians), 2));
+        public static decimal Cosine(decimal radians) => (decimal)General.SquareRoot(1 - General.Power(Sine(radians), 2)); // Some precision is lost during the process
         /// <summary>Returns the cosine value of an angle.</summary>
         /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
         /// <param name="measurementUnit">The angle measurement unit to use.</param>
-        public static decimal Cosine(decimal angle, AngleMeasurementUnit measurementUnit) => General.SquareRoot(1 - General.Power(Sine(angle, measurementUnit), 2));
+        public static decimal Cosine(decimal angle, AngleMeasurementUnit measurementUnit) => (decimal)General.SquareRoot(1 - General.Power(Sine(angle, measurementUnit), 2));
+        /// <summary>Returns the tangent value of an angle.</summary>
+        /// <param name="radians">The value of the angle in radians.</param>
+        public static decimal Tangent(decimal radians) => (decimal)General.SquareRoot(1 - General.Power(Sine(radians), 2));
         /// <summary>Returns the tangent value of an angle.</summary>
         /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
         /// <param name="measurementUnit">The angle measurement unit to use.</param>
-        public static decimal Tangent(decimal radians) => General.SquareRoot(1 - General.Power(Sine(radians), 2));
-        /// <summary>Returns the tangent value of an angle.</summary>
+        public static decimal Tangent(decimal angle, AngleMeasurementUnit measurementUnit) => (decimal)General.SquareRoot(1 - General.Power(Sine(angle, measurementUnit), 2));
+        /// <summary>Returns the cptangent value of an angle.</summary>
+        /// <param name="radians">The value of the angle in radians.</param>
+        public static decimal Cotangent(decimal radians) => General.Invert(Tangent(radians));
+        /// <summary>Returns the cotangent value of an angle.</summary>
         /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
         /// <param name="measurementUnit">The angle measurement unit to use.</param>
-        public static decimal Tangent(decimal angle, AngleMeasurementUnit measurementUnit) => General.SquareRoot(1 - General.Power(Sine(angle, measurementUnit), 2));
+        public static decimal Cotangent(decimal angle, AngleMeasurementUnit measurementUnit) => General.Invert(Tangent(angle, measurementUnit));
 
         /// <summary>Converts the angle from one measurement unit to another.</summary>
         /// <param name="angle">The angle to convert.</param>

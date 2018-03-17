@@ -206,7 +206,7 @@ namespace EML
             {
                 double result = 0;
                 for (int i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 8, 0); i--)
-                    result += a.Bytes[i] * (double)General.Power(2, i * 8);
+                    result += a.Bytes[i] * General.Power(2, i * 8);
                 result = result * (a < 0 ? -1 : 1);
                 return result;
             }
@@ -219,7 +219,7 @@ namespace EML
             {
                 decimal result = 0;
                 for (int i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 12, 0); i--)
-                    result += a.Bytes[i] * General.Power(2, i * 8);
+                    result += a.Bytes[i] * (decimal)General.Power(2, i * 8);
                 result = result * (a < 0 ? -1 : 1);
                 return result;
             }

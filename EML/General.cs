@@ -10,7 +10,7 @@ namespace EML
     public static class General
     {
         #region Constants
-        /// <summary>The constant π with 39-digit precision. This precision is enough for precise calculations in an atomic scale.</summary>
+        /// <summary>The constant π with 39-digit precision (supposedly). This precision is enough for precise calculations in an atomic scale.</summary>
         public const decimal Pi = 3.141592653589793238462643383279502884197m;
         #endregion
 
