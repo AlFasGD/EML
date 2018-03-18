@@ -50,7 +50,7 @@ namespace EML
         /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
         /// <param name="measurementUnit">The angle measurement unit to use.</param>
         public static decimal Tangent(decimal angle, AngleMeasurementUnit measurementUnit) => (decimal)General.SquareRoot(1 - General.Power(Sine(angle, measurementUnit), 2));
-        /// <summary>Returns the cptangent value of an angle.</summary>
+        /// <summary>Returns the cotangent value of an angle.</summary>
         /// <param name="radians">The value of the angle in radians.</param>
         public static decimal Cotangent(decimal radians) => General.Invert(Tangent(radians));
         /// <summary>Returns the cotangent value of an angle.</summary>
