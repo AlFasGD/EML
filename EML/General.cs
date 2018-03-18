@@ -1342,6 +1342,8 @@ namespace EML
         /// <param name="l">The array of <seealso cref="short"/> integers.</param>
         public static short GreatestCommonDivisor(params short[] l)
         {
+            for (int i = 0; i < l.Length; i++)
+                l[i] = AbsoluteValue(l[i]);
             short max = Max(l);
             short GCD = 1;
             bool isDivisible = true;
@@ -1358,6 +1360,8 @@ namespace EML
         /// <param name="l">The array of <seealso cref="int"/> integers.</param>
         public static int GreatestCommonDivisor(params int[] l)
         {
+            for (int i = 0; i < l.Length; i++)
+                l[i] = AbsoluteValue(l[i]);
             int max = Max(l);
             int GCD = 1;
             bool isDivisible = true;
@@ -1374,6 +1378,8 @@ namespace EML
         /// <param name="l">The array of <seealso cref="long"/> integers.</param>
         public static long GreatestCommonDivisor(params long[] l)
         {
+            for (int i = 0; i < l.Length; i++)
+                l[i] = AbsoluteValue(l[i]);
             long max = Max(l);
             long GCD = 1;
             bool isDivisible = true;
@@ -1390,6 +1396,8 @@ namespace EML
         /// <param name="l">The array of <seealso cref="sbyte"/> integers.</param>
         public static sbyte GreatestCommonDivisor(params sbyte[] l)
         {
+            for (int i = 0; i < l.Length; i++)
+                l[i] = AbsoluteValue(l[i]);
             sbyte max = Max(l);
             sbyte GCD = 1;
             bool isDivisible = true;
@@ -1449,6 +1457,144 @@ namespace EML
                     GCD = i;
             }
             return GCD;
+        }
+        #endregion
+        #region Least Common Multiple
+        /// <summary>Returns the least common multiple of a number of <seealso cref="byte"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="byte"/> integers.</param>
+        public static short LeastCommonMultiple(params byte[] l)
+        {
+            byte max = Max(l);
+            short LCM = 0;
+            bool isMultiple = false;
+            while (!isMultiple)
+            {
+                LCM += max;
+                isMultiple = true;
+                for (int i = 0; i < l.Length && isMultiple; i++)
+                    isMultiple = LCM % l[i] == 0;
+            }
+            return LCM;
+        }
+        /// <summary>Returns the least common multiple of a number of <seealso cref="short"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="short"/> integers.</param>
+        public static int LeastCommonMultiple(params short[] l)
+        {
+            for (int i = 0; i < l.Length; i++)
+                l[i] = AbsoluteValue(l[i]);
+            short max = Max(l);
+            int LCM = 0;
+            bool isMultiple = false;
+            while (!isMultiple)
+            {
+                LCM += max;
+                isMultiple = true;
+                for (int i = 0; i < l.Length && isMultiple; i++)
+                    isMultiple = LCM % l[i] == 0;
+            }
+            return LCM;
+        }
+        /// <summary>Returns the least common multiple of a number of <seealso cref="int"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="int"/> integers.</param>
+        public static long LeastCommonMultiple(params int[] l)
+        {
+            for (int i = 0; i < l.Length; i++)
+                l[i] = AbsoluteValue(l[i]);
+            int max = Max(l);
+            long LCM = 0;
+            bool isMultiple = false;
+            while (!isMultiple)
+            {
+                LCM += max;
+                isMultiple = true;
+                for (int i = 0; i < l.Length && isMultiple; i++)
+                    isMultiple = LCM % l[i] == 0;
+            }
+            return LCM;
+        }
+        /// <summary>Returns the least common multiple of a number of <seealso cref="long"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="long"/> integers.</param>
+        public static long LeastCommonMultiple(params long[] l)
+        {
+            for (int i = 0; i < l.Length; i++)
+                l[i] = AbsoluteValue(l[i]);
+            long max = Max(l);
+            long LCM = 0;
+            bool isMultiple = false;
+            while (!isMultiple)
+            {
+                LCM += max;
+                isMultiple = true;
+                for (int i = 0; i < l.Length && isMultiple; i++)
+                    isMultiple = LCM % l[i] == 0;
+            }
+            return LCM;
+        }
+        /// <summary>Returns the least common multiple of a number of <seealso cref="sbyte"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="sbyte"/> integers.</param>
+        public static short LeastCommonMultiple(params sbyte[] l)
+        {
+            for (int i = 0; i < l.Length; i++)
+                l[i] = AbsoluteValue(l[i]);
+            sbyte max = Max(l);
+            short LCM = 0;
+            bool isMultiple = false;
+            while (!isMultiple)
+            {
+                LCM += max;
+                isMultiple = true;
+                for (int i = 0; i < l.Length && isMultiple; i++)
+                    isMultiple = LCM % l[i] == 0;
+            }
+            return LCM;
+        }
+        /// <summary>Returns the least common multiple of a number of <seealso cref="ushort"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="ushort"/> integers.</param>
+        public static uint LeastCommonMultiple(params ushort[] l)
+        {
+            ushort max = Max(l);
+            uint LCM = 0;
+            bool isMultiple = false;
+            while (!isMultiple)
+            {
+                LCM += max;
+                isMultiple = true;
+                for (int i = 0; i < l.Length && isMultiple; i++)
+                    isMultiple = LCM % l[i] == 0;
+            }
+            return LCM;
+        }
+        /// <summary>Returns the least common multiple of a number of <seealso cref="uint"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="uint"/> integers.</param>
+        public static ulong LeastCommonMultiple(params uint[] l)
+        {
+            uint max = Max(l);
+            ulong LCM = 0;
+            bool isMultiple = false;
+            while (!isMultiple)
+            {
+                LCM += max;
+                isMultiple = true;
+                for (int i = 0; i < l.Length && isMultiple; i++)
+                    isMultiple = LCM % l[i] == 0;
+            }
+            return LCM;
+        }
+        /// <summary>Returns the least common multiple of a number of <seealso cref="ulong"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="ulong"/> integers.</param>
+        public static ulong LeastCommonMultiple(params ulong[] l)
+        {
+            ulong max = Max(l);
+            ulong LCM = 0;
+            bool isMultiple = false;
+            while (!isMultiple)
+            {
+                LCM += max;
+                isMultiple = true;
+                for (int i = 0; i < l.Length && isMultiple; i++)
+                    isMultiple = LCM % l[i] == 0;
+            }
+            return LCM;
         }
         #endregion
     }

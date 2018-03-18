@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 
 namespace EML
 {
-    /// <summary>Represents an integral.</summary>
-    public class Integral : Operation 
+    /// <summary>Represents a general integral.</summary>
+    public class Integral : Operation
     {
-        /// <summary>The start of the integral.</summary>
-        public RealNumberExpression start;
-        /// <summary>The end of the integral.</summary>
-        public RealNumberExpression end;
-        /// <summary>The end of the integral.</summary>
-        public Function function;
+        /// <summary>The function of the integral.</summary>
+        public Function Function;
         /// <summary>The variable to take into account while performing the integration.</summary>
-        public string variableName;
+        public string VariableName;
+
+        /// <summary>Creates a new instance of <seealso cref="DefiniteIntegral"/>.</summary>
+        /// <param name="function">The function of the integral.</param>
+        /// <param name="variableName">The variable to take into account while performing the integration.</param>
+        public Integral(Function function, string variableName)
+        {
+            Function = function;
+            VariableName = variableName;
+        }
     }
 }

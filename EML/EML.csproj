@@ -50,7 +50,9 @@
     <Compile Include="Expression.cs" />
     <Compile Include="Function.cs" />
     <Compile Include="General.cs" />
+    <Compile Include="IndefiniteIntegral.cs" />
     <Compile Include="Infinity.cs" />
+    <Compile Include="DefiniteIntegral.cs" />
     <Compile Include="Integral.cs" />
     <Compile Include="InvalidFactorizationVariableOrderException.cs" />
     <Compile Include="LargeDecimal.cs" />
