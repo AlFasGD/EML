@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace EML
 {
+    /// <summary>Represents a constant in mathematics. Probably to be removed since it is not frequently encountered.</summary>
     public class Constant
     {
         public string Name { get; set; }

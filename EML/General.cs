@@ -1451,8 +1451,5 @@ namespace EML
             return GCD;
         }
         #endregion
-        #region Invert
-        public static float Invert(float a) => 1 / a;
-        #endregion
     }
 }

@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace EML
 {
-    /// <summary>Represents a mathematical operation.</summary>
+    /// <summary>Represents an operation in mathematics.</summary>
     public class Operation
     {
-        OperationType OperationType { get; set; }
-        int Parameter { get; set; }
-        
-        public Operation(OperationType operationType, int parameter)
-        {
-            OperationType = operationType;
-            Parameter = parameter;
-        }
+        public OperationType type;
     }
 }

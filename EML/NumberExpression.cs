@@ -11,7 +11,7 @@ namespace EML
         Expression[] Expressions { get; set; }
         SpecialNumberSet ExpressionDomain { get; set; }
         
-        public NumberExpression(Expression[] expressions, SpecialNumberSet expressionDomain, LargeDecimal[] literals, Operation[] operations)
+        public NumberExpression(Expression[] expressions, SpecialNumberSet expressionDomain, LargeDecimal[] literals, OperationType[] operations)
             : base(literals, operations)
         {
             Expressions = expressions;

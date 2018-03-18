@@ -9,10 +9,10 @@ namespace EML
     public class Expression
     {
         LargeDecimal[] Literals { get; set; }
-        Operation[] Operations { get; set; }
+        OperationType[] Operations { get; set; }
 
         /// <summary>Initializes a new instance of the <seealso cref="Expression"/> class.</summary>
-        public Expression(LargeDecimal[] literals, Operation[] operations)
+        public Expression(LargeDecimal[] literals, OperationType[] operations)
         {
             Literals = literals;
             Operations = operations;
