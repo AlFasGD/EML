@@ -12,6 +12,8 @@ namespace EML
         #region Constants
         /// <summary>The constant π with 39-digit precision (supposedly). This precision is enough for precise calculations in an atomic scale.</summary>
         public const decimal Pi = 3.141592653589793238462643383279502884197m;
+        /// <summary>The constant e with 50-digit precision (supposedly).</summary>
+        public const decimal e = 2.71828182845904523536028747135266249775724709369995m;
         #endregion
 
         #region Min
@@ -282,27 +284,6 @@ namespace EML
         public static decimal AbsoluteValue(decimal a) => a > 0 ? a : -a;
         #endregion
         #region Invert
-        /// <summary>Returns the inverted value of a <seealso cref="byte"/>.</summary>
-        /// <param name="d">The <seealso cref="byte"/> whose inverted value to return.</param>
-        public static byte Invert(byte d) => (byte)(1 / d);
-        /// <summary>Returns the inverted value of a <seealso cref="short"/>.</summary>
-        /// <param name="d">The <seealso cref="short"/> whose inverted value to return.</param>
-        public static short Invert(short d) => (short)(1 / d);
-        /// <summary>Returns the inverted value of a <seealso cref="int"/>.</summary>
-        /// <param name="d">The <seealso cref="int"/> whose inverted value to return.</param>
-        public static int Invert(int d) => 1 / d;
-        /// <summary>Returns the inverted value of a <seealso cref="long"/>.</summary>
-        /// <param name="d">The <seealso cref="long"/> whose inverted value to return.</param>
-        public static long Invert(long d) => 1 / d;
-        /// <summary>Returns the inverted value of a <seealso cref="ushort"/>.</summary>
-        /// <param name="d">The <seealso cref="ushort"/> whose inverted value to return.</param>
-        public static ushort Invert(ushort d) => (ushort)(1 / d);
-        /// <summary>Returns the inverted value of a <seealso cref="uint"/>.</summary>
-        /// <param name="d">The <seealso cref="uint"/> whose inverted value to return.</param>
-        public static uint Invert(uint d) => 1 / d;
-        /// <summary>Returns the inverted value of a <seealso cref="ulong"/>.</summary>
-        /// <param name="d">The <seealso cref="ulong"/> whose inverted value to return.</param>
-        public static ulong Invert(ulong d) => 1 / d;
         /// <summary>Returns the inverted value of a <seealso cref="float"/>.</summary>
         /// <param name="d">The <seealso cref="float"/> whose inverted value to return.</param>
         public static float Invert(float d) => 1 / d;
@@ -1339,6 +1320,139 @@ namespace EML
         /// <summary>Returns the square root of a number.</summary>
         /// <param name="b">The base number to get the square root of.</param>
         public static decimal SquareRoot(decimal b) => Root(b, 2);
+        #endregion
+        #region Greatest Common Divisor
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="byte"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="byte"/> integers.</param>
+        public static byte GreatestCommonDivisor(params byte[] l)
+        {
+            byte max = Max(l);
+            byte GCD = 1;
+            bool isDivisible = true;
+            for (byte i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
+            return GCD;
+        }
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="short"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="short"/> integers.</param>
+        public static short GreatestCommonDivisor(params short[] l)
+        {
+            short max = Max(l);
+            short GCD = 1;
+            bool isDivisible = true;
+            for (short i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
+            return GCD;
+        }
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="int"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="int"/> integers.</param>
+        public static int GreatestCommonDivisor(params int[] l)
+        {
+            int max = Max(l);
+            int GCD = 1;
+            bool isDivisible = true;
+            for (int i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
+            return GCD;
+        }
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="long"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="long"/> integers.</param>
+        public static long GreatestCommonDivisor(params long[] l)
+        {
+            long max = Max(l);
+            long GCD = 1;
+            bool isDivisible = true;
+            for (long i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
+            return GCD;
+        }
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="sbyte"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="sbyte"/> integers.</param>
+        public static sbyte GreatestCommonDivisor(params sbyte[] l)
+        {
+            sbyte max = Max(l);
+            sbyte GCD = 1;
+            bool isDivisible = true;
+            for (sbyte i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
+            return GCD;
+        }
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="ushort"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="ushort"/> integers.</param>
+        public static ushort GreatestCommonDivisor(params ushort[] l)
+        {
+            ushort max = Max(l);
+            ushort GCD = 1;
+            bool isDivisible = true;
+            for (ushort i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
+            return GCD;
+        }
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="uint"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="uint"/> integers.</param>
+        public static uint GreatestCommonDivisor(params uint[] l)
+        {
+            uint max = Max(l);
+            uint GCD = 1;
+            bool isDivisible = true;
+            for (uint i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
+            return GCD;
+        }
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="ulong"/> integers.</summary>
+        /// <param name="l">The array of <seealso cref="ulong"/> integers.</param>
+        public static ulong GreatestCommonDivisor(params ulong[] l)
+        {
+            ulong max = Max(l);
+            ulong GCD = 1;
+            bool isDivisible = true;
+            for (ulong i = 1; i < max / 2; i++)
+            {
+                for (int j = 0; j < l.Length && isDivisible; j++)
+                    isDivisible = l[j] % i == 0;
+                if (isDivisible)
+                    GCD = i;
+            }
+            return GCD;
+        }
+        #endregion
+        #region Invert
+        public static float Invert(float a) => 1 / a;
         #endregion
     }
 }

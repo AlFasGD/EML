@@ -733,7 +733,6 @@ namespace EML
             }
             return GCD;
         }
-        public static LargeInteger Invert(LargeInteger l) => 1 / l;
         public static LargeInteger LeastCommonMultiple(LargeInteger a, LargeInteger b) => a * b / GreatestCommonDivisor(a, b);
         public static LargeInteger Max(params LargeInteger[] n)
         {
