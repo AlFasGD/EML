@@ -57,6 +57,20 @@ namespace EML
         /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
         /// <param name="measurementUnit">The angle measurement unit to use.</param>
         public static decimal Cotangent(decimal angle, AngleMeasurementUnit measurementUnit) => General.Invert(Tangent(angle, measurementUnit));
+        /// <summary>Returns the secant value of an angle.</summary>
+        /// <param name="radians">The value of the angle in radians.</param>
+        public static decimal Secant(decimal radians) => General.Invert(Cosine(radians));
+        /// <summary>Returns the secant value of an angle.</summary>
+        /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
+        /// <param name="measurementUnit">The angle measurement unit to use.</param>
+        public static decimal Secant(decimal angle, AngleMeasurementUnit measurementUnit) => General.Invert(Cosine(angle, measurementUnit));
+        /// <summary>Returns the cosecant value of an angle.</summary>
+        /// <param name="radians">The value of the angle in radians.</param>
+        public static decimal Cosecant(decimal radians) => General.Invert(Sine(radians));
+        /// <summary>Returns the cosecant value of an angle.</summary>
+        /// <param name="angle">The value of the angle in the prefered measurement unit.</param>
+        /// <param name="measurementUnit">The angle measurement unit to use.</param>
+        public static decimal Cosecant(decimal angle, AngleMeasurementUnit measurementUnit) => General.Invert(Sine(angle, measurementUnit));
 
         /// <summary>Converts the angle from one measurement unit to another.</summary>
         /// <param name="angle">The angle to convert.</param>
