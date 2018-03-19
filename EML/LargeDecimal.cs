@@ -24,9 +24,13 @@ namespace EML
 
         #region Constants
         /// <summary>The constant π with a 100-digit precision.</summary>
-        public static readonly LargeDecimal PI = new LargeDecimal("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679");
+        public static readonly LargeDecimal Pi  = new LargeDecimal("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679");
         /// <summary>The constant π with a 250-digit precision. Especially made with lots of love and care for the grecophiles.</summary>
-        public static readonly LargeDecimal π = new LargeDecimal("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091");
+        public static readonly LargeDecimal π   = new LargeDecimal("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091");
+        /// <summary>The constant e with a 100-digit precision.</summary>
+        public static readonly LargeDecimal e   = new LargeDecimal("2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274");
+        /// <summary>The constant φ with a 100-digit precision.</summary>
+        public static readonly LargeDecimal Phi = new LargeDecimal("1.6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374");
         #endregion
         #region Constructors
         public LargeDecimal(byte b)
@@ -657,8 +661,13 @@ namespace EML
             catch (FormatException) { return false; }
             return true;
         }
+        /// <summary>Returns the average of a number of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the average of.</param>
+        public static LargeDecimal Average(params LargeDecimal[] l) => Sum(l) / l.Length;
+        /// <summary>Returns the absolute value of a <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> whose absolute value to get.</param>
         public static LargeDecimal AbsoluteValue(LargeDecimal l) => l >= 0 ? l : -l;
-        public static Comparison GetComparison(LargeDecimal a, LargeDecimal b)
+        public static Comparison GetRelation(LargeDecimal a, LargeDecimal b)
         {
             if (a < b)
                 return Comparison.LessThan;
@@ -771,6 +780,15 @@ namespace EML
                 middle.Sign = !negative;
                 return middle;
             }
+        }
+        /// <summary>Returns the sum of a number of instances of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="a">The array of instances of <seealso cref="LargeDecimal"/> to calculate the sum of.</param>
+        public static LargeDecimal Sum(params LargeDecimal[] a)
+        {
+            LargeDecimal result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
         }
         /// <summary>Returns an approximation of the square root of a number. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>

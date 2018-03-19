@@ -655,8 +655,7 @@ namespace EML
             bool result = false;
             LargeInteger sqrt = SquareRoot(l);
             for (int i = 2; i <= sqrt; i++)
-                if (l % i == 0)
-                    break;
+                if (l % i == 0) break;
                 else result = i == sqrt;
             return result;
         }
@@ -696,6 +695,9 @@ namespace EML
         /// <summary>Returns the absolute value of a <seealso cref="LargeInteger"/>.</summary>
         /// <param name="l">The <seealso cref="LargeInteger"/> whose absolute value to get.</param>
         public static LargeInteger AbsoluteValue(LargeInteger l) => l >= 0 ? l : -l;
+        /// <summary>Returns the average of a number of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the average of.</param>
+        public static LargeInteger Average(params LargeInteger[] l) => Sum(l) / l.Length;
         /// <summary>Returns the factorial of a <seealso cref="LargeInteger"/>.</summary>
         /// <param name="l">The <seealso cref="LargeInteger"/> whose factorial to get.</param>
         public static LargeInteger Factorial(LargeInteger l)
@@ -705,9 +707,43 @@ namespace EML
                 result *= i;
             return result;
         }
-        /// <summary>Returns the greatest common divisor of a number of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="a">The left instance of <seealso cref="LargeInteger"/>.</param>
-        /// <param name="b">The right instance of <seealso cref="LargeInteger"/>.</param>
+        /// <summary>Returns the n-th Fibonacci with n being an one-based index with the list starting from 0 (0, 1, 1, 2, 3, 5, ...).</summary>
+        /// <param name="n">The one-based index index of the prime to return.</param>
+        public static LargeInteger GetNthFibonacci(int n)
+        {
+            if (n <= 0) throw new ArgumentOutOfRangeException();
+            if (n == 1) return 2;
+            else
+            {
+                List<LargeInteger> fibonacciNumbers = new List<LargeInteger> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Count <= n; i++)
+                    fibonacciNumbers.Add(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]);
+                return fibonacciNumbers.Last();
+            }
+        }
+        /// <summary>Returns the n-th prime with n being an one-based index.</summary>
+        /// <param name="n">The one-based index index of the prime to return.</param>
+        public static LargeInteger GetNthPrime(int n)
+        {
+            if (n <= 0) throw new ArgumentOutOfRangeException();
+            if (n == 1) return 2;
+            else
+            {
+                List<LargeInteger> primesFound = new List<LargeInteger> { 1, 2 };
+                bool isPrime = true;
+                for (LargeInteger p = 3; primesFound.Count <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return primesFound.Last();
+            }
+        }
+        /// <summary>Returns the greatest common divisor of 2 of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The first instance of <seealso cref="LargeInteger"/>.</param>
+        /// <param name="b">The second instance of <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger GreatestCommonDivisor(LargeInteger a, LargeInteger b)
         {
             LargeInteger max = Max(a, b);
@@ -733,7 +769,11 @@ namespace EML
             }
             return GCD;
         }
+        /// <summary>Returns the least common multiple of 2 of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The first instance of <seealso cref="LargeInteger"/>.</param>
+        /// <param name="b">The second instance of <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger LeastCommonMultiple(LargeInteger a, LargeInteger b) => a * b / GreatestCommonDivisor(a, b);
+        // Implement LCM for more than just two instances of LargeInteger
         public static LargeInteger Max(params LargeInteger[] n)
         {
             LargeInteger max = n[0];
@@ -903,6 +943,15 @@ namespace EML
                 middle.Sign = !negative;
                 return middle;
             }
+        }
+        /// <summary>Returns the sum of a number of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the sum of.</param>
+        public static LargeInteger Sum(params LargeInteger[] a)
+        {
+            LargeInteger result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
         }
         /// <summary>Returns the square root of any number rounded to the closest integer. Since this is an approximation for decimal integers, it's suggested that this function is only used for perfect squares.</summary>
         /// <param name="b">The integer to find the square root of.</param>

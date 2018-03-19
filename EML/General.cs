@@ -11,9 +11,11 @@ namespace EML
     {
         #region Constants
         /// <summary>The constant π with 39-digit precision (supposedly). This precision is enough for precise calculations in an atomic scale.</summary>
-        public const decimal Pi = 3.141592653589793238462643383279502884197m;
+        public const decimal Pi  = 3.141592653589793238462643383279502884197m;
         /// <summary>The constant e with 50-digit precision (supposedly).</summary>
-        public const decimal e = 2.71828182845904523536028747135266249775724709369995m;
+        public const decimal e   = 2.71828182845904523536028747135266249775724709369995m;
+        /// <summary>The constant φ with 50-digit precision (supposedly).</summary>
+        public const decimal Phi = 1.61803398874989484820458683436563811772030917980576m;
         #endregion
 
         #region Min
@@ -1597,5 +1599,346 @@ namespace EML
             return LCM;
         }
         #endregion
+        #region Sum
+        /// <summary>Returns the sum of a number of <seealso cref="byte"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="byte"/> integers to calculate the sum of.</param>
+        public static long Sum(params byte[] a)
+        {
+            long result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="short"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="short"/> integers to calculate the sum of.</param>
+        public static long Sum(params short[] a)
+        {
+            long result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="int"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="int"/> integers to calculate the sum of.</param>
+        public static long Sum(params int[] a)
+        {
+            long result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="long"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="long"/> integers to calculate the sum of.</param>
+        public static decimal Sum(params long[] a)
+        {
+            decimal result = 0; 
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="sbyte"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="sbyte"/> integers to calculate the sum of.</param>
+        public static long Sum(params sbyte[] a)
+        {
+            long result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="ushort"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="ushort"/> integers to calculate the sum of.</param>
+        public static long Sum(params ushort[] a)
+        {
+            long result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="uint"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="uint"/> integers to calculate the sum of.</param>
+        public static long Sum(params uint[] a)
+        {
+            long result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="ulong"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="ulong"/> integers to calculate the sum of.</param>
+        public static decimal Sum(params ulong[] a)
+        {
+            decimal result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="float"/> numbers.</summary>
+        /// <param name="a">The array of <seealso cref="float"/> numbers to calculate the sum of.</param>
+        public static double Sum(params float[] a)
+        {
+            double result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="double"/> numbers.</summary>
+        /// <param name="a">The array of <seealso cref="double"/> numbers to calculate the sum of.</param>
+        public static double Sum(params double[] a)
+        {
+            double result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += a[i];
+            return result;
+        }
+        /// <summary>Returns the sum of a number of <seealso cref="decimal"/> numbers.</summary>
+        /// <param name="a">The array of <seealso cref="decimal"/> numbers to calculate the sum of.</param>
+        public static double Sum(params decimal[] a)
+        {
+            double result = 0;
+            for (int i = 0; i < a.Length; i++)
+                result += (double)a[i];
+            return result;
+        }
+        #endregion
+        #region Average
+        /// <summary>Returns the avergae of a number of <seealso cref="byte"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="byte"/> integers to calculate the average of.</param>
+        public static double Average(params byte[] a) => Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="short"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="short"/> integers to calculate the average of.</param>
+        public static double Average(params short[] a) => Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="int"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="int"/> integers to calculate the average of.</param>
+        public static double Average(params int[] a) => Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="long"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="long"/> integers to calculate the average of.</param>
+        public static double Average(params long[] a) => (double)Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="sbyte"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="sbyte"/> integers to calculate the average of.</param>
+        public static double Average(params sbyte[] a) => Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="ushort"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="ushort"/> integers to calculate the average of.</param>
+        public static double Average(params ushort[] a) => Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="uint"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="uint"/> integers to calculate the average of.</param>
+        public static double Average(params uint[] a) => Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="ulong"/> integers.</summary>
+        /// <param name="a">The array of <seealso cref="ulong"/> integers to calculate the average of.</param>
+        public static double Average(params ulong[] a) => (double)Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="float"/> numbers.</summary>
+        /// <param name="a">The array of <seealso cref="float"/> numbers to calculate the average of.</param>
+        public static double Average(params float[] a) => Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="double"/> numbers.</summary>
+        /// <param name="a">The array of <seealso cref="double"/> numbers to calculate the average of.</param>
+        public static double Average(params double[] a) => Sum(a) / a.Length;
+        /// <summary>Returns the avergae of a number of <seealso cref="decimal"/> numbers.</summary>
+        /// <param name="a">The array of <seealso cref="decimal"/> numbers to calculate the average of.</param>
+        public static double Average(params decimal[] a) => Sum(a) / a.Length;
+        #endregion
+        #region Is Prime
+        /// <summary>Checks if a number is a prime or not.</summary>
+        /// <param name="n">The number to check if it's a prime or not.</param>
+        public static bool IsPrime(byte n)
+        {
+            if (n == 0 || n == 1) return false;
+            else if (n == 2) return true;
+            else
+            {
+                List<byte> primesFound = new List<byte> { 1, 2 };
+                bool isPrime = true;
+                for (byte p = 3; p <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return isPrime;
+            }
+        }
+        /// <summary>Checks if a number is a prime or not.</summary>
+        /// <param name="n">The number to check if it's a prime or not.</param>
+        public static bool IsPrime(short n)
+        {
+            n = AbsoluteValue(n);
+            if (n == 0 || n == 1) return false;
+            else if (n == 2) return true;
+            else
+            {
+                List<short> primesFound = new List<short> { 1, 2 };
+                bool isPrime = true;
+                for (short p = 3; p <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return isPrime;
+            }
+        }
+        /// <summary>Checks if a number is a prime or not.</summary>
+        /// <param name="n">The number to check if it's a prime or not.</param>
+        public static bool IsPrime(int n)
+        {
+            n = AbsoluteValue(n);
+            if (n == 0 || n == 1) return false;
+            else if (n == 2) return true;
+            else
+            {
+                List<int> primesFound = new List<int> { 1, 2 };
+                bool isPrime = true;
+                for (int p = 3; p <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return isPrime;
+            }
+        }
+        /// <summary>Checks if a number is a prime or not.</summary>
+        /// <param name="n">The number to check if it's a prime or not.</param>
+        public static bool IsPrime(long n)
+        {
+            n = AbsoluteValue(n);
+            if (n == 0 || n == 1) return false;
+            else if (n == 2) return true;
+            else
+            {
+                List<long> primesFound = new List<long> { 1, 2 };
+                bool isPrime = true;
+                for (long p = 3; p <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return isPrime;
+            }
+        }
+        /// <summary>Checks if a number is a prime or not.</summary>
+        /// <param name="n">The number to check if it's a prime or not.</param>
+        public static bool IsPrime(sbyte n)
+        {
+            n = AbsoluteValue(n);
+            if (n == 0 || n == 1) return false;
+            else if (n == 2) return true;
+            else
+            {
+                List<sbyte> primesFound = new List<sbyte> { 1, 2 };
+                bool isPrime = true;
+                for (sbyte p = 3; p <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return isPrime;
+            }
+        }
+        /// <summary>Checks if a number is a prime or not.</summary>
+        /// <param name="n">The number to check if it's a prime or not.</param>
+        public static bool IsPrime(ushort n)
+        {
+            if (n == 0 || n == 1) return false;
+            else if (n == 2) return true;
+            else
+            {
+                List<ushort> primesFound = new List<ushort> { 1, 2 };
+                bool isPrime = true;
+                for (ushort p = 3; p <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return isPrime;
+            }
+        }
+        /// <summary>Checks if a number is a prime or not.</summary>
+        /// <param name="n">The number to check if it's a prime or not.</param>
+        public static bool IsPrime(uint n)
+        {
+            if (n == 0 || n == 1) return false;
+            else if (n == 2) return true;
+            else
+            {
+                List<uint> primesFound = new List<uint> { 1, 2 };
+                bool isPrime = true;
+                for (uint p = 3; p <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return isPrime;
+            }
+        }
+        /// <summary>Checks if a number is a prime or not.</summary>
+        /// <param name="n">The number to check if it's a prime or not.</param>
+        public static bool IsPrime(ulong n)
+        {
+            if (n == 0 || n == 1) return false;
+            else if (n == 2) return true;
+            else
+            {
+                List<ulong> primesFound = new List<ulong> { 1, 2 };
+                bool isPrime = true;
+                for (ulong p = 3; p <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return isPrime;
+            }
+        }
+        #endregion
+        #region N-th Prime
+        /// <summary>Returns the n-th prime with n being an one-based index.</summary>
+        /// <param name="n">The one-based index index of the prime to return.</param>
+        public static long GetNthPrime(int n)
+        {
+            if (n <= 0) throw new ArgumentOutOfRangeException();
+            if (n == 1) return 2;
+            else
+            {
+                List<long> primesFound = new List<long> { 1, 2 };
+                bool isPrime = true;
+                for (long p = 3; primesFound.Count <= n; p++)
+                {
+                    for (int i = 0; i < primesFound.Count && isPrime; i++)
+                        isPrime = p % primesFound[i] != 0;
+                    if (isPrime)
+                        primesFound.Add(p);
+                }
+                return primesFound.Last();
+            }
+        }
+        #endregion
+        #region N-th Fibonacci
+        /// <summary>Returns the n-th Fibonacci with n being an one-based index with the list starting from 0 (0, 1, 1, 2, 3, 5, ...).</summary>
+        /// <param name="n">The one-based index index of the prime to return.</param>
+        public static long GetNthFibonacci(int n)
+        {
+            if (n <= 0) throw new ArgumentOutOfRangeException();
+            if (n == 1) return 2;
+            else
+            {
+                List<long> fibonacciNumbers = new List<long> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Count <= n; i++)
+                    fibonacciNumbers.Add(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]);
+                return fibonacciNumbers.Last();
+            }
+        }
+        #endregion
+        // Add functions to return whether a number is a Fibonacci number
     }
 }
