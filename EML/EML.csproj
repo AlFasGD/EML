@@ -49,31 +49,32 @@
     <Compile Include="Constant.cs" />
     <Compile Include="Expression.cs" />
     <Compile Include="Function.cs" />
-    <Compile Include="General.cs" />
+    <Compile Include="Tools\General.cs" />
     <Compile Include="IndefiniteIntegral.cs" />
-    <Compile Include="Infinity.cs" />
+    <Compile Include="NumericTypes\Infinity.cs" />
     <Compile Include="DefiniteIntegral.cs" />
     <Compile Include="Integral.cs" />
-    <Compile Include="InvalidFactorizationVariableOrderException.cs" />
-    <Compile Include="LargeDecimal.cs" />
-    <Compile Include="LargeInteger.cs" />
-    <Compile Include="ElevateZeroToThePowerOfZeroException.cs" />
-    <Compile Include="NegativeNumberFactorialException.cs" />
+    <Compile Include="Exceptions\InvalidFactorizationVariableOrderException.cs" />
+    <Compile Include="NumericTypes\LargeDecimal.cs" />
+    <Compile Include="NumericTypes\LargeInteger.cs" />
+    <Compile Include="Exceptions\ElevateZeroToThePowerOfZeroException.cs" />
+    <Compile Include="Exceptions\NegativeNumberFactorialException.cs" />
     <Compile Include="NumberExpression.cs" />
-    <Compile Include="NumberInterval.cs" />
+    <Compile Include="Sets\NumberInterval.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperationType.cs" />
-    <Compile Include="PrecisionExponent.cs" />
+    <Compile Include="NumericTypes\PrecisionExponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealNumberExpression.cs" />
-    <Compile Include="NumberSet.cs" />
-    <Compile Include="SetOperation.cs" />
-    <Compile Include="SpecialNumberSet.cs" />
-    <Compile Include="Trigonometry.cs" />
+    <Compile Include="Sets\NumberSet.cs" />
+    <Compile Include="Sets\SetOperation.cs" />
+    <Compile Include="Sets\SpecialNumberSet.cs" />
+    <Compile Include="Tools\Trigonometry.cs" />
     <Compile Include="Vector2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

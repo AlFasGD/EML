@@ -659,6 +659,20 @@ namespace EML
                 else result = i == sqrt;
             return result;
         }
+        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is a Fibonacci number or not.</summary>
+        /// <param name="l">The instance of <seealso cref="LargeInteger"/> to check for being a Fibonacci number.</param>
+        public static bool IsFibonacci(LargeInteger n)
+        {
+            if (n < 0) throw new ArgumentOutOfRangeException();
+            else if (n == 0 || n == 1) return true;
+            else
+            {
+                List<LargeInteger> fibonacciNumbers = new List<LargeInteger> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]);
+                return fibonacciNumbers.Last() == n;
+            }
+        }
         /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeInteger"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeInteger"/>, otherwise <see langword="false"/>.</summary>
         /// <param name="str">The string to parse.</param>
         /// <param name="result">The variable to return the converted instance of <seealso cref="LargeInteger"/> to.</param>

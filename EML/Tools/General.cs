@@ -1907,7 +1907,7 @@ namespace EML
         public static long GetNthPrime(int n)
         {
             if (n <= 0) throw new ArgumentOutOfRangeException();
-            if (n == 1) return 2;
+            else if (n == 1) return 2;
             else
             {
                 List<long> primesFound = new List<long> { 1, 2 };
@@ -1923,13 +1923,123 @@ namespace EML
             }
         }
         #endregion
+        #region Is Fibonacci
+        /// <summary>Checks if a number is a Fibonacci number or not.</summary>
+        /// <param name="n">The number to check if it's a Fibonacci number or not.</param>
+        public static bool IsFibonacci(byte n)
+        {
+            if (n == 0 || n == 1) return true;
+            else
+            {
+                List<byte> fibonacciNumbers = new List<byte> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add((byte)(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]));
+                return fibonacciNumbers.Last() == n;
+            }
+        }
+        /// <summary>Checks if a number is a Fibonacci number or not.</summary>
+        /// <param name="n">The number to check if it's a Fibonacci number or not.</param>
+        public static bool IsFibonacci(short n)
+        {
+            if (n < 0) throw new ArgumentOutOfRangeException(); // Maybe NegativeFibonacciNumberCheckException?
+            else if (n == 0 || n == 1) return true;
+            else
+            {
+                List<short> fibonacciNumbers = new List<short> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add((short)(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]));
+                return fibonacciNumbers.Last() == n;
+            }
+        }
+        /// <summary>Checks if a number is a Fibonacci number or not.</summary>
+        /// <param name="n">The number to check if it's a Fibonacci number or not.</param>
+        public static bool IsFibonacci(int n)
+        {
+            if (n < 0) throw new ArgumentOutOfRangeException();
+            else if (n == 0 || n == 1) return true;
+            else
+            {
+                List<int> fibonacciNumbers = new List<int> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]);
+                return fibonacciNumbers.Last() == n;
+            }
+        }
+        /// <summary>Checks if a number is a Fibonacci number or not.</summary>
+        /// <param name="n">The number to check if it's a Fibonacci number or not.</param>
+        public static bool IsFibonacci(long n)
+        {
+            if (n < 0) throw new ArgumentOutOfRangeException();
+            else if (n == 0 || n == 1) return true;
+            else
+            {
+                List<long> fibonacciNumbers = new List<long> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]);
+                return fibonacciNumbers.Last() == n;
+            }
+        }
+        /// <summary>Checks if a number is a Fibonacci number or not.</summary>
+        /// <param name="n">The number to check if it's a Fibonacci number or not.</param>
+        public static bool IsFibonacci(sbyte n)
+        {
+            if (n < 0) throw new ArgumentOutOfRangeException();
+            else if (n == 0 || n == 1) return true;
+            else
+            {
+                List<sbyte> fibonacciNumbers = new List<sbyte> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add((sbyte)(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]));
+                return fibonacciNumbers.Last() == n;
+            }
+        }
+        /// <summary>Checks if a number is a Fibonacci number or not.</summary>
+        /// <param name="n">The number to check if it's a Fibonacci number or not.</param>
+        public static bool IsFibonacci(ushort n)
+        {
+            if (n == 0 || n == 1) return true;
+            else
+            {
+                List<ushort> fibonacciNumbers = new List<ushort> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add((ushort)(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]));
+                return fibonacciNumbers.Last() == n;
+            }
+        }
+        /// <summary>Checks if a number is a Fibonacci number or not.</summary>
+        /// <param name="n">The number to check if it's a Fibonacci number or not.</param>
+        public static bool IsFibonacci(uint n)
+        {
+            if (n == 0 || n == 1) return true;
+            else
+            {
+                List<uint> fibonacciNumbers = new List<uint> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]);
+                return fibonacciNumbers.Last() == n;
+            }
+        }
+        /// <summary>Checks if a number is a Fibonacci number or not.</summary>
+        /// <param name="n">The number to check if it's a Fibonacci number or not.</param>
+        public static bool IsFibonacci(ulong n)
+        {
+            if (n == 0 || n == 1) return true;
+            else
+            {
+                List<ulong> fibonacciNumbers = new List<ulong> { 0, 1 };
+                for (int i = 2; fibonacciNumbers.Last() <= n; i++)
+                    fibonacciNumbers.Add(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]);
+                return fibonacciNumbers.Last() == n;
+            }
+        }
+        #endregion
         #region N-th Fibonacci
         /// <summary>Returns the n-th Fibonacci with n being an one-based index with the list starting from 0 (0, 1, 1, 2, 3, 5, ...).</summary>
         /// <param name="n">The one-based index index of the prime to return.</param>
         public static long GetNthFibonacci(int n)
         {
             if (n <= 0) throw new ArgumentOutOfRangeException();
-            if (n == 1) return 2;
+            else if (n == 1) return 2;
             else
             {
                 List<long> fibonacciNumbers = new List<long> { 0, 1 };
@@ -1939,6 +2049,5 @@ namespace EML
             }
         }
         #endregion
-        // Add functions to return whether a number is a Fibonacci number
     }
 }

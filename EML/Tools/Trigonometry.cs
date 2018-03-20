@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace EML
 {
     /// <summary>Provides tools for trigonometrical functions in mathematics.</summary>
-    public class Trigonometry
+    public static class Trigonometry
     {
         /// <summary>Returns the sine value of an angle.</summary>
         /// <param name="radians">The value of the angle in radians.</param>
