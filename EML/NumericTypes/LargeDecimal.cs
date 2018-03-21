@@ -661,12 +661,6 @@ namespace EML
             catch (FormatException) { return false; }
             return true;
         }
-        /// <summary>Returns the average of a number of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the average of.</param>
-        public static LargeDecimal Average(params LargeDecimal[] l) => Sum(l) / l.Length;
-        /// <summary>Returns the absolute value of a <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="l">The <seealso cref="LargeInteger"/> whose absolute value to get.</param>
-        public static LargeDecimal AbsoluteValue(LargeDecimal l) => l >= 0 ? l : -l;
         public static Comparison GetRelation(LargeDecimal a, LargeDecimal b)
         {
             if (a < b)
@@ -692,6 +686,61 @@ namespace EML
             }
             rightBytes >>= shifts;
             return LargeInteger.GetDecimalDigitCount(leftBytes) + LargeInteger.GetDecimalDigitCount(rightBytes);
+        }
+        /// <summary>Returns the average of a number of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the average of.</param>
+        public static LargeDecimal Average(params LargeDecimal[] l) => Sum(l) / l.Length;
+        /// <summary>Returns the absolute value of a <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> whose absolute value to get.</param>
+        public static LargeDecimal AbsoluteValue(LargeDecimal l) => l >= 0 ? l : -l;
+        /// <summary>Calculates π using the Chudnovsky's formula with a specified number of terms to execute.</summary>
+        /// <param name="n">The number of terms to execute.</param>
+        public static LargeDecimal CalculatePi(LargeInteger n)
+        {
+            if (n > 0)
+            {
+                LargeDecimal result = 0;
+                for (LargeInteger i = 0; i <= n; i++)
+                    result += (LargeInteger.Factorial(6 * i) * (545140134 * i + 13591409)) / (LargeDecimal)(LargeInteger.Factorial(3 * i) * LargeInteger.Power(LargeInteger.Factorial(i), 3) * LargeInteger.Power(-262537412640768000, i));
+                return 426880 * SquareRoot(10005, 50) / result;
+            }
+            else throw new ArgumentException();
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static LargeDecimal Lb(LargeDecimal n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static LargeDecimal Ln(LargeDecimal n) // The process will be infinitely continuing for numbers with too much precision - Maybe consider optimizing or anything?
+        {
+            if (n > 0)
+            {
+                LargeDecimal t = (n - 1) / (n + 1);
+                LargeDecimal result = t;
+                LargeDecimal previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static LargeDecimal Log(LargeDecimal n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static LargeDecimal Log(LargeDecimal n, LargeDecimal b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
         }
         public static LargeDecimal Invert(LargeDecimal l) => 1 / l;
         public static LargeDecimal Parse(string str)
