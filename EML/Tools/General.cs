@@ -2049,5 +2049,437 @@ namespace EML
             }
         }
         #endregion
+        #region Logarithm (base 2)
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(byte n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(short n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(int n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(long n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(sbyte n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(ushort n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(uint n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(ulong n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(float n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(double n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Lb(decimal n)
+        {
+            if (n > 0) return Ln(n) / Ln(2);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        #endregion
+        #region Logarithm (base e)
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(byte n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2) // Don't judge me for not following the formula exactly as written on Wikipedia and adjusting some values for more efficient computation
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(short n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(int n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(long n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(sbyte n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(ushort n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(uint n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(ulong n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(float n)
+        {
+            if (n > 0)
+            {
+                double t = (double)(n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(double n)
+        {
+            if (n > 0)
+            {
+                double t = (n - 1) / (n + 1);
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Ln(decimal n)
+        {
+            if (n > 0)
+            {
+                double t = (double)((n - 1) / (n + 1));
+                double result = t;
+                double previousResult = 0;
+                for (int i = 3; previousResult != result; i += 2)
+                    result += Power(t, i) / i;
+                return 2 * result;
+            }
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        #endregion
+        #region Logarithm (base 10)
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(byte n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(short n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(int n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(long n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(sbyte n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(ushort n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(uint n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(ulong n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(float n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(double n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(decimal n)
+        {
+            if (n > 0) return Ln(n) / Ln(10);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        #endregion
+        #region Logarithm (base b)
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(byte n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(short n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(int n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(long n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(sbyte n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(ushort n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(uint n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(ulong n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else return double.NegativeInfinity;
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(float n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(double n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
+        /// <param name="n">The number to find the binary logarithm of.</param>
+        public static double Log(decimal n, double b)
+        {
+            if (n > 0) return Ln(n) / Ln(n);
+            else if (n == 0) return double.NegativeInfinity;
+            else throw new Exception(); // LogarithmOfNonPositiveNumberException
+        }
+        #endregion
     }
 }
