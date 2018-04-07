@@ -19,7 +19,7 @@ namespace EML
         public int LeftLength { get { return LeftBytes.Count; } }
         /// <summary>The length of the right part of the instance of <seealso cref="LargeDecimal"/>.</summary>
         public int RightLength { get { return RightBytes.Count; } }
-        /// <summary>The period part of the instance of <seealso cref="LargeDecimal"/>. The first item represents the period's beginning point</summary>
+        /// <summary>The period part of the instance of <seealso cref="LargeDecimal"/>. The first item represents the period's beginning point and the second represents the length of the period in bits.</summary>
         public (int, int) Period { get; }
 
         #region Constants
@@ -391,6 +391,7 @@ namespace EML
                         result = (result << 1) | q;
                         if (q != 0)
                             remainder = t;
+                        // Check here if the result is periodic
                     }
                     return result;
                 }
@@ -766,18 +767,30 @@ namespace EML
         }
         public static LargeDecimal Power(LargeDecimal b, LargeInteger power)
         {
-            if (power != 0)
+            if (b != 0)
             {
-                LargeInteger brainPower = LargeInteger.AbsoluteValue(power);
-                LargeDecimal result = b;
-                for (LargeInteger i = 2; i <= brainPower; i++)
-                    result *= b;
-                if (!power.Sign)
-                    result = Invert(result);
-                return result;
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / b;
+                else if (power > 0)
+                {
+                    if (power.IsEven())
+                        return Power(b * b, power << 1);
+                    else
+                        return Power(b * b, (power - 1) << 1);
+                }
+                else // if (power < 0)
+                    return Power(1 / b, -power);
             }
-            else if (b != 0) return 1;
-            else throw new ElevateZeroToThePowerOfZeroException();
+            else if (power > 0)
+                return 0;
+            else if (power < 0)
+                throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+            else
+                throw new ElevateZeroToThePowerOfZeroException();
         }
         /// <summary>Returns an approximation of the root of a number. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>
@@ -788,7 +801,7 @@ namespace EML
             bool negative = b < 0;
             b.Sign = true; // Already checked if it's a negative number, needless to work around with the stupid negative sign
             if (b == 0 || b == 1) return b;
-            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
             {
                 int digCount = GetDecimalDigitCount(b);

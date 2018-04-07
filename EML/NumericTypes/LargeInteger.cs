@@ -648,17 +648,13 @@ namespace EML
         #endregion
         #region Operations
         // Need to write documentation for the functions and their parameters
-        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is a prime or not.</summary>
-        /// <param name="l">The instance of <seealso cref="LargeInteger"/> to check for being a prime.</param>
-        public static bool IsPrime(LargeInteger l)
-        {
-            bool result = false;
-            LargeInteger sqrt = SquareRoot(l);
-            for (int i = 2; i <= sqrt; i++)
-                if (l % i == 0) break;
-                else result = i == sqrt;
-            return result;
-        }
+        /// <summary>Determines whether the instance of <seealso cref="LargeInteger"/> is even.</summary>
+        public bool IsEven() => (this & 1) == 0;
+        /// <summary>Determines whether the instance of <seealso cref="LargeInteger"/> is odd.</summary>
+        public bool IsOdd() => (this & 1) == 1;
+        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is even.</summary>
+        /// <param name="n">The instance of <seealso cref="LargeInteger"/> to check for being even.</param>
+        public static bool IsEven(LargeInteger n) => (n & 1) == 0;
         /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is a Fibonacci number or not.</summary>
         /// <param name="l">The instance of <seealso cref="LargeInteger"/> to check for being a Fibonacci number.</param>
         public static bool IsFibonacci(LargeInteger n)
@@ -672,6 +668,20 @@ namespace EML
                     fibonacciNumbers.Add(fibonacciNumbers[i - 1] + fibonacciNumbers[i - 2]);
                 return fibonacciNumbers.Last() == n;
             }
+        }
+        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is odd.</summary>
+        /// <param name="n">The instance of <seealso cref="LargeInteger"/> to check for being odd.</param>
+        public static bool IsOdd(LargeInteger n) => (n & 1) == 1;
+        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is a prime or not.</summary>
+        /// <param name="l">The instance of <seealso cref="LargeInteger"/> to check for being a prime.</param>
+        public static bool IsPrime(LargeInteger l)
+        {
+            bool result = false;
+            LargeInteger sqrt = SquareRoot(l);
+            for (int i = 2; i <= sqrt; i++)
+                if (l % i == 0) break;
+                else result = i == sqrt;
+            return result;
         }
         /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeInteger"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeInteger"/>, otherwise <see langword="false"/>.</summary>
         /// <param name="str">The string to parse.</param>
@@ -788,6 +798,8 @@ namespace EML
         /// <param name="b">The second instance of <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger LeastCommonMultiple(LargeInteger a, LargeInteger b) => a * b / GreatestCommonDivisor(a, b);
         // Implement LCM for more than just two instances of LargeInteger
+        /// <summary>Returns the largest <seealso cref="LargeInteger"/> from an array of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="n">The array of instances of <seealso cref="LargeInteger"/> to get the largest <seealso cref="LargeInteger"/> of.</param>
         public static LargeInteger Max(params LargeInteger[] n)
         {
             LargeInteger max = n[0];
@@ -796,6 +808,8 @@ namespace EML
                     max = n[i];
             return max;
         }
+        /// <summary>Returns the smallest <seealso cref="LargeInteger"/> from an array of instances of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="n">The array of instances of <seealso cref="LargeInteger"/> to get the smallest <seealso cref="LargeInteger"/> of.</param>
         public static LargeInteger Min(params LargeInteger[] n)
         {
             LargeInteger min = n[0];
@@ -804,6 +818,8 @@ namespace EML
                     min = n[i];
             return min;
         }
+        /// <summary>Parses a <seealso cref="string"/> to its <seealso cref="LargeInteger"/> representation.</summary>
+        /// <param name="str">The <seealso cref="string"/> to parse as a <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger Parse(string str)
         {
             LargeInteger result = 0;
@@ -823,21 +839,38 @@ namespace EML
             else throw new FormatException("The string represents no integral value.");
             return result;
         }
+        /// <summary>Calculates the power of a <seealso cref="LargeInteger"/> raised to a <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The base that will be raised to the power.</param>
+        /// <param name="power">The power to raise the base to.</param>
         public static LargeInteger Power(LargeInteger b, LargeInteger power)
         {
-            if (power.Sign)
+            if (b != 0)
             {
-                LargeInteger brainPower = AbsoluteValue(power);
-                LargeInteger result = b;
-                for (LargeInteger i = 2; i <= brainPower; i++)
-                    result *= b;
-                return result;
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / b;
+                else if (power > 0)
+                {
+                    if (power.IsEven())
+                        return Power(b * b, power << 1);
+                    else
+                        return Power(b * b, (power - 1) << 1);
+                }
+                else // if (power < 0)
+                    return Power(1 / b, -power);
             }
-            else if (!power.Sign)
+            else if (power > 0)
                 return 0;
-            else if (b != 0) return 1;
-            else throw new ElevateZeroToThePowerOfZeroException();
+            else if (power < 0)
+                throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+            else
+                throw new ElevateZeroToThePowerOfZeroException();
         }
+        /// <summary>Returns a random <seealso cref="LargeInteger"/> with a specified length.</summary>
+        /// <param name="length">The length in bytes of the random <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger Random(int length)
         {
             LargeInteger result = new LargeInteger();
@@ -848,6 +881,9 @@ namespace EML
             result.Bytes[length - 1] = (byte)shit.Next(1, 255);
             return result;
         }
+        /// <summary>Returns a random <seealso cref="LargeInteger"/> with a length that is within a specified range.</summary>
+        /// <param name="minLength">The smallest possible length in bytes of the random <seealso cref="LargeInteger"/>.</param>
+        /// <param name="maxLength">The largest possible length in bytes of the random <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger Random(int minLength, int maxLength)
         {
             LargeInteger result = new LargeInteger();
@@ -859,6 +895,9 @@ namespace EML
             result.Bytes[length - 1] = (byte)shit.Next(1, 255);
             return result;
         }
+        /// <summary>Returns a random <seealso cref="LargeInteger"/> within a range.</summary>
+        /// <param name="min">The smallest possible <seealso cref="LargeInteger"/>.</param>
+        /// <param name="max">The largest possible <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger Random(LargeInteger min, LargeInteger max)
         {
             if (min != max)
@@ -900,6 +939,8 @@ namespace EML
             }
             else return min;
         }
+        /// <summary>Removes the useless null bytes in the <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> to remove the useless null bytes of.</param>
         private static LargeInteger RemoveUnnecessaryBytes(LargeInteger l)
         {
             int i = l.Length - 1;
@@ -916,7 +957,7 @@ namespace EML
             bool negative = b < 0;
             b.Sign = true; // Already checked if it's a negative number, needless to work around with the stupid negative sign
             if (b == 0 || b == 1) return b;
-            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
             {
                 int digCount = GetDecimalDigitCount(b);
@@ -972,6 +1013,7 @@ namespace EML
         public static LargeInteger SquareRoot(LargeInteger b) => Root(b, 2);
         #endregion
         #region Overrides
+        /// <summary>Returns the <seealso cref="string"/> representation of the <seealso cref="LargeInteger"/>.</summary>
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();

@@ -72,6 +72,57 @@ namespace EML
         /// <param name="measurementUnit">The angle measurement unit to use.</param>
         public static decimal Cosecant(decimal angle, AngleMeasurementUnit measurementUnit) => General.Invert(Sine(angle, measurementUnit));
 
+
+        /// <summary>Returns the arcsine of a value in radians.</summary>
+        /// <param name="value">The value to return the arcsine of.</param>
+        public static decimal ArcSine(decimal value)
+        {
+            if (value >= -1 && value <= 1)
+            {
+                decimal result = value;
+                decimal previousResult = 0;
+                int i = 0;
+                double currentFactorization;
+                double denominatorCoefficient;
+                while (result != previousResult) // Quick way to check whether the precision is enough
+                {
+                    previousResult = result;
+                    currentFactorization = General.Factorization(i, 2 * i);
+                    denominatorCoefficient = General.Power(4, i);
+                    result += (decimal)((currentFactorization * General.Power(value, (2 * i + 1))) / (denominatorCoefficient * (2 * i + 1)));
+                    i++;
+                }
+                return result;
+            }
+            else
+                throw new ArgumentOutOfRangeException("The domain of arcsine is the interval [-1, 1].");
+        }
+        /// <summary>Returns the arctangent of a value in radians.</summary>
+        /// <param name="value">The value to return the arctangent of.</param>
+        public static decimal ArcTangent(decimal value)
+        {
+            decimal result = value / (1 + value * value); // Initialization of the result
+            decimal resultCoefficient = 0;
+            decimal previousResult = 0;
+            int i = 1;
+            double currentFactorial = 1;
+            decimal valueSquared = (decimal)General.Power(value, 2);
+            decimal valueSquaredPlusOne = valueSquared + 1;
+            decimal doubleValueSquared = 2 * valueSquared;
+            while (resultCoefficient != previousResult) // Quick way to check whether the precision is enough
+            {
+                decimal product = 1;
+                for (int j = 1; j <= i; j++)
+                    product *= (j * doubleValueSquared) / ((2 * j + 1) * valueSquaredPlusOne);
+                previousResult = resultCoefficient;
+                currentFactorial *= General.Factorization(2 * (i - 1) + 1, 2 * i + 1);
+                resultCoefficient += product;
+                i++;
+            }
+            result *= resultCoefficient;
+            return result;
+        }
+
         /// <summary>Converts the angle from one measurement unit to another.</summary>
         /// <param name="angle">The angle to convert.</param>
         /// <param name="originalUnit">The unit the parsed angle is based on.</param>

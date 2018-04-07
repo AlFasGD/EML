@@ -304,20 +304,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -327,20 +337,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -350,20 +370,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -373,20 +403,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -396,20 +436,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -419,20 +469,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -442,20 +502,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -465,20 +535,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -488,20 +568,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * b, power << 1);
+                    else
+                        return Power((double)b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -511,20 +601,30 @@ namespace EML
         {
             if (b != 0)
             {
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return b;
+                if (power == -1)
+                    return 1 / b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= b;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power(b * b, power << 1);
+                    else
+                        return Power(b * b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         /// <summary>Returns the power of a number.</summary>
@@ -534,21 +634,30 @@ namespace EML
         {
             if (b != 0)
             {
-                double a = (double)b;
-                if (power != 0)
+                if (power == 0)
+                    return 1;
+                else if (power == 1)
+                    return (double)b;
+                if (power == -1)
+                    return 1 / (double)b;
+                else if (power > 0)
                 {
-                    int absolutePower = AbsoluteValue(power);
-                    double result = 1;
-                    for (int i = 1; i <= absolutePower; i++)
-                        result *= a;
-                    return power > 0 ? result : Invert(result);
+                    if (IsEven(power))
+                        return Power((double)b * (double)b, power << 1);
+                    else
+                        return Power((double)b * (double)b, (power - 1) << 1);
                 }
-                else return 1;
+                else // if (power < 0)
+                    return Power(1 / (double)b, -power);
             }
             else
             {
-                if (power != 0) return 0;
-                else throw new ElevateZeroToThePowerOfZeroException();
+                if (power > 0)
+                    return 0;
+                else if (power < 0)
+                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
+                else
+                    throw new ElevateZeroToThePowerOfZeroException();
             }
         }
         #endregion
@@ -852,7 +961,7 @@ namespace EML
             bool negative = b < 0;
             if (negative) b = (short)-b; // Already checked if it's a negative number, needless to work around with the stupid negative sign
             if (b == 0 || b == 1) return b;
-            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
             {
                 int maxRootCount = 1; // Minimum digit count
@@ -898,7 +1007,7 @@ namespace EML
             bool negative = b < 0;
             if (negative) b = -b; // Already checked if it's a negative number, needless to work around with the stupid negative sign
             if (b == 0 || b == 1) return b;
-            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
             {
                 int maxRootCount = 1; // Minimum digit count
@@ -944,7 +1053,7 @@ namespace EML
             bool negative = b < 0;
             if (negative) b = -b; // Already checked if it's a negative number, needless to work around with the stupid negative sign
             if (b == 0 || b == 1) return b;
-            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
             {
                 int maxRootCount = 1; // Minimum digit count
@@ -990,7 +1099,7 @@ namespace EML
             bool negative = b < 0;
             if (negative) b = (sbyte)-b; // Already checked if it's a negative number, needless to work around with the stupid negative sign
             if (b == 0 || b == 1) return b;
-            else if (rootClass % 2 == 0 && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
             {
                 int maxRootCount = 1; // Minimum digit count
@@ -2480,6 +2589,58 @@ namespace EML
             else if (n == 0) return double.NegativeInfinity;
             else throw new Exception(); // LogarithmOfNonPositiveNumberException
         }
+        #endregion
+        #region Is Even
+        /// <summary>Determines whether a number is even.</summary>
+        /// <param name="n">The number to check whether it's even or not.</param>
+        public static bool IsEven(byte n) => (n & 1) == 0;
+        /// <summary>Determines whether a number is even.</summary>
+        /// <param name="n">The number to check whether it's even or not.</param>
+        public static bool IsEven(short n) => (n & 1) == 0;
+        /// <summary>Determines whether a number is even.</summary>
+        /// <param name="n">The number to check whether it's even or not.</param>
+        public static bool IsEven(int n) => (n & 1) == 0;
+        /// <summary>Determines whether a number is even.</summary>
+        /// <param name="n">The number to check whether it's even or not.</param>
+        public static bool IsEven(long n) => (n & 1) == 0;
+        /// <summary>Determines whether a number is even.</summary>
+        /// <param name="n">The number to check whether it's even or not.</param>
+        public static bool IsEven(sbyte n) => (n & 1) == 0;
+        /// <summary>Determines whether a number is even.</summary>
+        /// <param name="n">The number to check whether it's even or not.</param>
+        public static bool IsEven(ushort n) => (n & 1) == 0;
+        /// <summary>Determines whether a number is even.</summary>
+        /// <param name="n">The number to check whether it's even or not.</param>
+        public static bool IsEven(uint n) => (n & 1) == 0;
+        /// <summary>Determines whether a number is even.</summary>
+        /// <param name="n">The number to check whether it's even or not.</param>
+        public static bool IsEven(ulong n) => (n & 1) == 0;
+        #endregion
+        #region Is Odd
+        /// <summary>Determines whether a number is odd.</summary>
+        /// <param name="n">The number to check whether it's odd or not.</param>
+        public static bool IsOdd(byte n) => (n & 1) == 1;
+        /// <summary>Determines whether a number is odd.</summary>
+        /// <param name="n">The number to check whether it's odd or not.</param>
+        public static bool IsOdd(short n) => (n & 1) == 1;
+        /// <summary>Determines whether a number is odd.</summary>
+        /// <param name="n">The number to check whether it's odd or not.</param>
+        public static bool IsOdd(int n) => (n & 1) == 1;
+        /// <summary>Determines whether a number is odd.</summary>
+        /// <param name="n">The number to check whether it's odd or not.</param>
+        public static bool IsOdd(long n) => (n & 1) == 1;
+        /// <summary>Determines whether a number is odd.</summary>
+        /// <param name="n">The number to check whether it's odd or not.</param>
+        public static bool IsOdd(sbyte n) => (n & 1) == 1;
+        /// <summary>Determines whether a number is odd.</summary>
+        /// <param name="n">The number to check whether it's odd or not.</param>
+        public static bool IsOdd(ushort n) => (n & 1) == 1;
+        /// <summary>Determines whether a number is odd.</summary>
+        /// <param name="n">The number to check whether it's odd or not.</param>
+        public static bool IsOdd(uint n) => (n & 1) == 1;
+        /// <summary>Determines whether a number is odd.</summary>
+        /// <param name="n">The number to check whether it's odd or not.</param>
+        public static bool IsOdd(ulong n) => (n & 1) == 1;
         #endregion
     }
 }
