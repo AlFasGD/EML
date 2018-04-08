@@ -155,6 +155,5 @@ namespace EML
                 throw new ArgumentOutOfRangeException("The domain of arccosecant is the interval (-∞, 1]∪[1, +∞).");
         }
         #endregion
-
     }
 }

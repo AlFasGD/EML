@@ -71,7 +71,7 @@
     <Compile Include="Sets\SpecialNumberSet.cs" />
     <Compile Include="Tools\Geometry.cs" />
     <Compile Include="Tools\HyperbolicFunctions.cs" />
-    <Compile Include="Tools\Trigonometry.cs" />
+    <Compile Include="Tools\TrigonometricFunctions.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Vector2D.cs" />
   </ItemGroup>
