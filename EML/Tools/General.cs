@@ -874,15 +874,15 @@ namespace EML
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(float b, float power) => Exponentation(power * Ln(power));
+        public static double Power(float b, float power) => Exponentation(power * Ln(b));
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(double b, double power) => Exponentation(power * Ln(power));
+        public static double Power(double b, double power) => Exponentation(power * Ln(b));
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(decimal b, decimal power) => Exponentation(power * (decimal)Ln(power));
+        public static double Power(decimal b, decimal power) => Exponentation(power * (decimal)Ln(b));
         #endregion
         #region Factorial
         /// <summary>Returns the factorial of a number.</summary>

@@ -99,6 +99,15 @@ namespace EML
             else
                 throw new ArgumentOutOfRangeException("The domain of arcsine is the interval [-1, 1].");
         }
+        /// <summary>Returns the arccosine of a value in radians.</summary>
+        /// <param name="value">The value to return the arccosine of.</param>
+        public static decimal ArcCosine(decimal value)
+        {
+            if (value >= -1 && value <= 1)
+                return General.Pi / 2 - ArcSine(value);
+            else
+                throw new ArgumentOutOfRangeException("The domain of arccosine is the interval [-1, 1].");
+        }
         /// <summary>Returns the arctangent of a value in radians.</summary>
         /// <param name="value">The value to return the arctangent of.</param>
         public static decimal ArcTangent(decimal value)
@@ -123,6 +132,27 @@ namespace EML
             }
             result *= resultCoefficient;
             return result;
+        }
+        /// <summary>Returns the arccotangent of a value in radians.</summary>
+        /// <param name="value">The value to return the arccotangent of.</param>
+        public static decimal ArcCotangent(decimal value) => General.Pi / 2 - ArcTangent(value);
+        /// <summary>Returns the arcsecant of a value in radians.</summary>
+        /// <param name="value">The value to return the arcsecant of.</param>
+        public static decimal ArcSecant(decimal value)
+        {
+            if (General.AbsoluteValue(value) >= 1)
+                return ArcCosine(1 / value);
+            else
+                throw new ArgumentOutOfRangeException("The domain of arcsecant is the interval (-∞, 1]∪[1, +∞).");
+        }
+        /// <summary>Returns the arccosecant of a value in radians.</summary>
+        /// <param name="value">The value to return the arccosecant of.</param>
+        public static decimal ArcCosecant(decimal value)
+        {
+            if (General.AbsoluteValue(value) >= 1)
+                return ArcSine(1 / value);
+            else
+                throw new ArgumentOutOfRangeException("The domain of arccosecant is the interval (-∞, 1]∪[1, +∞).");
         }
         #endregion
 

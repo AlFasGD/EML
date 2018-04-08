@@ -712,6 +712,25 @@ namespace EML
             }
             else throw new ArgumentException();
         }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static LargeDecimal Exponentation(LargeDecimal n)
+        {
+            LargeDecimal result = 1;
+            LargeDecimal previousResult = 0;
+            LargeDecimal currentFactorial = 1;
+            LargeDecimal currentPower = 1;
+            LargeDecimal i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
         /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
         /// <param name="n">The number to find the binary logarithm of.</param>
         public static LargeDecimal Lb(LargeDecimal n)
@@ -794,7 +813,7 @@ namespace EML
             else throw new FormatException("The string represents no numerical value.");
             return result;
         }
-        /// <summary>Calculates the power of a <seealso cref="LargeDecimal"/> raised to a <seealso cref="LargeDecimal"/>.</summary>
+        /// <summary>Calculates the power of a <seealso cref="LargeDecimal"/> raised to a <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The base that will be raised to the power.</param>
         /// <param name="power">The power to raise the base to.</param>
         public static LargeDecimal Power(LargeDecimal b, LargeInteger power)
@@ -824,6 +843,10 @@ namespace EML
             else
                 throw new ElevateZeroToThePowerOfZeroException();
         }
+        /// <summary>Calculates the power of a <seealso cref="LargeDecimal"/> raised to a <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="b">The base that will be raised to the power.</param>
+        /// <param name="power">The power to raise the base to.</param>
+        public static LargeDecimal Power(LargeDecimal b, LargeDecimal power) => Exponentation(power * Ln(b));
         /// <summary>Returns an approximation of the root of a number. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>
         /// <param name="rootClass">The class of the root.</param>

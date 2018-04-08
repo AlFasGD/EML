@@ -109,7 +109,7 @@ namespace EML
             if (General.AbsoluteValue(value) > 1)
                 return (decimal)General.Ln((value + 1) / (value - 1)) / 2;
             else
-                throw new ArgumentOutOfRangeException("The domain of arccoth is (-∞, 1)∪(1, +∞).");
+                throw new ArgumentOutOfRangeException("The domain of arccoth is (-∞, -1)∪(1, +∞).");
         }
         /// <summary>Returns the inverse hyperbolic secant (arcsech) value of a value in radians.</summary>
         /// <param name="value">The value to return the arcsech of.</param>
