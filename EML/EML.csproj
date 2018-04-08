@@ -69,6 +69,8 @@
     <Compile Include="Sets\NumberSet.cs" />
     <Compile Include="Sets\SetOperation.cs" />
     <Compile Include="Sets\SpecialNumberSet.cs" />
+    <Compile Include="Tools\Geometry.cs" />
+    <Compile Include="Tools\HyperbolicFunctions.cs" />
     <Compile Include="Tools\Trigonometry.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="Vector2D.cs" />

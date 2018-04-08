@@ -654,7 +654,9 @@ namespace EML
         }
         #endregion
         #region Operations
-        // Need to write documentation for the functions and their parameters
+        /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeDecimal"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeDecimal"/>, otherwise <see langword="false"/>.</summary>
+        /// <param name="str">The string to parse.</param>
+        /// <param name="result">The variable to return the converted instance of <seealso cref="LargeDecimal"/> to.</param>
         public static bool TryParse(string str, out LargeDecimal result)
         {
             result = 0;
@@ -662,6 +664,9 @@ namespace EML
             catch (FormatException) { return false; }
             return true;
         }
+        /// <summary>Returns the relation between two instances of <seealso cref="LargeDecimal"/>. The result is the relation based on the left <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="a">The left instance of <seealso cref="LargeDecimal"/> to compare.</param>
+        /// <param name="b">The right instance of <seealso cref="LargeDecimal"/> to compare.</param>
         public static Comparison GetRelation(LargeDecimal a, LargeDecimal b)
         {
             if (a < b)
@@ -743,7 +748,31 @@ namespace EML
             if (n > 0) return Ln(n) / Ln(n);
             else throw new Exception(); // LogarithmOfNonPositiveNumberException
         }
+        /// <summary>Returns the inverted value of the <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeDecimal"/> to invert.</param>
         public static LargeDecimal Invert(LargeDecimal l) => 1 / l;
+        /// <summary>Returns the largest <seealso cref="LargeDecimal"/> from an array of instances of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="n">The array of instances of <seealso cref="LargeDecimal"/> to get the largest <seealso cref="LargeDecimal"/> of.</param>
+        public static LargeDecimal Max(params LargeDecimal[] n)
+        {
+            LargeDecimal max = n[0];
+            for (int i = 1; i < n.Length; i++)
+                if (max < n[i])
+                    max = n[i];
+            return max;
+        }
+        /// <summary>Returns the smallest <seealso cref="LargeDecimal"/> from an array of instances of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="n">The array of instances of <seealso cref="LargeDecimal"/> to get the smallest <seealso cref="LargeDecimal"/> of.</param>
+        public static LargeDecimal Min(params LargeDecimal[] n)
+        {
+            LargeDecimal min = n[0];
+            for (int i = 1; i < n.Length; i++)
+                if (min > n[i])
+                    min = n[i];
+            return min;
+        }
+        /// <summary>Parses a <seealso cref="string"/> to its <seealso cref="LargeDecimal"/> representation.</summary>
+        /// <param name="str">The <seealso cref="string"/> to parse as a <seealso cref="LargeDecimal"/>.</param>
         public static LargeDecimal Parse(string str)
         {
             LargeDecimal result = 0;
@@ -765,6 +794,9 @@ namespace EML
             else throw new FormatException("The string represents no numerical value.");
             return result;
         }
+        /// <summary>Calculates the power of a <seealso cref="LargeDecimal"/> raised to a <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="b">The base that will be raised to the power.</param>
+        /// <param name="power">The power to raise the base to.</param>
         public static LargeDecimal Power(LargeDecimal b, LargeInteger power)
         {
             if (b != 0)
@@ -858,6 +890,7 @@ namespace EML
         public static LargeDecimal SquareRoot(LargeDecimal b, int decimalDigits) => Root(b, 2, decimalDigits);
         #endregion
         #region Overrides
+        /// <summary>Returns the <seealso cref="string"/> representation of the <seealso cref="LargeDecimal"/>.</summary>
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();

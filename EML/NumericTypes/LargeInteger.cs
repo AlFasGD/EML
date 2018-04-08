@@ -647,7 +647,6 @@ namespace EML
         }
         #endregion
         #region Operations
-        // Need to write documentation for the functions and their parameters
         /// <summary>Determines whether the instance of <seealso cref="LargeInteger"/> is even.</summary>
         public bool IsEven() => (this & 1) == 0;
         /// <summary>Determines whether the instance of <seealso cref="LargeInteger"/> is odd.</summary>

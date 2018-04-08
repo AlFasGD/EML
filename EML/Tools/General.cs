@@ -296,6 +296,217 @@ namespace EML
         /// <param name="d">The <seealso cref="decimal"/> whose inverted value to return.</param>
         public static decimal Invert(decimal d) => 1 / d;
         #endregion
+        #region Exponentation
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(byte n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(short n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(int n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(long n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(sbyte n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(ushort n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(uint n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(ulong n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(float n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(double n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
+        /// <param name="n">The number to raise e.</param>
+        public static double Exponentation(decimal n)
+        {
+            double result = 1;
+            double previousResult = 0;
+            double currentFactorial = 1;
+            double currentPower = 1;
+            double i = 1;
+            while (result != previousResult)
+            {
+                previousResult = result;
+                currentFactorial *= i;
+                currentPower *= (double)n;
+                result += currentPower / currentFactorial;
+                i++;
+            }
+            return result;
+        }
+        #endregion
         #region Power
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
@@ -660,6 +871,18 @@ namespace EML
                     throw new ElevateZeroToThePowerOfZeroException();
             }
         }
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(float b, float power) => Exponentation(power * Ln(power));
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(double b, double power) => Exponentation(power * Ln(power));
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(decimal b, decimal power) => Exponentation(power * (decimal)Ln(power));
         #endregion
         #region Factorial
         /// <summary>Returns the factorial of a number.</summary>
