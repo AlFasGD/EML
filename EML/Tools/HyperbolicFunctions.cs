@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EML
+namespace EML.Tools
 {
     /// <summary>Provides tools for hyperbolic functions in mathematics.</summary>
     public static class HyperbolicFunctions

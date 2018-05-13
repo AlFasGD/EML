@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace EML
+namespace EML.Exceptions
 {
     /// <summary>The exception that is thrown when trying to calculate the factorial of a negative number.</summary>
     [ComVisible(true)]

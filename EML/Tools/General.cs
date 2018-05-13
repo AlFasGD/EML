@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EML.Exceptions;
 
-namespace EML
+namespace EML.Tools
 {
     /// <summary>Contains general operations in mathematics.</summary>
     public static class General
@@ -18,6 +19,200 @@ namespace EML
         public const decimal Phi = 1.61803398874989484820458683436563811772030917980576m;
         #endregion
 
+        #region Clamp
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static char Clamp(char min, char value, char max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static byte Clamp(byte min, byte value, byte max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static short Clamp(short min, short value, short max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static int Clamp(int min, int value, int max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static long Clamp(long min, long value, long max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static sbyte Clamp(sbyte min, sbyte value, sbyte max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static ushort Clamp(ushort min, ushort value, ushort max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static uint Clamp(uint min, uint value, uint max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static ulong Clamp(ulong min, ulong value, ulong max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static float Clamp(float min, float value, float max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static double Clamp(double min, double value, double max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static decimal Clamp(decimal min, decimal value, decimal max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
+        #endregion
         #region Min
         /// <summary>Returns the smallest value of a <seealso cref="char"/> array.</summary>
         /// <param name="a">The <seealso cref="char"/> array.</param>

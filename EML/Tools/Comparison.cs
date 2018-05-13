@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EML
+namespace EML.Tools
 {
     /// <summary>Provides values for the comparison between two numbers.</summary>
     public enum Comparison

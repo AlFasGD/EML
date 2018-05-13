@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EML.Expressions;
 
-namespace EML
+namespace EML.NumericTypes.Vectors
 {
     /// <summary>Represents a two-dimensional vector.</summary>
     public struct Vector2D

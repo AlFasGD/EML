@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EML
+namespace EML.Tools
 {
     /// <summary>Provides values for the different measurement units of an angle.</summary>
     public enum AngleMeasurementUnit

@@ -16,13 +16,19 @@ using System.Reflection;
 using System.Collections;
 using System.Globalization;
 using System.Diagnostics.Contracts;
+using EML.Tools;
+using EML.Exceptions;
 
-namespace EML
+namespace EML.NumericTypes
 {
-    /// <summary>Represents a number stored with precision multiplied by 10 powered to an exponent.</summary>
+    /// <summary>Represents a number stored with precision multiplied by a base powered to an exponent.</summary>
     public struct PrecisionExponent
     {
+        /// <summary>The base that is used when multiplying the value.</summary>
+        public int Base { get; } // To be implemented some time
+        /// <summary>The value that is multiplied by the base raised to the exponent.</summary>
         public decimal Value { get; set; }
+        /// <summary>The value that the exponent is raised at.</summary>
         public LargeInteger Exponent { get; set; }
 
         #region Constructors
@@ -35,8 +41,14 @@ namespace EML
                 GetPrecisionExponentInfo(value, 0, out var v, out var e);
                 Value = v;
                 Exponent = e;
+                Base = 10;
             }
-            else { Value = 0; Exponent = 1; }
+            else
+            {
+                Value = 0;
+                Exponent = 1;
+                Base = 10;
+            }
         }
         /// <summary>Create a new instance of the <see cref="PrecisionExponent"/> struct.</summary>
         /// <param name="value">The value to parse to the <see cref="PrecisionExponent"/>.</param>
@@ -48,11 +60,16 @@ namespace EML
                 GetPrecisionExponentInfo(value, exponent, out var v, out var e);
                 Value = v;
                 Exponent = e;
+                Base = 10;
             }
-            else { Value = 0; Exponent = 1; }
+            else
+            {
+                Value = 0;
+                Exponent = 1;
+                Base = 10;
+            }
         }
         #endregion
-
         #region Valid PrecisionExponent Conversion Functions
         /// <summary>Sets the parsed values as they are supposed to be in the <see cref="PrecisionExponent"/> struct and returns them.</summary>
         /// <param name="inputValue">The value that will be processed in the <see cref="PrecisionExponent"/>.</param>
@@ -96,9 +113,7 @@ namespace EML
             return output;
         }
         #endregion
-
         #region Operators
-        /// <summary>Adds the values of the two <see cref="PrecisionExponent"/> objects and returns their sum.</summary>
         public static PrecisionExponent operator +(PrecisionExponent left, PrecisionExponent right)
         {
             LargeInteger times = right.Exponent - left.Exponent;
@@ -106,7 +121,6 @@ namespace EML
                 right.Value /= 10;
             return new PrecisionExponent(left.Value + right.Value, left.Exponent);
         }
-        /// <summary>Subtracts the value of the second <see cref="PrecisionExponent"/> object from the value of the first <see cref="PrecisionExponent"/> object and returns their difference.</summary>
         public static PrecisionExponent operator -(PrecisionExponent left, PrecisionExponent right)
         {
             LargeInteger times = right.Exponent - left.Exponent;
@@ -114,19 +128,14 @@ namespace EML
                 right.Value /= 10;
             return new PrecisionExponent(left.Value - right.Value, left.Exponent);
         }
-        /// <summary>Multiplies the value of the first <see cref="PrecisionExponent"/> object with the value of the second <see cref="PrecisionExponent"/> object and returns the product.</summary>
         public static PrecisionExponent operator *(PrecisionExponent left, PrecisionExponent right) => new PrecisionExponent(left.Value * right.Value, left.Exponent + right.Exponent);
-        /// <summary>Divides the value of the first <see cref="PrecisionExponent"/>object by the value of the second <see cref="PrecisionExponent"/> object and returns the result.</summary>
         public static PrecisionExponent operator /(PrecisionExponent left, PrecisionExponent right)
         {
             if (right.Value != 0) return new PrecisionExponent(left.Value / right.Value, left.Exponent - right.Exponent);
             else throw new DivideByZeroException("Cannot divide by zero.");
         }
-        /// <summary>Adds one to the <see cref="PrecisionExponent"/>.</summary>
         public static PrecisionExponent operator ++(PrecisionExponent p) => p + One;
-        /// <summary>Subtracts one from the <see cref="PrecisionExponent"/>.</summary>
         public static PrecisionExponent operator --(PrecisionExponent p) => p - One;
-        /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is greater than the value of the second <see cref="PrecisionExponent"/> object.</summary>
         public static bool operator >(PrecisionExponent left, PrecisionExponent right)
         {
             if (left.Exponent == right.Exponent)
@@ -139,7 +148,6 @@ namespace EML
                     return left.Value > 0;
             }
         }
-        /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is smaller than the value of the second <see cref="PrecisionExponent"/> object.</summary>
         public static bool operator <(PrecisionExponent left, PrecisionExponent right)
         {
             if (left.Exponent == right.Exponent)
@@ -152,7 +160,6 @@ namespace EML
                     return left.Value < 0;
             }
         }
-        /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is greater than or equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
         public static bool operator >=(PrecisionExponent left, PrecisionExponent right)
         {
             if (left.Exponent == right.Exponent)
@@ -165,7 +172,6 @@ namespace EML
                     return left.Value >= 0;
             }
         }
-        /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is smaller than or equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
         public static bool operator <=(PrecisionExponent left, PrecisionExponent right)
         {
             if (left.Exponent == right.Exponent)
@@ -178,12 +184,9 @@ namespace EML
                     return left.Value <= 0;
             }
         }
-        /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
         public static bool operator ==(PrecisionExponent left, PrecisionExponent right) => left.Exponent == right.Exponent && left.Value == right.Value;
-        /// <summary>Returns whether the value of the first <see cref="PrecisionExponent"/> object is not equal to the value of the second <see cref="PrecisionExponent"/> object.</summary>
         public static bool operator !=(PrecisionExponent left, PrecisionExponent right) => left.Exponent != right.Exponent && left.Value != right.Value;
         #endregion
-
         #region Implicit Conversions
         public static implicit operator PrecisionExponent(byte b) => new PrecisionExponent(b);
         public static implicit operator PrecisionExponent(sbyte sb) => new PrecisionExponent(sb);
@@ -197,7 +200,6 @@ namespace EML
         public static implicit operator PrecisionExponent(double d) => new PrecisionExponent((decimal)d);
         public static implicit operator PrecisionExponent(float f) => new PrecisionExponent((decimal)f);
         #endregion
-
         #region Operations
         /// <summary>Returns the result of the power of a number.</summary>
         /// <param name="p">The <see cref="PrecisionExponent"/> to elevate to a power.</param>
@@ -210,8 +212,8 @@ namespace EML
             else
             {
                 PrecisionExponent result = p;
-                result.Value = (decimal)doublePow((double)result.Value, power);
-                result.Value *= (decimal)doublePow(10, power - (int)power);
+                result.Value = (decimal)General.Power((double)result.Value, power);
+                result.Value *= (decimal)General.Power(10, power - (int)power);
                 result.Exponent *= (int)power;
                 return GetPrecisionExponentInfo(result);
             }
@@ -241,35 +243,34 @@ namespace EML
         /// <summary>Returns one or greater from the value that is specified.</summary>
         /// <param name="p">The <see cref="PrecisionExponent"/> to examine.</param>
         public static PrecisionExponent OneOrGreater(PrecisionExponent p) => (p = GetPrecisionExponentInfo(p)).Exponent >= 0 ? p : One;
-        ///// <summary>Returns the result of the arrows hyperoperation.</summary>
-        ///// <param name="a">The base number which is also going to be used as the exponent.</param>
-        ///// <param name="n">The number of arrows. Must be a non-negative number.</param>
-        ///// <param name="b">The stack of operations. Must be a non-negative number.</param>
-        //public static PrecisionExponent Arrow(int a, PrecisionExponent n, int b)
-        //{
-        //    if (n < 0) throw new ArgumentException("The number of arrows cannot be a negative number.", "n");
-        //    else if (b < 0) throw new ArgumentException("The stack cannot be a negative number.", "b");
-        //    else if (a == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
-        //    else if (n == 0) return a * b;
-        //    else if (n >= 1 && b == 0) return 1;
-        //    else if (n == 1) return doublePow(a, b);
-        //    else
-        //    {
-        //        PrecisionExponent result = a;
-        //        for (int i = 1; i < b; i++)
-        //        {
-        //            // What the fuck can you do to avoid StackOverflowException?!
-        //        }
-        //        return result;
-        //    }
-        //}
+        /// <summary>Returns the result of the arrows hyperoperation.</summary>
+        /// <param name="a">The base number which is also going to be used as the exponent.</param>
+        /// <param name="n">The number of arrows. Must be a non-negative number.</param>
+        /// <param name="b">The stack of operations. Must be a non-negative number.</param>
+        public static PrecisionExponent Arrow(int a, PrecisionExponent n, int b)
+        {
+            if (n < 0) throw new ArgumentException("The number of arrows cannot be a negative number.", "n");
+            else if (b < 0) throw new ArgumentException("The stack cannot be a negative number.", "b");
+            else if (a == 0) throw new ElevateZeroToThePowerOfZeroException("Cannot elevate zero to the power of zero.");
+            else if (n == 0) return a * b;
+            else if (n >= 1 && b == 0) return 1;
+            else if (n == 1) return General.Power(a, b);
+            else
+            {
+                PrecisionExponent result = a;
+                for (int i = 1; i < b; i++)
+                {
+                    // What the fuck can you do to avoid StackOverflowException?!
+                }
+                return result;
+            }
+        }
         /// <summary>Returns the absolute value of the <see cref="PrecisionExponent"/>.</summary>
         /// <param name="p">The <see cref="PrecisionExponent"/> to get the absolute value of.</param>
-        public static PrecisionExponent Abs(PrecisionExponent p) => (p.Value < 0) ? p * -1 : p;
+        public static PrecisionExponent AbsoluteValue(PrecisionExponent p) => (p.Value < 0) ? p * -1 : p;
         /// <summary>Returns the result of a power tower consisting of n copies of a.</summary>
         /// <param name="a">The base value that will be used in the power tower.</param>
         /// <param name="n">The number of copies to return.</param>
-        /// <returns></returns>
         public static PrecisionExponent PowerTower(int a, int n)
         {
             if (a <= 0) throw new ArgumentException("The base cannot be a negative number or zero.", "a");
@@ -287,7 +288,14 @@ namespace EML
         #endregion
 
         #region Overrdides
+        /// <summary>Returns the <seealso cref="string"/> representation of the <seealso cref="PrecisionExponent"/>.</summary>
         public override string ToString() => Value.ToString() + " * 10 ^ " + Exponent.ToString();
+        /// <summary>Returns a value indicating whether an object is equal to another.</summary>
+        /// <param name="obj">The object to check whether the instance of <seealso cref="PrecisionExponent"/> is equal to.</param>
+        public override bool Equals(object obj) => (PrecisionExponent)obj == this;
+        // Chicken
+        /// <summary>Returns the hash code of the <seealso cref="PrecisionExponent"/>.</summary>
+        public override int GetHashCode() => base.GetHashCode();
         #endregion
 
         #region Constant Fields

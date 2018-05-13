@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace EML
+namespace EML.Exceptions
 {
     /// <summary>The exception that is thrown when trying to elevate zero to the power of zero.</summary>
     [ComVisible(true)]

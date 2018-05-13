@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EML.Tools;
+using EML.Exceptions;
 
-namespace EML
+namespace EML.NumericTypes
 {
+    /// <summary>Represents an arbitrarily large decimal number.</summary>
     public struct LargeDecimal
     {
         /// <summary>The <seealso cref="byte"/> list representing the digits on the left side of the number from the decimal point (the integral part).</summary>
@@ -712,6 +715,22 @@ namespace EML
             }
             else throw new ArgumentException();
         }
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static LargeDecimal Clamp(LargeDecimal min, LargeDecimal value, LargeDecimal max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
         /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
         /// <param name="n">The number to raise e.</param>
         public static LargeDecimal Exponentation(LargeDecimal n)
@@ -933,6 +952,13 @@ namespace EML
             }
             return result.ToString();
         }
+        /// <summary>Returns a value indicating whether an object is equal to another.</summary>
+        /// <param name="obj">The object to check whether the instance of <seealso cref="LargeDecimal"/> is equal to.</param>
+        public override bool Equals(object obj) => (LargeDecimal)obj == this;
+        // Get this fucking code copy-pasted bitch
+        /// <summary>Returns the hash code of the <seealso cref="LargeDecimal"/>.</summary>
+        public override int GetHashCode() => base.GetHashCode();
+        // I love copy-pasting my useless code everywhere because of someone being idiotic
         #endregion
     }
 }

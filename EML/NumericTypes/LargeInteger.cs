@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EML.Tools;
+using EML.Exceptions;
 
-namespace EML
+namespace EML.NumericTypes
 {
     /// <summary>Represents an arbitrarily large integer.</summary>
     public struct LargeInteger
@@ -721,6 +723,22 @@ namespace EML
         /// <summary>Returns the average of a number of instances of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the average of.</param>
         public static LargeInteger Average(params LargeInteger[] l) => Sum(l) / l.Length;
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="value">The value to enclose.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public static LargeInteger Clamp(LargeInteger min, LargeInteger value, LargeInteger max)
+        {
+            if (min > max)
+                throw new ArgumentException("Maximum value cannot be greater than minimum value.");
+            if (min == max)
+                return min;
+            if (min > value)
+                return min;
+            if (value > max)
+                return max;
+            return value;
+        }
         /// <summary>Returns the factorial of a <seealso cref="LargeInteger"/>.</summary>
         /// <param name="l">The <seealso cref="LargeInteger"/> whose factorial to get.</param>
         public static LargeInteger Factorial(LargeInteger l)
@@ -876,8 +894,8 @@ namespace EML
             Random shit = new Random();
             result.Bytes = new List<byte>(length);
             for (int i = 0; i < length - 1; i++)
-                result.Bytes[i] = (byte)shit.Next(0, 255);
-            result.Bytes[length - 1] = (byte)shit.Next(1, 255);
+                result.Bytes.Add((byte)shit.Next(0, 255));
+            result.Bytes.Add((byte)shit.Next(1, 255));
             return result;
         }
         /// <summary>Returns a random <seealso cref="LargeInteger"/> with a length that is within a specified range.</summary>
@@ -890,8 +908,8 @@ namespace EML
             int length = shit.Next(minLength, maxLength);
             result.Bytes = new List<byte>(length);
             for (int i = 0; i < length - 1; i++)
-                result.Bytes[i] = (byte)shit.Next(0, 255);
-            result.Bytes[length - 1] = (byte)shit.Next(1, 255);
+                result.Bytes.Add((byte)shit.Next(0, 255));
+            result.Bytes.Add((byte)shit.Next(1, 255));
             return result;
         }
         /// <summary>Returns a random <seealso cref="LargeInteger"/> within a range.</summary>
@@ -909,6 +927,8 @@ namespace EML
                 bool matchesMax = false;
                 int length = shit.Next(min.Length, max.Length);
                 result.Bytes = new List<byte>(length);
+                for (int i = 0; i < length; i++)
+                    result.Bytes.Add(0);
                 if (length == min.Length)
                 {
                     result.Bytes[length - 1] = (byte)shit.Next(min.Bytes[length - 1], 255);
@@ -1022,6 +1042,13 @@ namespace EML
                 result.Insert(0, (char)((currentIntPart % 10) + 48));
             return result.ToString();
         }
+        /// <summary>Returns a value indicating whether an object is equal to another.</summary>
+        /// <param name="obj">The object to check whether the instance of <seealso cref="LargeInteger"/> is equal to.</param>
+        public override bool Equals(object obj) => (LargeInteger)obj == this;
+        // Honestly this is bullshit
+        /// <summary>Returns the hash code of the <seealso cref="LargeInteger"/>.</summary>
+        public override int GetHashCode() => base.GetHashCode();
+        // I completely fail to understand why this system is so complex
         #endregion
     }
 }

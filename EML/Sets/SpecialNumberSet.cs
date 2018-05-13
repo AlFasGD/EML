@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EML
+namespace EML.Sets
 {
     /// <summary>Provides values for the different special number sets.</summary>
     public enum SpecialNumberSet

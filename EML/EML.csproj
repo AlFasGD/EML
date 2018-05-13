@@ -44,10 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AngleMeasurementUnit.cs" />
-    <Compile Include="Comparison.cs" />
+    <Compile Include="Extensions\GenericExtensions.cs" />
+    <Compile Include="Tools\AngleMeasurementUnit.cs" />
+    <Compile Include="Tools\Comparison.cs" />
+    <Compile Include="Complex.cs" />
     <Compile Include="Constant.cs" />
-    <Compile Include="Expression.cs" />
+    <Compile Include="Expressions\Expression.cs" />
     <Compile Include="Function.cs" />
     <Compile Include="Tools\General.cs" />
     <Compile Include="IndefiniteIntegral.cs" />
@@ -59,21 +61,21 @@
     <Compile Include="NumericTypes\LargeInteger.cs" />
     <Compile Include="Exceptions\ElevateZeroToThePowerOfZeroException.cs" />
     <Compile Include="Exceptions\NegativeNumberFactorialException.cs" />
-    <Compile Include="NumberExpression.cs" />
+    <Compile Include="Expressions\NumberExpression.cs" />
     <Compile Include="Sets\NumberInterval.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperationType.cs" />
     <Compile Include="NumericTypes\PrecisionExponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RealNumberExpression.cs" />
+    <Compile Include="Expressions\RealNumberExpression.cs" />
     <Compile Include="Sets\NumberSet.cs" />
     <Compile Include="Sets\SetOperation.cs" />
     <Compile Include="Sets\SpecialNumberSet.cs" />
     <Compile Include="Tools\Geometry.cs" />
     <Compile Include="Tools\HyperbolicFunctions.cs" />
     <Compile Include="Tools\TrigonometricFunctions.cs" />
-    <Compile Include="Vector.cs" />
-    <Compile Include="Vector2D.cs" />
+    <Compile Include="NumericTypes\Vectors\Vector.cs" />
+    <Compile Include="NumericTypes\Vectors\Vector2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EML.Expressions;
 
-namespace EML
+namespace EML.Sets
 {
     /// <summary>Represents a number interval.</summary>
     public class RealNumberInterval

@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EML.NumericTypes;
+using EML.Sets;
+using EML.Tools;
+using EML.Exceptions;
 
-namespace EML
+namespace EML.Expressions
 {
     public class Expression
     {

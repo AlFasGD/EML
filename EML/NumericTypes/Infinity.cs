@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EML.Tools;
+using EML.Exceptions;
 
-namespace EML
+namespace EML.NumericTypes
 {
     public class Infinity
     {
         public bool Sign { get; set; }
-        // public int RelativeSize { get; set; }
+        // public Limit Formula { get; set; }
 
         public Infinity(bool sign)
         {

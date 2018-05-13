@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EML.Exceptions;
 
-namespace EML
+namespace EML.Tools
 {
     /// <summary>Provides tools for operations in geometry.</summary>
     public static class Geometry
