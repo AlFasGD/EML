@@ -7,19 +7,23 @@ using EML.NumericTypes;
 using EML.Sets;
 using EML.Tools;
 using EML.Exceptions;
+using EML.Expressions.Operations;
 
 namespace EML.Expressions
 {
     public class Expression
     {
-        LargeDecimal[] Literals { get; set; }
-        OperationType[] Operations { get; set; }
+        public Operation Operation { get; set; }
 
         /// <summary>Initializes a new instance of the <seealso cref="Expression"/> class.</summary>
-        public Expression(LargeDecimal[] literals, OperationType[] operations)
+        public Expression(Operation operation)
         {
-            Literals = literals;
-            Operations = operations;
+            Operation = operation;
         }
+
+        public static Addition operator +(Expression left, Expression right) => new Addition(left, right);
+        public static Subtraction operator -(Expression left, Expression right) => new Subtraction(left, right);
+        public static Multiplication operator *(Expression left, Expression right) => new Multiplication(left, right);
+        public static Division operator /(Expression left, Expression right) => new Division(left, right);
     }
 }

@@ -9,7 +9,7 @@ using EML.Tools;
 using EML.Exceptions;
 using EML.Extensions;
 
-namespace EML
+namespace EML.NumericTypes
 {
     /// <summary>Represents a complex number.</summary>
     /// <typeparam name="T">The type of number to use for the value of the complex number.</typeparam>

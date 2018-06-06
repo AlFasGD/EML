@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EML.Expressions;
+using EML.Expressions.Operations;
 
 namespace EML.NumericTypes.Vectors
 {
@@ -14,6 +15,8 @@ namespace EML.NumericTypes.Vectors
         public RealNumberExpression X;
         /// <summary>The Y value of the vector.</summary>
         public RealNumberExpression Y;
+        /// <summary>The length of the vector.</summary>
+        public RealNumberExpression Length => X * X + Y * Y;
 
         /// <summary>Creates a new instance of <seealso cref="Vector2D"/>.</summary>
         /// <param name="x">The X value of the vector.</param>
@@ -56,7 +59,7 @@ namespace EML.NumericTypes.Vectors
         /// <param name="v">The vector to get the inner product of.</param>
         public static RealNumberExpression InnerProduct(Vector2D v)
         {
-            return new RealNumberExpression("iv", new LargeDecimal[0], new OperationType[0]);
+            return new RealNumberExpression("iv", new Multiplication(v.X, v.Y));
         }
 
         /// <summary>Converts the vector to its string representation.</summary>

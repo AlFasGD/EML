@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EML.Expressions;
 
-namespace EML
+namespace EML.Expressions.Operations.Integrals
 {
     /// <summary>Represents a definite integral.</summary>
     public class DefiniteIntegral : Integral

@@ -7,6 +7,7 @@ using EML.NumericTypes;
 using EML.Sets;
 using EML.Tools;
 using EML.Exceptions;
+using EML.Expressions.Operations;
 
 namespace EML.Expressions
 {
@@ -15,8 +16,8 @@ namespace EML.Expressions
         public string Name { get; set; }
 
         /// <summary>Initializes a new instance of the <seealso cref="RealNumberExpression"/> class.</summary>
-        public RealNumberExpression(string name, LargeDecimal[] literals, OperationType[] operations)
-            : base(literals, operations)
+        public RealNumberExpression(string name, Operation operation)
+            : base(operation)
         {
             Name = name;
         }
@@ -25,25 +26,25 @@ namespace EML.Expressions
         // Only made for the compiler to work
         public static RealNumberExpression operator +(RealNumberExpression left, RealNumberExpression right)
         {
-            return new RealNumberExpression(left.Name + right.Name, new LargeDecimal[0], new OperationType[0]);
+            return new RealNumberExpression($"{left.Name} + {right.Name}", (left as Expression) + (right as Expression));
         }
         public static RealNumberExpression operator -(RealNumberExpression left, RealNumberExpression right)
         {
-            return new RealNumberExpression(left.Name + right.Name, new LargeDecimal[0], new OperationType[0]);
+            return new RealNumberExpression($"{left.Name} + {right.Name}", (left as Expression) - (right as Expression));
         }
         public static RealNumberExpression operator *(RealNumberExpression left, RealNumberExpression right)
         {
-            return new RealNumberExpression(left.Name + right.Name, new LargeDecimal[0], new OperationType[0]);
+            return new RealNumberExpression($"{left.Name} + {right.Name}", (left as Expression) * (right as Expression));
         }
         public static RealNumberExpression operator /(RealNumberExpression left, RealNumberExpression right)
         {
-            return new RealNumberExpression(left.Name + right.Name, new LargeDecimal[0], new OperationType[0]);
+            return new RealNumberExpression($"{left.Name} + {right.Name}", (left as Expression) / (right as Expression));
         }
         #endregion
         #region Operations
         public static RealNumberExpression Power(RealNumberExpression b, RealNumberExpression power)
         {
-            return new RealNumberExpression(b.Name, new LargeDecimal[0], new OperationType[0]);
+            return new RealNumberExpression(b.Name, new Exponentation(b, power));
         }
         #endregion
         #region Overrides

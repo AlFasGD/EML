@@ -7,18 +7,19 @@ using EML.NumericTypes;
 using EML.Sets;
 using EML.Tools;
 using EML.Exceptions;
+using EML.Expressions;
 
-namespace EML
+namespace EML.Expressions.Operations.Integrals
 {
     /// <summary>Represents a general integral.</summary>
-    public class Integral : Operation
+    public abstract class Integral : Operation
     {
         /// <summary>The function of the integral.</summary>
         public Function Function;
         /// <summary>The variable to take into account while performing the integration.</summary>
         public string VariableName;
 
-        /// <summary>Creates a new instance of <seealso cref="DefiniteIntegral"/>.</summary>
+        /// <summary>Creates a new instance of <seealso cref="Integral"/>.</summary>
         /// <param name="function">The function of the integral.</param>
         /// <param name="variableName">The variable to take into account while performing the integration.</param>
         public Integral(Function function, string variableName)
