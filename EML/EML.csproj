@@ -46,6 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Expressions\Operations\Advanced\ConditionalSummation.cs" />
+    <Compile Include="Expressions\Operations\Advanced\Limit.cs" />
+    <Compile Include="Expressions\Operations\Advanced\SequentialProduct.cs" />
+    <Compile Include="Expressions\Operations\Advanced\Summation.cs" />
     <Compile Include="Expressions\Operations\Basic\Division.cs" />
     <Compile Include="Expressions\Operations\Basic\Exponentation.cs" />
     <Compile Include="Expressions\Operations\Functions\Exponential\Exp.cs" />
