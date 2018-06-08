@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace EML.Sets
 {
+    /// <summary>Represents a number set.</summary>
     public class NumberSet
     {
-        public RealNumberInterval[] Intervals { get; set; }
-        public SetOperation[] SetOperations { get; set; }
+        public SetOperation Operation;
 
         /// <summary>Initializes a new instance of the <seealso cref="NumberSet"/> class.</summary>
-        public NumberSet(RealNumberInterval[] intervals, SetOperation[] setOperations)
+        public NumberSet(SetOperation operation)
         {
-            Intervals = intervals;
-            SetOperations = setOperations;
+            Operation = operation;
         }
     }
 }

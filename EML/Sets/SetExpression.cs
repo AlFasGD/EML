@@ -7,8 +7,7 @@ using EML.Expressions;
 
 namespace EML.Sets
 {
-    /// <summary>Represents a set operation.</summary>
-    public abstract class SetOperation : Operation
+    public abstract class SetExpression : Expression
     {
 
     }

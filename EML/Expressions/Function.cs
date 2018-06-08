@@ -7,9 +7,8 @@ using EML.NumericTypes;
 using EML.Sets;
 using EML.Tools;
 using EML.Exceptions;
-using EML.Expressions;
 
-namespace EML
+namespace EML.Expressions
 {
     /// <summary>Represents a function.</summary>
     public class Function

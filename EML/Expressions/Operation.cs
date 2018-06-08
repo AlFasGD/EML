@@ -7,6 +7,7 @@ using EML.Expressions.Operations;
 
 namespace EML.Expressions
 {
+    /// <summary>Represents an operation.</summary>
     public abstract class Operation : Expression
     {
 
