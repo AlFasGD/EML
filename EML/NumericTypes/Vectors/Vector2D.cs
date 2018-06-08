@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EML.Expressions;
 using EML.Expressions.Operations;
+using EML.Expressions.Operations.Basic;
 
 namespace EML.NumericTypes.Vectors
 {

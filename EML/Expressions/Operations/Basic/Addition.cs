@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EML.Expressions.Operations
+namespace EML.Expressions.Operations.Basic
 {
-    public class Multiplication : Operation
+    /// <summary>Represents an addition operation.</summary>
+    public class Addition : Operation
     {
         public Expression Left;
         public Expression Right;
-
-        public Multiplication(Expression left, Expression right)
+        
+        public Addition(Expression left, Expression right)
         {
             Left = left;
             Right = right;

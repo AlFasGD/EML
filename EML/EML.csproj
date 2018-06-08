@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -44,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Expressions\Operations\Division.cs" />
-    <Compile Include="Expressions\Operations\Exponentation.cs" />
+    <Compile Include="Expressions\Operations\Basic\Division.cs" />
+    <Compile Include="Expressions\Operations\Basic\Exponentation.cs" />
+    <Compile Include="Expressions\Operations\Functions\Exponential\Exp.cs" />
+    <Compile Include="Expressions\Operations\Functions\Exponential\Exponentation.cs" />
     <Compile Include="Expressions\Operations\Functions\FunctionOperation.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Cosecanth.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Cosineh.cs" />
@@ -63,10 +67,10 @@
     <Compile Include="Expressions\Operations\Functions\Trigonometric\Secant.cs" />
     <Compile Include="Expressions\Operations\Functions\Trigonometric\Sine.cs" />
     <Compile Include="Expressions\Operations\Functions\Trigonometric\Tangent.cs" />
-    <Compile Include="Expressions\Operations\Multiplication.cs" />
+    <Compile Include="Expressions\Operations\Basic\Multiplication.cs" />
     <Compile Include="Expressions\Operation.cs" />
-    <Compile Include="Expressions\Operations\Addition.cs" />
-    <Compile Include="Expressions\Operations\Subtraction.cs" />
+    <Compile Include="Expressions\Operations\Basic\Addition.cs" />
+    <Compile Include="Expressions\Operations\Basic\Subtraction.cs" />
     <Compile Include="Extensions\GenericExtensions.cs" />
     <Compile Include="Tools\AngleMeasurementUnit.cs" />
     <Compile Include="Tools\Comparison.cs" />

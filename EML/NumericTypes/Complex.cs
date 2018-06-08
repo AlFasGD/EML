@@ -28,12 +28,14 @@ namespace EML.NumericTypes
                 RealPart = real;
                 ImaginaryPart = imaginary;
             }
+            else
+                throw new Exception("The provided argument is not an acceptable numerical type.");
         }
 
         // Implement addition, subtraction, etc.
         public static Complex<T> operator +(Complex<T> left, Complex<T> right)
         {
-            Complex<T> result = new Complex<T>(default(T), default(T))
+            Complex<T> result = new Complex<T>(default, default)
             {
                 RealPart = Addition(left.RealPart, right.RealPart),
                 ImaginaryPart = Addition(left.ImaginaryPart, right.ImaginaryPart)
@@ -42,7 +44,7 @@ namespace EML.NumericTypes
         }
         public static Complex<T> operator -(Complex<T> left, Complex<T> right)
         {
-            Complex<T> result = new Complex<T>(default(T), default(T))
+            Complex<T> result = new Complex<T>(default, default)
             {
                 RealPart = Subtraction(left.RealPart, right.RealPart),
                 ImaginaryPart = Subtraction(left.ImaginaryPart, right.ImaginaryPart)
@@ -51,7 +53,7 @@ namespace EML.NumericTypes
         }
         public static Complex<T> operator *(Complex<T> left, Complex<T> right)
         {
-            Complex<T> result = new Complex<T>(default(T), default(T))
+            Complex<T> result = new Complex<T>(default, default)
             {
                 RealPart = Multiplication(left.RealPart, right.RealPart),
                 ImaginaryPart = Multiplication(left.ImaginaryPart, right.ImaginaryPart)
@@ -60,7 +62,7 @@ namespace EML.NumericTypes
         }
         public static Complex<T> operator /(Complex<T> left, Complex<T> right)
         {
-            Complex<T> result = new Complex<T>(default(T), default(T))
+            Complex<T> result = new Complex<T>(default, default)
             {
                 RealPart = Division(left.RealPart, right.RealPart),
                 ImaginaryPart = Division(left.ImaginaryPart, right.ImaginaryPart)
@@ -93,9 +95,9 @@ namespace EML.NumericTypes
             else if (typeof(T) == typeof(decimal))
                 return ((left as decimal?) + (right as decimal?)) as T;
             else if (typeof(T) == typeof(LargeInteger))
-                return ((left as decimal?) + (right as decimal?)) as T;
+                return ((left as LargeInteger?) + (right as LargeInteger?)) as T;
             else if (typeof(T) == typeof(LargeDecimal))
-                return ((left as decimal?) + (right as decimal?)) as T;
+                return ((left as LargeDecimal?) + (right as LargeDecimal?)) as T;
             else
                 throw new Exception("The provided argument is not a valid numerical type.");
         }
@@ -124,9 +126,9 @@ namespace EML.NumericTypes
             else if (typeof(T) == typeof(decimal))
                 return ((left as decimal?) - (right as decimal?)) as T;
             else if (typeof(T) == typeof(LargeInteger))
-                return ((left as decimal?) - (right as decimal?)) as T;
+                return ((left as LargeInteger?) - (right as LargeInteger?)) as T;
             else if (typeof(T) == typeof(LargeDecimal))
-                return ((left as decimal?) - (right as decimal?)) as T;
+                return ((left as LargeDecimal?) - (right as LargeDecimal?)) as T;
             else
                 throw new Exception("The provided argument is not a valid numerical type.");
         }
@@ -155,9 +157,9 @@ namespace EML.NumericTypes
             else if (typeof(T) == typeof(decimal))
                 return ((left as decimal?) * (right as decimal?)) as T;
             else if (typeof(T) == typeof(LargeInteger))
-                return ((left as decimal?) * (right as decimal?)) as T;
+                return ((left as LargeInteger?) * (right as LargeInteger?)) as T;
             else if (typeof(T) == typeof(LargeDecimal))
-                return ((left as decimal?) * (right as decimal?)) as T;
+                return ((left as LargeDecimal?) * (right as LargeDecimal?)) as T;
             else
                 throw new Exception("The provided argument is not a valid numerical type.");
         }
@@ -186,9 +188,38 @@ namespace EML.NumericTypes
             else if (typeof(T) == typeof(decimal))
                 return ((left as decimal?) / (right as decimal?)) as T;
             else if (typeof(T) == typeof(LargeInteger))
-                return ((left as decimal?) / (right as decimal?)) as T;
+                return ((left as LargeInteger?) / (right as LargeInteger?)) as T;
             else if (typeof(T) == typeof(LargeDecimal))
-                return ((left as decimal?) / (right as decimal?)) as T;
+                return ((left as LargeDecimal?) / (right as LargeDecimal?)) as T;
+            else
+                throw new Exception("The provided argument is not a valid numerical type.");
+        }
+        public static T Modulus(T left, T right)
+        {
+            if (typeof(T) == typeof(int))
+                return ((left as int?) % (right as int?)) as T;
+            else if (typeof(T) == typeof(long))
+                return ((left as long?) % (right as long?)) as T;
+            else if (typeof(T) == typeof(short))
+                return ((left as short?) % (right as short?)) as T;
+            else if (typeof(T) == typeof(byte))
+                return ((left as byte?) % (right as byte?)) as T;
+            else if (typeof(T) == typeof(uint))
+                return ((left as uint?) % (right as uint?)) as T;
+            else if (typeof(T) == typeof(ulong))
+                return ((left as ulong?) % (right as ulong?)) as T;
+            else if (typeof(T) == typeof(ushort))
+                return ((left as ushort?) % (right as ushort?)) as T;
+            else if (typeof(T) == typeof(sbyte))
+                return ((left as sbyte?) % (right as sbyte?)) as T;
+            else if (typeof(T) == typeof(float))
+                return ((left as float?) % (right as float?)) as T;
+            else if (typeof(T) == typeof(double))
+                return ((left as double?) % (right as double?)) as T;
+            else if (typeof(T) == typeof(decimal))
+                return ((left as decimal?) % (right as decimal?)) as T;
+            else if (typeof(T) == typeof(LargeInteger))
+                return ((left as LargeInteger?) % (right as LargeInteger?)) as T;
             else
                 throw new Exception("The provided argument is not a valid numerical type.");
         }

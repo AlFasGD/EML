@@ -16,8 +16,8 @@ namespace EML.Expressions
         SpecialNumberSet ExpressionDomain { get; set; }
         
         public NumberExpression(Expression[] expressions, SpecialNumberSet expressionDomain, Operation operation)
-            : base(operation)
         {
+            Operation = operation;
             Expressions = expressions;
             ExpressionDomain = expressionDomain;
         }

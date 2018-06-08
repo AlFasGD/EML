@@ -13,7 +13,7 @@ namespace EML.NumericTypes.Vectors
         /// <summary>The values of the vector.</summary>
         public RealNumberExpression[] Values;
         /// <summary>Gets the number of dimensions of the vector.</summary>
-        public int Dimensions { get => Values.Length; }
+        public int Dimensions => Values.Length;
 
         /// <summary>Creates a new instance of <seealso cref="Vector"/>.</summary>
         /// <param name="v">The values of the vector.</param>

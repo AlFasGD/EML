@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EML.Expressions.Operations
+namespace EML.Expressions.Operations.Basic
 {
+    /// <summary>Represents an exponentation operation.</summary>
     public class Exponentation : Operation
     {
         public Expression Base;

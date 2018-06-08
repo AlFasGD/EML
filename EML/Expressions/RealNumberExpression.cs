@@ -8,6 +8,7 @@ using EML.Sets;
 using EML.Tools;
 using EML.Exceptions;
 using EML.Expressions.Operations;
+using EML.Expressions.Operations.Basic;
 
 namespace EML.Expressions
 {
@@ -17,8 +18,8 @@ namespace EML.Expressions
 
         /// <summary>Initializes a new instance of the <seealso cref="RealNumberExpression"/> class.</summary>
         public RealNumberExpression(string name, Operation operation)
-            : base(operation)
         {
+            Operation = operation;
             Name = name;
         }
 

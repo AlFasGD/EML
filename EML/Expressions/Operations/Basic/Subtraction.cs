@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EML.Expressions.Operations
+namespace EML.Expressions.Operations.Basic
 {
+    /// <summary>Represents a subtraction operation.</summary>
     public class Subtraction : Operation
     {
         public Expression Left;
