@@ -10,7 +10,8 @@ using EML.Exceptions;
 
 namespace EML
 {
-    /// <summary>Represents a constant in mathematics. Probably to be removed since it is not frequently encountered.</summary>
+    // Probably to be removed since it is not frequently encountered
+    /// <summary>Represents a constant in mathematics.</summary>
     public class Constant
     {
         public string Name { get; set; }

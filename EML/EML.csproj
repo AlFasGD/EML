@@ -54,6 +54,12 @@
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Cosecanth.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Cosineh.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Cotangenth.cs" />
+    <Compile Include="Expressions\Operations\Functions\Hyperbolic\ArcCosecanth.cs" />
+    <Compile Include="Expressions\Operations\Functions\Hyperbolic\ArcCosineh.cs" />
+    <Compile Include="Expressions\Operations\Functions\Hyperbolic\ArcCotangenth.cs" />
+    <Compile Include="Expressions\Operations\Functions\Hyperbolic\ArcSecanth.cs" />
+    <Compile Include="Expressions\Operations\Functions\Hyperbolic\ArcSineh.cs" />
+    <Compile Include="Expressions\Operations\Functions\Hyperbolic\ArcTangenth.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Secanth.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Sineh.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Tangenth.cs" />
@@ -61,6 +67,12 @@
     <Compile Include="Expressions\Operations\Functions\Logarithmic\Ln.cs" />
     <Compile Include="Expressions\Operations\Functions\Logarithmic\Log.cs" />
     <Compile Include="Expressions\Operations\Functions\Logarithmic\Logn.cs" />
+    <Compile Include="Expressions\Operations\Functions\Trigonometric\ArcCosecant.cs" />
+    <Compile Include="Expressions\Operations\Functions\Trigonometric\ArcCosine.cs" />
+    <Compile Include="Expressions\Operations\Functions\Trigonometric\ArcCotangent.cs" />
+    <Compile Include="Expressions\Operations\Functions\Trigonometric\ArcSecant.cs" />
+    <Compile Include="Expressions\Operations\Functions\Trigonometric\ArcSine.cs" />
+    <Compile Include="Expressions\Operations\Functions\Trigonometric\ArcTangent.cs" />
     <Compile Include="Expressions\Operations\Functions\Trigonometric\Cosecant.cs" />
     <Compile Include="Expressions\Operations\Functions\Trigonometric\Cosine.cs" />
     <Compile Include="Expressions\Operations\Functions\Trigonometric\Cotangent.cs" />
