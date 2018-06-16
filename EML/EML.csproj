@@ -95,7 +95,7 @@
     <Compile Include="Sets\Operations\Union.cs" />
     <Compile Include="Sets\SetExpression.cs" />
     <Compile Include="Tools\AngleMeasurementUnit.cs" />
-    <Compile Include="Tools\Comparison.cs" />
+    <Compile Include="Tools\Enumerations\Comparison.cs" />
     <Compile Include="NumericTypes\Complex.cs" />
     <Compile Include="Constant.cs" />
     <Compile Include="Expressions\Expression.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Tools\Functions\TrigonometricFunctions.cs" />
     <Compile Include="NumericTypes\Vectors\Vector.cs" />
     <Compile Include="NumericTypes\Vectors\Vector2D.cs" />
+    <Compile Include="Tools\Enumerations\Sign.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EML.Tools;
 using EML.Exceptions;
+using EML.Tools.Enumerations;
 
 namespace EML.NumericTypes
 {
@@ -13,9 +14,15 @@ namespace EML.NumericTypes
     {
         /// <summary>The <seealso cref="byte"/> list representing the digits of the number.</summary>
         public List<byte> Bytes { get; set; }
-        /// <summary>The sign of the instance of <seealso cref="LargeInteger"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
-        public bool Sign { get; set; } // True if number is positive
-        /// <summary>The length of the instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <summary>The <seealso cref="Tools.Enumerations.Sign"/> of the <seealso cref="LargeInteger"/>.</summary>
+        public Sign Sign { get; set; }
+        /// <summary>The sign of the <seealso cref="LargeInteger"/> as a <seealso cref="bool"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
+        public bool BoolSign
+        {
+            get => Sign == Sign.Positive;
+            set => Sign = value ? Sign.Positive : Sign.Negative;
+        }
+        /// <summary>The length of the <seealso cref="LargeInteger"/>.</summary>
         public int Length => Bytes.Count;
 
         #region Constructors
@@ -25,7 +32,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.Add(b);
-            Sign = true;
+            Sign = Sign.Positive;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="short"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -33,7 +40,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(s)));
-            Sign = s >= 0;
+            Sign = s >= 0 ? Sign.Positive : Sign.Negative;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="int"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -41,7 +48,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(i)));
-            Sign = i >= 0;
+            Sign = i >= 0 ? Sign.Positive : Sign.Negative;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="long"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -49,7 +56,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(l)));
-            Sign = l >= 0;
+            Sign = l >= 0 ? Sign.Positive : Sign.Negative;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="sbyte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -57,7 +64,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.Add((byte)General.AbsoluteValue(b));
-            Sign = b >= 0;
+            Sign = b >= 0 ? Sign.Positive : Sign.Negative;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="ushort"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -65,7 +72,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(s));
-            Sign = s >= 0;
+            Sign = Sign.Positive;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="uint"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -73,7 +80,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(i));
-            Sign = i >= 0;
+            Sign = Sign.Positive;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="ulong"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -81,7 +88,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(l));
-            Sign = l >= 0;
+            Sign = Sign.Positive;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="float"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -112,7 +119,7 @@ namespace EML.NumericTypes
         public LargeInteger(LargeDecimal d)
         {
             Bytes = d.RightBytes;
-            Sign = d.Sign;
+            Sign = d.Sign ? Sign.Positive : Sign.Negative;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="byte"/> array to create the <seealso cref="LargeInteger"/> from.</param>
@@ -120,7 +127,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.AddRange(b);
-            Sign = true;
+            Sign = Sign.Positive;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="byte"/> list to create the <seealso cref="LargeInteger"/> from.</param>
@@ -128,7 +135,7 @@ namespace EML.NumericTypes
         {
             Bytes = new List<byte>();
             Bytes.AddRange(b);
-            Sign = true;
+            Sign = Sign.Positive;
         }
         #endregion
         #region Implicit Conversions
@@ -153,11 +160,6 @@ namespace EML.NumericTypes
             if (a.Length == 1) return a.Bytes[0];
             else throw new OverflowException("The LargeInteger was too big.");
         }
-        public static explicit operator sbyte(LargeInteger a)
-        {
-            if (a.Length == 1) return (sbyte)a.Bytes[0];
-            else throw new OverflowException("The LargeInteger was too big.");
-        }
         public static explicit operator short(LargeInteger a)
         {
             if (a.Length <= 2) return BitConverter.ToInt16(a.Bytes.ToArray(), 0);
@@ -171,6 +173,11 @@ namespace EML.NumericTypes
         public static explicit operator long(LargeInteger a)
         {
             if (a.Length <= 8) return BitConverter.ToInt64(a.Bytes.ToArray(), 0);
+            else throw new OverflowException("The LargeInteger was too big.");
+        }
+        public static explicit operator sbyte(LargeInteger a)
+        {
+            if (a.Length == 1) return (sbyte)a.Bytes[0];
             else throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator ushort(LargeInteger a)
@@ -233,83 +240,84 @@ namespace EML.NumericTypes
         public static LargeInteger operator +(LargeInteger left, LargeInteger right)
         {
             LargeInteger result = new LargeInteger();
-            result.Bytes.AddRange(new byte[General.Max(left.Length, right.Length) + 1]); // Add as many bytes as needed for both the integers
-            if (!left.Sign && !right.Sign)
-                result.Sign = false;
-            else if (left.Sign && right.Sign)
-                result.Sign = true;
-            else if (!left.Sign && right.Sign)
+            // Add the maximum number of bytes between the two integers and another one to avoid overflows
+            result.Bytes.AddRange(new byte[General.Max(left.Length, right.Length) + 1]);
+
+            // Determine the sign of the result
+            if (!left.BoolSign && !right.BoolSign)
+                result.BoolSign = false;
+            else if (left.BoolSign && right.BoolSign)
+                result.BoolSign = true;
+            else if (!left.BoolSign && right.BoolSign)
             {
                 if (left.Length > right.Length)
-                    result.Sign = false;
+                    result.BoolSign = false;
                 else if (left.Length < right.Length)
-                    result.Sign = true;
+                    result.BoolSign = true;
                 else if (left.Length == right.Length)
                     for (int i = 0; i < left.Length; i++)
                         if (left.Bytes[i] != right.Bytes[i])
                         {
-                            result.Sign = left.Bytes[left.Length - 1] < right.Bytes[right.Length - 1];
+                            result.BoolSign = left.Bytes[left.Length - 1] < right.Bytes[right.Length - 1];
                             break;
                         }
             }
-            else if (left.Sign && !right.Sign)
+            else if (left.BoolSign && !right.BoolSign)
             {
                 if (left.Length > right.Length)
-                    result.Sign = true;
+                    result.BoolSign = true;
                 else if (left.Length < right.Length)
-                    result.Sign = false;
+                    result.BoolSign = false;
                 else if (left.Length == right.Length)
                     for (int i = 0; i < left.Length; i++)
                         if (left.Bytes[i] != right.Bytes[i])
                         {
-                            result.Sign = left.Bytes[left.Length - 1] > right.Bytes[right.Length - 1];
+                            result.BoolSign = left.Bytes[left.Length - 1] > right.Bytes[right.Length - 1];
                             break;
                         }
             }
+
+            // Perform the calculation
             for (int i = 0; i < result.Length - 1; i++) // Insert the result per bytes
             {
                 int sum = 0;
                 if (i < left.Length && i < right.Length) // Add both numbers in the sum if the byte positions are in the bounds of both numbers' byte list
-                {
-                    if (left.Sign && right.Sign) // If both numbers are positive
-                        sum = left.Bytes[i] + right.Bytes[i];
-                    else if (!left.Sign && right.Sign) // If the left number is negative and the other is positive
-                        sum = right.Bytes[i] - left.Bytes[i];
-                    else if (left.Sign && !right.Sign) // If the right number is negative and the other is positive
-                        sum = left.Bytes[i] - right.Bytes[i];
-                    else if (!left.Sign && !right.Sign) // If both numbers are negative
-                        sum = -left.Bytes[i] - right.Bytes[i];
-                }
+                    sum = left.Bytes[i] * (int)left.Sign + right.Bytes[i] * (int)right.Sign;
                 else if (i < left.Length && i >= right.Length) // Only add the left number in the byte position if the byte index is out of range of the right number's byte list
-                    sum = left.Bytes[i] * (left.Sign ? 1 : -1);
+                    sum = left.Bytes[i] * (int)left.Sign;
                 else if (i >= left.Length && i < right.Length) // Only add the right number in the byte position if the byte index is out of range of the left number's byte list
-                    sum = right.Bytes[i] * (right.Sign ? 1 : -1);
-                if (sum >= 256 - result.Bytes[i]) // If the sum is positive and bigger than the max value of a byte
+                    sum = right.Bytes[i] * (int)right.Sign;
+
+                if (sum >= 256 - result.Bytes[i]) // If the sum is positive and adding that to the current byte will cause an overflow
                 {
-                    sum -= 256;
-                    result.Bytes[i] = (byte)sum;
+                    result.Bytes[i] = (byte)((sum + result.Bytes[i]) % 256);
+                    int t;
                     int j = i + 1;
                     do
                     {
-                        result.Bytes[j]++;
+                        t = result.Bytes[j] + 1;
+                        result.Bytes[j] = (byte)(t % 256);
                         j++;
                     }
-                    while (j < result.Length && result.Bytes[j - 1] == 0);
+                    while (j < result.Length && t / 256 != 0);
                 }
-                else if (sum <= -result.Bytes[i]) // If the sum is negative and its absolute value is bigger than the max value of a byte
+                else if (sum <= -result.Bytes[i]) // If the sum is negative and adding its absolute value to the current byte will cause an overflow
                 {
-                    sum += 256;
-                    result.Bytes[i] = (byte)sum;
-                    result.Bytes[i + 1]++;
+                    result.Bytes[i] = (byte)(256 + sum - result.Bytes[i]);
+                    int t;
                     int j = i + 1;
                     do
                     {
+                        t = result.Bytes[j] - 1;
                         result.Bytes[j]--;
                         j++;
                     }
-                    while (j < result.Length && result.Bytes[j - 1] == 0);
+                    while (j < result.Length && t < 0);
                 }
+                else // The sum can be normally added
+                    result.Bytes[i] += (byte)sum;
             }
+            
             return RemoveUnnecessaryBytes(result);
         }
         public static LargeInteger operator -(LargeInteger left, LargeInteger right) => left + (-right);
@@ -328,7 +336,7 @@ namespace EML.NumericTypes
             else
             {
                 LargeInteger result = 0;
-                result.Sign = left.Sign == right.Sign;
+                result.BoolSign = left.Sign == right.Sign;
                 left = AbsoluteValue(left);
                 right = AbsoluteValue(right);
 
@@ -379,7 +387,7 @@ namespace EML.NumericTypes
                 else
                 {
                     LargeInteger result = 0;
-                    result.Sign = left.Sign == right.Sign;
+                    result.BoolSign = left.Sign == right.Sign;
                     LargeInteger numBits = absoluteLeft.Length * 8;
                     LargeInteger t, q, bit, d = 0;
                     LargeInteger remainder = 0;
@@ -516,7 +524,7 @@ namespace EML.NumericTypes
         }
         public static LargeInteger operator -(LargeInteger l)
         {
-            l.Sign = !l.Sign;
+            l.BoolSign = !l.BoolSign;
             return l;
         }
         public static LargeInteger operator &(LargeInteger left, LargeInteger right)
@@ -571,7 +579,7 @@ namespace EML.NumericTypes
         }
         public static bool operator >(LargeInteger left, LargeInteger right)
         {
-            if (left.Sign && right.Sign)
+            if (left.BoolSign && right.BoolSign)
             {
                 if (left.Length > right.Length)
                     return true;
@@ -583,7 +591,7 @@ namespace EML.NumericTypes
                             return true;
                 return false;
             }
-            else if (!left.Sign && !right.Sign)
+            else if (!left.BoolSign && !right.BoolSign)
             {
                 if (left.Length < right.Length)
                     return true;
@@ -595,11 +603,11 @@ namespace EML.NumericTypes
                             return true;
                 return false;
             }
-            else return left.Sign;
+            else return left.BoolSign;
         }
         public static bool operator <(LargeInteger left, LargeInteger right)
         {
-            if (left.Sign && right.Sign)
+            if (left.BoolSign && right.BoolSign)
             {
                 if (left.Length < right.Length)
                     return true;
@@ -611,7 +619,7 @@ namespace EML.NumericTypes
                             return true;
                 return false;
             }
-            else if (!left.Sign && !right.Sign)
+            else if (!left.BoolSign && !right.BoolSign)
             {
                 if (left.Length > right.Length)
                     return true;
@@ -623,7 +631,7 @@ namespace EML.NumericTypes
                             return true;
                 return false;
             }
-            else return right.Sign;
+            else return right.BoolSign;
         }
         public static bool operator >=(LargeInteger left, LargeInteger right) => left > right || left == right;
         public static bool operator <=(LargeInteger left, LargeInteger right) => left < right || left == right;
@@ -649,15 +657,15 @@ namespace EML.NumericTypes
         }
         #endregion
         #region Operations
-        /// <summary>Determines whether the instance of <seealso cref="LargeInteger"/> is even.</summary>
+        /// <summary>Determines whether the <seealso cref="LargeInteger"/> is even.</summary>
         public bool IsEven() => (this & 1) == 0;
-        /// <summary>Determines whether the instance of <seealso cref="LargeInteger"/> is odd.</summary>
+        /// <summary>Determines whether the <seealso cref="LargeInteger"/> is odd.</summary>
         public bool IsOdd() => (this & 1) == 1;
-        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is even.</summary>
-        /// <param name="n">The instance of <seealso cref="LargeInteger"/> to check for being even.</param>
+        /// <summary>Determines whether a <seealso cref="LargeInteger"/> is even.</summary>
+        /// <param name="n">The <seealso cref="LargeInteger"/> to check for being even.</param>
         public static bool IsEven(LargeInteger n) => (n & 1) == 0;
-        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is a Fibonacci number or not.</summary>
-        /// <param name="l">The instance of <seealso cref="LargeInteger"/> to check for being a Fibonacci number.</param>
+        /// <summary>Determines whether a <seealso cref="LargeInteger"/> is a Fibonacci number or not.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> to check for being a Fibonacci number.</param>
         public static bool IsFibonacci(LargeInteger n)
         {
             if (n < 0) throw new ArgumentOutOfRangeException();
@@ -670,11 +678,11 @@ namespace EML.NumericTypes
                 return fibonacciNumbers.Last() == n;
             }
         }
-        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is odd.</summary>
-        /// <param name="n">The instance of <seealso cref="LargeInteger"/> to check for being odd.</param>
+        /// <summary>Determines whether a <seealso cref="LargeInteger"/> is odd.</summary>
+        /// <param name="n">The <seealso cref="LargeInteger"/> to check for being odd.</param>
         public static bool IsOdd(LargeInteger n) => (n & 1) == 1;
-        /// <summary>Determines whether an instance of <seealso cref="LargeInteger"/> is a prime or not.</summary>
-        /// <param name="l">The instance of <seealso cref="LargeInteger"/> to check for being a prime.</param>
+        /// <summary>Determines whether a <seealso cref="LargeInteger"/> is a prime or not.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> to check for being a prime.</param>
         public static bool IsPrime(LargeInteger l)
         {
             bool result = false;
@@ -684,9 +692,9 @@ namespace EML.NumericTypes
                 else result = i == sqrt;
             return result;
         }
-        /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeInteger"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeInteger"/>, otherwise <see langword="false"/>.</summary>
+        /// <summary>Parses a <seealso cref="string"/> as a <seealso cref="LargeInteger"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeInteger"/>, otherwise <see langword="false"/>.</summary>
         /// <param name="str">The string to parse.</param>
-        /// <param name="result">The variable to return the converted instance of <seealso cref="LargeInteger"/> to.</param>
+        /// <param name="result">The variable to return the converted <seealso cref="LargeInteger"/> to.</param>
         public static bool TryParse(string str, out LargeInteger result)
         {
             result = 0;
@@ -694,9 +702,9 @@ namespace EML.NumericTypes
             catch { return false; }
             return true;
         }
-        /// <summary>Returns the relation between two instances of <seealso cref="LargeInteger"/>. The result is the relation based on the left <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="a">The left instance of <seealso cref="LargeInteger"/> to compare.</param>
-        /// <param name="b">The right instance of <seealso cref="LargeInteger"/> to compare.</param>
+        /// <summary>Returns the relation between two <seealso cref="LargeInteger"/>s. The result is the relation based on the left <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="a">The left <seealso cref="LargeInteger"/> to compare.</param>
+        /// <param name="b">The right <seealso cref="LargeInteger"/> to compare.</param>
         public static Comparison GetRelation(LargeInteger a, LargeInteger b)
         {
             if (a < b)
@@ -707,8 +715,8 @@ namespace EML.NumericTypes
                 return Comparison.GreaterThan;
             // Simple implementation, might need to optimize a bit
         }
-        /// <summary>Gets the decimal digit count of an instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="l">The instance of <seealso cref="LargeInteger"/> whose decimal digits to get.</param>
+        /// <summary>Gets the decimal digit count of a <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> whose decimal digits to get.</param>
         public static int GetDecimalDigitCount(LargeInteger l)
         {
             int digCount = (l.Length - 1) * 2 + 1;
@@ -720,8 +728,8 @@ namespace EML.NumericTypes
         /// <summary>Returns the absolute value of a <seealso cref="LargeInteger"/>.</summary>
         /// <param name="l">The <seealso cref="LargeInteger"/> whose absolute value to get.</param>
         public static LargeInteger AbsoluteValue(LargeInteger l) => l >= 0 ? l : -l;
-        /// <summary>Returns the average of a number of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the average of.</param>
+        /// <summary>Returns the average of a number of <seealso cref="LargeInteger"/>s.</summary>
+        /// <param name="a">The array of <seealso cref="LargeInteger"/>s to calculate the average of.</param>
         public static LargeInteger Average(params LargeInteger[] l) => Sum(l) / l.Length;
         /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
         /// <param name="min">The minimum specified value.</param>
@@ -782,9 +790,9 @@ namespace EML.NumericTypes
                 return primesFound.Last();
             }
         }
-        /// <summary>Returns the greatest common divisor of 2 of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="a">The first instance of <seealso cref="LargeInteger"/>.</param>
-        /// <param name="b">The second instance of <seealso cref="LargeInteger"/>.</param>
+        /// <summary>Returns the greatest common divisor of 2 of <seealso cref="LargeInteger"/>s.</summary>
+        /// <param name="a">The first <seealso cref="LargeInteger"/>.</param>
+        /// <param name="b">The second <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger GreatestCommonDivisor(LargeInteger a, LargeInteger b)
         {
             LargeInteger max = Max(a, b);
@@ -794,8 +802,8 @@ namespace EML.NumericTypes
                     GCD = i;
             return GCD;
         }
-        /// <summary>Returns the greatest common divisor of a number of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="l">The array of instances of <seealso cref="LargeInteger"/>.</param>
+        /// <summary>Returns the greatest common divisor of a number of <seealso cref="LargeInteger"/>s.</summary>
+        /// <param name="l">The array of <seealso cref="LargeInteger"/>s.</param>
         public static LargeInteger GreatestCommonDivisor(params LargeInteger[] l)
         {
             LargeInteger max = Max(l);
@@ -810,13 +818,13 @@ namespace EML.NumericTypes
             }
             return GCD;
         }
-        /// <summary>Returns the least common multiple of 2 of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="a">The first instance of <seealso cref="LargeInteger"/>.</param>
-        /// <param name="b">The second instance of <seealso cref="LargeInteger"/>.</param>
+        /// <summary>Returns the least common multiple of 2 of <seealso cref="LargeInteger"/>s.</summary>
+        /// <param name="a">The first <seealso cref="LargeInteger"/>.</param>
+        /// <param name="b">The second <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger LeastCommonMultiple(LargeInteger a, LargeInteger b) => a * b / GreatestCommonDivisor(a, b);
         // Implement LCM for more than just two instances of LargeInteger
-        /// <summary>Returns the largest <seealso cref="LargeInteger"/> from an array of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="n">The array of instances of <seealso cref="LargeInteger"/> to get the largest <seealso cref="LargeInteger"/> of.</param>
+        /// <summary>Returns the largest <seealso cref="LargeInteger"/> from an array of <seealso cref="LargeInteger"/>s.</summary>
+        /// <param name="n">The array of <seealso cref="LargeInteger"/>s to get the largest <seealso cref="LargeInteger"/> of.</param>
         public static LargeInteger Max(params LargeInteger[] n)
         {
             LargeInteger max = n[0];
@@ -825,8 +833,8 @@ namespace EML.NumericTypes
                     max = n[i];
             return max;
         }
-        /// <summary>Returns the smallest <seealso cref="LargeInteger"/> from an array of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="n">The array of instances of <seealso cref="LargeInteger"/> to get the smallest <seealso cref="LargeInteger"/> of.</param>
+        /// <summary>Returns the smallest <seealso cref="LargeInteger"/> from an array of <seealso cref="LargeInteger"/>s.</summary>
+        /// <param name="n">The array of <seealso cref="LargeInteger"/>s to get the smallest <seealso cref="LargeInteger"/> of.</param>
         public static LargeInteger Min(params LargeInteger[] n)
         {
             LargeInteger min = n[0];
@@ -843,7 +851,7 @@ namespace EML.NumericTypes
             if (str[0] == '-') // If it's the negative sign symbol
             {
                 str = str.Remove(0, 1);
-                result.Sign = false;
+                result.Sign = Sign.Negative;
             }
             if (str.Length > 0)
             {
@@ -974,7 +982,7 @@ namespace EML.NumericTypes
         public static LargeInteger Root(LargeInteger b, LargeInteger rootClass)
         {
             bool negative = b < 0;
-            b.Sign = true; // Already checked if it's a negative number, needless to work around with the stupid negative sign
+            b.Sign = Sign.Positive; // Already checked if it's a negative number, needless to work around with the stupid negative sign
             if (b == 0 || b == 1) return b;
             else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
@@ -994,7 +1002,7 @@ namespace EML.NumericTypes
                         end = (start + middle) / 2;
                     middle = (start + end) / 2;
                 }
-                middle.Sign = !negative;
+                middle.BoolSign = !negative;
                 return middle;
             }
             else // if (0 < b < 1)
@@ -1014,12 +1022,12 @@ namespace EML.NumericTypes
                         end = (start + middle) / 2;
                     middle = (start + end) / 2;
                 }
-                middle.Sign = !negative;
+                middle.BoolSign = !negative;
                 return middle;
             }
         }
-        /// <summary>Returns the sum of a number of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the sum of.</param>
+        /// <summary>Returns the sum of a number of <seealso cref="LargeInteger"/>s.</summary>
+        /// <param name="a">The array of <seealso cref="LargeInteger"/>s to calculate the sum of.</param>
         public static LargeInteger Sum(params LargeInteger[] a)
         {
             LargeInteger result = 0;
@@ -1036,14 +1044,15 @@ namespace EML.NumericTypes
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();
-            if (Sign == false) result.Append("-");
+            if (Sign == Sign.Negative)
+                result.Append("-");
             LargeInteger currentIntPart = this;
             for (LargeInteger i = 1; (currentIntPart = this / i) > 0; i *= 10)
                 result.Insert(0, (char)((currentIntPart % 10) + 48));
             return result.ToString();
         }
         /// <summary>Returns a value indicating whether an object is equal to another.</summary>
-        /// <param name="obj">The object to check whether the instance of <seealso cref="LargeInteger"/> is equal to.</param>
+        /// <param name="obj">The object to check whether the <seealso cref="LargeInteger"/> is equal to.</param>
         public override bool Equals(object obj) => (LargeInteger)obj == this;
         // Honestly this is bullshit
         /// <summary>Returns the hash code of the <seealso cref="LargeInteger"/>.</summary>
