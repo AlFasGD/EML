@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EML.Tools;
+using EML.Tools.Enumerations;
 using EML.Exceptions;
 
 namespace EML.NumericTypes
@@ -15,8 +16,14 @@ namespace EML.NumericTypes
         public List<byte> LeftBytes { get; set; } // The bytes for the left part of the decimal number
         /// <summary>The <seealso cref="byte"/> list representing the digits on the right side of the number from the decimal point (the decimal part).</summary>
         public List<byte> RightBytes { get; set; } // The bytes for the right part of the decimal number (after the decimal point)
-        /// <summary>The sign of the instance of <seealso cref="LargeDecimal"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
-        public bool Sign { get; set; } // True = positive
+        /// <summary>The <seealso cref="Tools.Enumerations.Sign"/> of the <seealso cref="LargeDecimal"/>.</summary>
+        public Sign Sign { get; set; }
+        /// <summary>The sign of the <seealso cref="LargeDecimal"/> as a <seealso cref="bool"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
+        public bool BoolSign
+        {
+            get => Sign == Sign.Positive;
+            set => Sign = value ? Sign.Positive : Sign.Negative;
+        }
         //public int Length { get { return LeftBytes.Count + RightBytes.Count; } }
         /// <summary>The length of the left part of the instance of <seealso cref="LargeDecimal"/>.</summary>
         public int LeftLength { get { return LeftBytes.Count; } }
@@ -41,7 +48,7 @@ namespace EML.NumericTypes
             LeftBytes = new List<byte>();
             LeftBytes.Add(b);
             RightBytes = new List<byte>();
-            Sign = true;
+            Sign = Sign.Positive;
             Period = (0, 0);
         }
         public LargeDecimal(short s)
@@ -49,7 +56,7 @@ namespace EML.NumericTypes
             LeftBytes = new List<byte>();
             LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(s)));
             RightBytes = new List<byte>();
-            Sign = s >= 0;
+            Sign = s >= 0 ? Sign.Positive : Sign.Negative;
             Period = (0, 0);
         }
         public LargeDecimal(int i)
@@ -57,7 +64,7 @@ namespace EML.NumericTypes
             LeftBytes = new List<byte>();
             LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(i)));
             RightBytes = new List<byte>();
-            Sign = i >= 0;
+            Sign = i >= 0 ? Sign.Positive : Sign.Negative;
             Period = (0, 0);
         }
         public LargeDecimal(long l)
@@ -65,7 +72,7 @@ namespace EML.NumericTypes
             LeftBytes = new List<byte>();
             LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(l)));
             RightBytes = new List<byte>();
-            Sign = l >= 0;
+            Sign = l >= 0 ? Sign.Positive : Sign.Negative;
             Period = (0, 0);
         }
         public LargeDecimal(sbyte b)
@@ -73,7 +80,7 @@ namespace EML.NumericTypes
             LeftBytes = new List<byte>();
             LeftBytes.Add((byte)General.AbsoluteValue(b));
             RightBytes = new List<byte>();
-            Sign = b >= 0;
+            Sign = b >= 0 ? Sign.Positive : Sign.Negative;
             Period = (0, 0);
         }
         public LargeDecimal(ushort s)
@@ -81,7 +88,7 @@ namespace EML.NumericTypes
             LeftBytes = new List<byte>();
             LeftBytes.AddRange(BitConverter.GetBytes(s));
             RightBytes = new List<byte>();
-            Sign = s >= 0;
+            Sign = Sign.Positive;
             Period = (0, 0);
         }
         public LargeDecimal(uint i)
@@ -89,7 +96,7 @@ namespace EML.NumericTypes
             LeftBytes = new List<byte>();
             LeftBytes.AddRange(BitConverter.GetBytes(i));
             RightBytes = new List<byte>();
-            Sign = i >= 0;
+            Sign = Sign.Positive;
             Period = (0, 0);
         }
         public LargeDecimal(ulong l)
@@ -97,7 +104,7 @@ namespace EML.NumericTypes
             LeftBytes = new List<byte>();
             LeftBytes.AddRange(BitConverter.GetBytes(l));
             RightBytes = new List<byte>();
-            Sign = l >= 0;
+            Sign = Sign.Positive;
             Period = (0, 0);
         }
         public LargeDecimal(float f)
@@ -137,7 +144,7 @@ namespace EML.NumericTypes
             LeftBytes.AddRange(leftBytes);
             RightBytes = new List<byte>();
             RightBytes.AddRange(rightBytes);
-            Sign = true;
+            Sign = Sign.Positive;
             Period = (0, 0);
         }
         public LargeDecimal(string s)
@@ -162,63 +169,45 @@ namespace EML.NumericTypes
         #region Operators
         public static LargeDecimal operator +(LargeDecimal left, LargeDecimal right)
         {
-            LargeDecimal result = new LargeDecimal();
-            result.LeftBytes.AddRange(new byte[General.Max(left.LeftLength, right.LeftLength)]); // Add as many left bytes as needed for both the decimals
-            result.RightBytes.AddRange(new byte[General.Max(left.RightLength, right.RightLength)]); // Add as many right bytes as needed for both the decimals
-            if (!left.Sign && !right.Sign)
-                result.Sign = false;
-            else if (left.Sign && right.Sign)
-                result.Sign = true;
-            else if (!left.Sign && right.Sign)
+            LargeDecimal result = new LargeDecimal(new byte[General.Max(left.LeftLength, right.LeftLength)], new byte[General.Max(left.RightLength, right.RightLength)]);
+
+            if (!left.BoolSign && !right.BoolSign)
+                result.BoolSign = false;
+            else if (left.BoolSign && right.BoolSign)
+                result.BoolSign = true;
+            else if (!left.BoolSign && right.BoolSign)
             {
                 if (left.RightLength > right.RightLength)
-                    result.Sign = false;
+                    result.BoolSign = false;
                 else if (left.RightLength < right.RightLength)
-                    result.Sign = true;
+                    result.BoolSign = true;
                 else if (left.RightLength == 0 && right.RightLength == 0)
-                    result.Sign = left.LeftBytes[0] < right.LeftBytes[0];
+                    result.BoolSign = left.LeftBytes[0] < right.LeftBytes[0];
                 else if (left.RightLength == right.RightLength)
-                    result.Sign = left.RightBytes[left.RightLength - 1] < right.RightBytes[right.RightLength - 1];
+                    result.BoolSign = left.RightBytes[left.RightLength - 1] < right.RightBytes[right.RightLength - 1];
             }
-            else if (left.Sign && !right.Sign)
+            else if (left.BoolSign && !right.BoolSign)
             {
                 if (left.RightLength > right.RightLength)
-                    result.Sign = true;
+                    result.BoolSign = true;
                 else if (left.RightLength < right.RightLength)
-                    result.Sign = false;
+                    result.BoolSign = false;
+                // TODO: Fix
                 else if (left.RightLength == 0 && right.RightLength == 0)
-                    result.Sign = left.LeftBytes[0] > right.LeftBytes[0];
+                    result.BoolSign = left.LeftBytes[0] > right.LeftBytes[0];
                 else if (left.RightLength == right.RightLength)
-                    result.Sign = left.RightBytes[left.RightLength - 1] > right.RightBytes[right.RightLength - 1];
+                    result.BoolSign = left.RightBytes[left.RightLength - 1] > right.RightBytes[right.RightLength - 1];
             }
             for (int i = result.RightLength; i >= 0; i--) // Insert the result per bytes
             {
                 int sum = 0;
                 if (i < left.RightLength && i < right.RightLength) // Add both numbers in the sum if the byte positions are in the bounds of both numbers' byte list
-                {
-                    if (left.Sign && right.Sign) // If both numbers are positive
-                        sum = left.RightBytes[i] + right.RightBytes[i];
-                    else if (!left.Sign && right.Sign) // If the left number is negative and the other is positive
-                        sum = right.RightBytes[i] - left.RightBytes[i];
-                    else if (left.Sign && !right.Sign) // If the right number is negative and the other is positive
-                        sum = left.RightBytes[i] - right.RightBytes[i];
-                    else if (!left.Sign && !right.Sign) // If both numbers are negative
-                        sum = -left.RightBytes[i] - right.RightBytes[i];
-                }
+                    sum = left.RightBytes[i] * (int)left.Sign + right.RightBytes[i] * (int)right.Sign;
                 else if (i < left.RightLength && i >= right.RightLength) // Only add the left number in the byte position if the byte index is out of range of the right number's byte list
-                {
-                    if (left.Sign) // If the left number is positive
-                        sum = left.RightBytes[i];
-                    else // If the left number is negative
-                        sum = -left.RightBytes[i];
-                }
+                    sum = left.RightBytes[i] * (int)left.Sign;
                 else if (i >= left.RightLength && i < right.RightLength) // Only add the right number in the byte position if the byte index is out of range of the left number's byte list
-                {
-                    if (right.Sign) // If the right number is positive
-                        sum = right.RightBytes[i];
-                    else // If the right number is negative
-                        sum = -right.RightBytes[i];
-                }
+                    sum = right.RightBytes[i] * (int)right.Sign;
+
                 if (sum >= 256 - result.RightBytes[i] && sum > 0) // If the sum is positive and bigger than the max value of a byte
                 {
                     sum -= 256;
@@ -262,30 +251,11 @@ namespace EML.NumericTypes
             {
                 int sum = 0;
                 if (i < left.LeftLength && i < right.LeftLength) // Add both numbers in the sum if the byte positions are in the bounds of both numbers' byte list
-                {
-                    if (left.Sign && right.Sign) // If both numbers are positive
-                        sum = left.LeftBytes[i] + right.LeftBytes[i];
-                    else if (!left.Sign && right.Sign) // If the left number is negative and the other is positive
-                        sum = right.LeftBytes[i] - left.LeftBytes[i];
-                    else if (left.Sign && !right.Sign) // If the right number is negative and the other is positive
-                        sum = left.LeftBytes[i] - right.LeftBytes[i];
-                    else if (!left.Sign && !right.Sign) // If both numbers are negative
-                        sum = -left.LeftBytes[i] - right.LeftBytes[i];
-                }
+                    sum = left.LeftBytes[i] * (int)left.Sign + right.LeftBytes[i] * (int)right.Sign;
                 else if (i < left.LeftLength && i >= right.LeftLength) // Only add the left number in the byte position if the byte index is out of range of the right number's byte list
-                {
-                    if (left.Sign) // If the left number is positive
-                        sum = left.LeftBytes[i];
-                    else // If the left number is negative
-                        sum = -left.LeftBytes[i];
-                }
+                    sum = left.LeftBytes[i] * (int)left.Sign;
                 else if (i >= left.LeftLength && i < right.LeftLength) // Only add the right number in the byte position if the byte index is out of range of the left number's byte list
-                {
-                    if (right.Sign) // If the right number is positive
-                        sum = right.LeftBytes[i];
-                    else // If the right number is negative
-                        sum = -right.LeftBytes[i];
-                }
+                    sum = right.LeftBytes[i] * (int)right.Sign;
                 if (sum >= 256 - result.LeftBytes[i] && sum > 0) // If the sum is positive and bigger than the max value of a byte
                 {
                     sum -= 256;
@@ -316,7 +286,7 @@ namespace EML.NumericTypes
         {
             // TODO: Work on this, add some details in the algorithm
             LargeDecimal result = 0;
-            result.Sign = left.Sign == right.Sign;
+            result.BoolSign = left.Sign == right.Sign;
             left = AbsoluteValue(left);
             right = AbsoluteValue(right);
             while (right > 0)
@@ -358,7 +328,7 @@ namespace EML.NumericTypes
                     LargeInteger leftInt = new LargeInteger(left << left.RightLength * 8);
                     LargeInteger rightInt = new LargeInteger(right << right.RightLength * 8);
                     LargeDecimal result = 0;
-                    result.Sign = left.Sign == right.Sign;
+                    result.BoolSign = left.Sign == right.Sign;
                     leftInt = LargeInteger.AbsoluteValue(leftInt);
                     rightInt = LargeInteger.AbsoluteValue(rightInt);
                     LargeInteger num_bits = leftInt.Length * 8;
@@ -486,7 +456,7 @@ namespace EML.NumericTypes
         }
         public static LargeDecimal operator -(LargeDecimal l)
         {
-            l.Sign = !l.Sign;
+            l.BoolSign = !l.BoolSign;
             return l;
         }
         public static LargeDecimal operator &(LargeDecimal left, LargeDecimal right)
@@ -563,7 +533,7 @@ namespace EML.NumericTypes
         }
         public static bool operator >(LargeDecimal left, LargeDecimal right)
         {
-            if (left.Sign && right.Sign)
+            if (left.BoolSign && right.BoolSign)
             {
                 if (left.LeftLength > right.LeftLength)
                     return true;
@@ -575,7 +545,7 @@ namespace EML.NumericTypes
                             return true;
                 return false;
             }
-            else if (!left.Sign && !right.Sign)
+            else if (!left.BoolSign && !right.BoolSign)
             {
                 if (left.LeftLength < right.LeftLength)
                     return true;
@@ -587,14 +557,14 @@ namespace EML.NumericTypes
                             return true;
                 return false;
             }
-            else if (!left.Sign && right.Sign)
+            else if (!left.BoolSign && right.BoolSign)
                 return false;
             else
                 return true;
         }
         public static bool operator <(LargeDecimal left, LargeDecimal right)
         {
-            if (left.Sign && right.Sign)
+            if (left.BoolSign && right.BoolSign)
             {
                 if (left.LeftLength < right.LeftLength)
                     return true;
@@ -606,7 +576,7 @@ namespace EML.NumericTypes
                             return true;
                 return false;
             }
-            else if (!left.Sign && !right.Sign)
+            else if (!left.BoolSign && !right.BoolSign)
             {
                 if (left.LeftLength > right.LeftLength)
                     return true;
@@ -618,7 +588,7 @@ namespace EML.NumericTypes
                             return true;
                 return false;
             }
-            else if (!left.Sign && right.Sign)
+            else if (!left.BoolSign && right.BoolSign)
                 return true;
             else
                 return false;
@@ -817,7 +787,7 @@ namespace EML.NumericTypes
             if (str[0] == '-') // If it's the negative sign symbol
             {
                 str = str.Remove(0, 1);
-                result.Sign = false;
+                result.BoolSign = false;
             }
             string[] split = str.Split('.');
             if (str.Length > 0 && split.Length <= 2)
@@ -873,7 +843,7 @@ namespace EML.NumericTypes
         public static LargeDecimal Root(LargeDecimal b, LargeInteger rootClass, int decimalDigits)
         {
             bool negative = b < 0;
-            b.Sign = true; // Already checked if it's a negative number, needless to work around with the stupid negative sign
+            b.BoolSign = true; // Already checked if it's a negative number, needless to work around with the stupid negative sign
             if (b == 0 || b == 1) return b;
             else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
@@ -893,7 +863,7 @@ namespace EML.NumericTypes
                         end = (start + middle) / 2;
                     middle = (start + end) / 2;
                 }
-                middle.Sign = !negative;
+                middle.BoolSign = !negative;
                 return middle;
             }
             else // if (0 < b < 1)
@@ -913,7 +883,7 @@ namespace EML.NumericTypes
                         end = (start + middle) / 2;
                     middle = (start + end) / 2;
                 }
-                middle.Sign = !negative;
+                middle.BoolSign = !negative;
                 return middle;
             }
         }
@@ -936,7 +906,8 @@ namespace EML.NumericTypes
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();
-            if (Sign == false) result.Append("-");
+            if (Sign == Sign.Negative)
+                result.Append("-");
             LargeInteger rightIntPart = new LargeInteger();
             rightIntPart.Bytes = RightBytes;
             LargeInteger leftIntPart = new LargeInteger();

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EML.Tools;
 using EML.Exceptions;
 using EML.Tools.Enumerations;
+using System.Globalization;
 
 namespace EML.NumericTypes
 {
@@ -35,28 +36,37 @@ namespace EML.NumericTypes
             Sign = Sign.Positive;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="short"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(short s)
+        /// <param name="s">The <seealso cref="short"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(short s, bool removeUnnecessaryBytes = true)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(s)));
             Sign = s >= 0 ? Sign.Positive : Sign.Negative;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="int"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(int i)
+        /// <param name="i">The <seealso cref="int"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(int i, bool removeUnnecessaryBytes = true)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(i)));
             Sign = i >= 0 ? Sign.Positive : Sign.Negative;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="long"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(long l)
+        /// <param name="l">The <seealso cref="long"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(long l, bool removeUnnecessaryBytes = true)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(l)));
             Sign = l >= 0 ? Sign.Positive : Sign.Negative;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="sbyte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -67,75 +77,102 @@ namespace EML.NumericTypes
             Sign = b >= 0 ? Sign.Positive : Sign.Negative;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="ushort"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(ushort s)
+        /// <param name="s">The <seealso cref="ushort"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(ushort s, bool removeUnnecessaryBytes = true)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(s));
             Sign = Sign.Positive;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="uint"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(uint i)
+        /// <param name="i">The <seealso cref="uint"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(uint i, bool removeUnnecessaryBytes = true)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(i));
             Sign = Sign.Positive;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="ulong"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(ulong l)
+        /// <param name="l">The <seealso cref="ulong"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(ulong l, bool removeUnnecessaryBytes = true)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(BitConverter.GetBytes(l));
             Sign = Sign.Positive;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="float"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(float f)
+        /// <param name="f">The <seealso cref="float"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(float f, bool removeUnnecessaryBytes = true)
         {
-            LargeInteger n = Parse(f.ToString());
+            LargeInteger n = Parse(f.ToString(CultureInfo.InvariantCulture).Split('.').First());
             Bytes = n.Bytes;
             Sign = n.Sign;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="double"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(double d)
+        /// <param name="d">The <seealso cref="double"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(double d, bool removeUnnecessaryBytes = true)
         {
-            LargeInteger n = Parse(d.ToString());
+            LargeInteger n = Parse(d.ToString(CultureInfo.InvariantCulture).Split('.').First());
             Bytes = n.Bytes;
             Sign = n.Sign;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="decimal"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(decimal d)
+        /// <param name="d">The <seealso cref="decimal"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(decimal d, bool removeUnnecessaryBytes = true)
         {
-            LargeInteger n = Parse(d.ToString());
+            LargeInteger n = Parse(d.ToString(CultureInfo.InvariantCulture).Split('.').First());
             Bytes = n.Bytes;
             Sign = n.Sign;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="b">The <seealso cref="LargeDecimal"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(LargeDecimal d)
+        /// <param name="d">The <seealso cref="LargeDecimal"/> value to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(LargeDecimal d, bool removeUnnecessaryBytes = true)
         {
             Bytes = d.RightBytes;
-            Sign = d.Sign ? Sign.Positive : Sign.Negative;
+            Sign = d.Sign;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="byte"/> array to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(byte[] b)
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(byte[] b, bool removeUnnecessaryBytes = true)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(b);
             Sign = Sign.Positive;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="byte"/> list to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(List<byte> b)
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(List<byte> b, bool removeUnnecessaryBytes = true)
         {
             Bytes = new List<byte>();
             Bytes.AddRange(b);
             Sign = Sign.Positive;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
         }
         #endregion
         #region Implicit Conversions
@@ -157,43 +194,83 @@ namespace EML.NumericTypes
         #region Type Casts
         public static explicit operator byte(LargeInteger a)
         {
-            if (a.Length == 1) return a.Bytes[0];
-            else throw new OverflowException("The LargeInteger was too big.");
+            if (a.Length == 1)
+                return a.Bytes[0];
+            else
+                throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator short(LargeInteger a)
         {
-            if (a.Length <= 2) return BitConverter.ToInt16(a.Bytes.ToArray(), 0);
-            else throw new OverflowException("The LargeInteger was too big.");
+            if (a.Length <= 2)
+            {
+                List<byte> bytes = a.Bytes;
+                bytes.AddRange(new byte[2 - bytes.Count]);
+                return BitConverter.ToInt16(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator int(LargeInteger a)
         {
-            if (a.Length <= 4) return BitConverter.ToInt32(a.Bytes.ToArray(), 0);
-            else throw new OverflowException("The LargeInteger was too big.");
+            if (a.Length <= 4)
+            {
+                List<byte> bytes = a.Bytes;
+                bytes.AddRange(new byte[4 - bytes.Count]);
+                return BitConverter.ToInt32(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator long(LargeInteger a)
         {
-            if (a.Length <= 8) return BitConverter.ToInt64(a.Bytes.ToArray(), 0);
-            else throw new OverflowException("The LargeInteger was too big.");
+            if (a.Length <= 8)
+            {
+                List<byte> bytes = a.Bytes;
+                bytes.AddRange(new byte[8 - bytes.Count]);
+                return BitConverter.ToInt64(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator sbyte(LargeInteger a)
         {
-            if (a.Length == 1) return (sbyte)a.Bytes[0];
-            else throw new OverflowException("The LargeInteger was too big.");
+            if (a.Length == 1)
+                return (sbyte)a.Bytes[0];
+            else
+                throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator ushort(LargeInteger a)
         {
-            if (a.Length <= 2) return BitConverter.ToUInt16(a.Bytes.ToArray(), 0);
-            else throw new OverflowException("The LargeInteger was too big.");
+            if (a.Length <= 2)
+            {
+                List<byte> bytes = a.Bytes;
+                bytes.AddRange(new byte[2 - bytes.Count]);
+                return BitConverter.ToUInt16(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator uint(LargeInteger a)
         {
-            if (a.Length <= 4) return BitConverter.ToUInt32(a.Bytes.ToArray(), 0);
-            else throw new OverflowException("The LargeInteger was too big.");
+            if (a.Length <= 4)
+            {
+                List<byte> bytes = a.Bytes;
+                bytes.AddRange(new byte[4 - bytes.Count]);
+                return BitConverter.ToUInt32(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator ulong(LargeInteger a)
         {
-            if (a.Length <= 8) return BitConverter.ToUInt64(a.Bytes.ToArray(), 0);
-            else throw new OverflowException("The LargeInteger was too big.");
+            if (a.Length <= 8)
+            {
+                List<byte> bytes = a.Bytes;
+                bytes.AddRange(new byte[8 - bytes.Count]);
+                return BitConverter.ToUInt64(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeInteger was too big.");
         }
         public static explicit operator float(LargeInteger a)
         {
@@ -203,7 +280,7 @@ namespace EML.NumericTypes
                 float result = 0;
                 for (int i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 4, 0); i--)
                     result += a.Bytes[i] * (float)General.Power(2, i * 8);
-                result = result * (a < 0 ? -1 : 1);
+                result = result * (int)a.Sign;
                 return result;
             }
             catch { throw new OverflowException("The LargeInteger was too big."); } // Really, brackets are not necessary for single-line statements
@@ -216,7 +293,7 @@ namespace EML.NumericTypes
                 double result = 0;
                 for (int i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 8, 0); i--)
                     result += a.Bytes[i] * General.Power(2, i * 8);
-                result = result * (a < 0 ? -1 : 1);
+                result = result * (int)a.Sign;
                 return result;
             }
             catch { throw new OverflowException("The LargeInteger was too big."); } // Really, brackets are not necessary for single-line statements
@@ -229,7 +306,7 @@ namespace EML.NumericTypes
                 decimal result = 0;
                 for (int i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 12, 0); i--)
                     result += a.Bytes[i] * (decimal)General.Power(2, i * 8);
-                result = result * (a < 0 ? -1 : 1);
+                result = result * (int)a.Sign;
                 return result;
             }
             catch { throw new OverflowException("The LargeInteger was too big."); } // Really, brackets are not necessary for single-line statements
@@ -239,9 +316,8 @@ namespace EML.NumericTypes
         #region Operators
         public static LargeInteger operator +(LargeInteger left, LargeInteger right)
         {
-            LargeInteger result = new LargeInteger();
             // Add the maximum number of bytes between the two integers and another one to avoid overflows
-            result.Bytes.AddRange(new byte[General.Max(left.Length, right.Length) + 1]);
+            LargeInteger result = new LargeInteger(new byte[General.Max(left.Length, right.Length) + 1], false);
 
             // Determine the sign of the result
             if (!left.BoolSign && !right.BoolSign)
@@ -288,6 +364,8 @@ namespace EML.NumericTypes
                 else if (i >= left.Length && i < right.Length) // Only add the right number in the byte position if the byte index is out of range of the left number's byte list
                     sum = right.Bytes[i] * (int)right.Sign;
 
+                //if (sum == 0) // Ignore the sum if it's 0
+                //    continue;
                 if (sum >= 256 - result.Bytes[i]) // If the sum is positive and adding that to the current byte will cause an overflow
                 {
                     result.Bytes[i] = (byte)((sum + result.Bytes[i]) % 256);
@@ -970,10 +1048,10 @@ namespace EML.NumericTypes
         /// <param name="l">The <seealso cref="LargeInteger"/> to remove the useless null bytes of.</param>
         private static LargeInteger RemoveUnnecessaryBytes(LargeInteger l)
         {
-            int i = l.Length - 1;
-            while (l.Bytes[i] == 0)
+            int i = l.Length;
+            while (i > 1 && l.Bytes[i - 1] == 0)
                 i--;
-            l.Bytes.RemoveRange(i, l.Length - 1 - i);
+            l.Bytes.RemoveRange(i, l.Length - i);
             return l;
         }
         /// <summary>Returns the square root of any number rounded to the closest integer. Since this is an approximation for decimal integers, it's suggested that this function is only used for integers whose n-th root is an integer.</summary>
