@@ -283,7 +283,10 @@ namespace EML.NumericTypes
                 result = result * (int)a.Sign;
                 return result;
             }
-            catch { throw new OverflowException("The LargeInteger was too big."); } // Really, brackets are not necessary for single-line statements
+            catch
+            {
+                throw new OverflowException("The LargeInteger was too big.");
+            }
         }
         public static explicit operator double(LargeInteger a)
         {
@@ -296,7 +299,10 @@ namespace EML.NumericTypes
                 result = result * (int)a.Sign;
                 return result;
             }
-            catch { throw new OverflowException("The LargeInteger was too big."); } // Really, brackets are not necessary for single-line statements
+            catch
+            {
+                throw new OverflowException("The LargeInteger was too big.");
+            }
         }
         public static explicit operator decimal(LargeInteger a)
         {
@@ -309,7 +315,10 @@ namespace EML.NumericTypes
                 result = result * (int)a.Sign;
                 return result;
             }
-            catch { throw new OverflowException("The LargeInteger was too big."); } // Really, brackets are not necessary for single-line statements
+            catch
+            {
+                throw new OverflowException("The LargeInteger was too big.");
+            }
         }   
         // Add more casts
         #endregion
@@ -582,7 +591,7 @@ namespace EML.NumericTypes
                 int shifts = right % 8;
                 int fullShifts = right / 8;
                 for (int i = 0; i < fullShifts; i++)
-                    result.Bytes.Add(result.Bytes[i - fullShifts]);
+                    result.Bytes.Add(result.Bytes[result.Bytes.Count - i - 1]);
                 if (fullShifts > 0)
                 {
                     for (int i = result.Length - fullShifts; i > fullShifts; i--)

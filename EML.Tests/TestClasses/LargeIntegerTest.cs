@@ -13,32 +13,40 @@ namespace EML.Tests.TestClasses
     {
         public LargeIntegerTest()
         {
-            LargeInteger a =  12462;
-            LargeInteger b = 216745;
+            long A = 12462;
+            long B = 216745;
+            LargeInteger a = A;
+            LargeInteger b = B;
 
-            LargeInteger sum = a + b;
-            LargeInteger targetSum = 229207;
+            Assert.IsTrue(a << 11 == A << 11);
+            Console.WriteLine("Left shifting was successful.");
 
-            Assert.AreEqual(sum, targetSum);
-            Console.WriteLine("Sum was successful.");
+            Assert.IsTrue(b >> 4 == B >> 4);
+            Console.WriteLine("Right shifting was successful.");
 
-            LargeInteger difference = a - b;
-            LargeInteger targetDifference = 195717;
+            Assert.IsTrue((a & b) == (A & B));
+            Console.WriteLine("Bitwise AND was successful.");
 
-            Assert.AreEqual(difference, targetDifference);
-            Console.WriteLine("Difference was successful.");
+            Assert.IsTrue((a | b) == (A | B));
+            Console.WriteLine("Bitwise OR was successful.");
 
-            LargeInteger product = a * b;
-            LargeInteger targetProduct = 2701076190;
+            Assert.IsTrue((a ^ b) == (A ^ B));
+            Console.WriteLine("Bitwise XOR was successful.");
 
-            Assert.AreEqual(product, targetProduct);
-            Console.WriteLine("Product was successful.");
+            Assert.IsTrue(a + b == A + B);
+            Console.WriteLine("Addition was successful.");
+            
+            Assert.IsTrue(a - b == A - B);
+            Console.WriteLine("Subtraction was successful.");
 
-            LargeInteger division = b / a;
-            LargeInteger targetDivision = 17;
+            Assert.IsTrue(a * b == A * B);
+            Console.WriteLine("Multiplication was successful.");
 
-            Assert.AreEqual(division, targetDivision);
+            Assert.IsTrue(b / a == B / A);
             Console.WriteLine("Division was successful.");
+
+            Assert.IsTrue(b % a == B % A);
+            Console.WriteLine("Modulus was successful.");
         }
     }
 }
