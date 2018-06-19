@@ -15,5 +15,13 @@ namespace EML.Extensions
                     return i;
             return -1;
         }
+
+        public static List<T> Clone<T>(this List<T> list)
+        {
+            List<T> result = new List<T>();
+            for (int i = 0; i < list.Count; i++)
+                result.Add(list[i]);
+            return result;
+        }
     }
 }

@@ -706,25 +706,104 @@ namespace EML.Tools
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(byte b, int power)
+        public static double Power(byte b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(short b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(int b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(long b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(sbyte b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(ushort b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(uint b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(ulong b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(float b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(double b, int power) => Power(b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(decimal b, int power) => Power((double)b, (long)power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(byte b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(short b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(int b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(long b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(sbyte b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(ushort b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(uint b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(ulong b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(float b, long power) => Power((double)b, power);
+        /// <summary>Returns the power of a number.</summary>
+        /// <param name="b">The base number to get the power of.</param>
+        /// <param name="power">The power to elevate the number to.</param>
+        public static double Power(double b, long power)
         {
             if (b != 0)
             {
                 if (power == 0)
                     return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
+                double result = b;
+                if (power < 0)
                 {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
+                    result = 1 / b;
+                    power = -power;
                 }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
+                while (power > 1)
+                {
+                    result *= result;
+                    power = (power - Convert.ToInt32(IsOdd(power))) >> 1;
+                }
+                return result;
             }
             else
             {
@@ -739,333 +818,7 @@ namespace EML.Tools
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(short b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(int b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(long b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(sbyte b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(ushort b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(uint b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(ulong b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(float b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * b, power << 1);
-                    else
-                        return Power((double)b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(double b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return b;
-                if (power == -1)
-                    return 1 / b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power(b * b, power << 1);
-                    else
-                        return Power(b * b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
-        /// <summary>Returns the power of a number.</summary>
-        /// <param name="b">The base number to get the power of.</param>
-        /// <param name="power">The power to elevate the number to.</param>
-        public static double Power(decimal b, int power)
-        {
-            if (b != 0)
-            {
-                if (power == 0)
-                    return 1;
-                else if (power == 1)
-                    return (double)b;
-                if (power == -1)
-                    return 1 / (double)b;
-                else if (power > 0)
-                {
-                    if (IsEven(power))
-                        return Power((double)b * (double)b, power << 1);
-                    else
-                        return Power((double)b * (double)b, (power - 1) << 1);
-                }
-                else // if (power < 0)
-                    return Power(1 / (double)b, -power);
-            }
-            else
-            {
-                if (power > 0)
-                    return 0;
-                else if (power < 0)
-                    throw new DivideByZeroException("Cannot divide by zero. Elevating zero to a negative power is equal to dividing by zero raised to the absolute value of the power.");
-                else
-                    throw new ElevateZeroToThePowerOfZeroException();
-            }
-        }
+        public static double Power(decimal b, long power) => Power((double)b, power);
         /// <summary>Returns the power of a number.</summary>
         /// <param name="b">The base number to get the power of.</param>
         /// <param name="power">The power to elevate the number to.</param>

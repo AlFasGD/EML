@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EML.Tools;
 using EML.Exceptions;
 using EML.Tools.Enumerations;
+using EML.Extensions;
 using System.Globalization;
 
 namespace EML.NumericTypes
@@ -14,7 +15,7 @@ namespace EML.NumericTypes
     public struct LargeInteger
     {
         /// <summary>The <seealso cref="byte"/> list representing the digits of the number.</summary>
-        public List<byte> Bytes { get; set; }
+        public LongList<byte> Bytes { get; set; }
         /// <summary>The <seealso cref="Tools.Enumerations.Sign"/> of the <seealso cref="LargeInteger"/>.</summary>
         public Sign Sign { get; set; }
         /// <summary>The sign of the <seealso cref="LargeInteger"/> as a <seealso cref="bool"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
@@ -24,14 +25,14 @@ namespace EML.NumericTypes
             set => Sign = value ? Sign.Positive : Sign.Negative;
         }
         /// <summary>The length of the <seealso cref="LargeInteger"/>.</summary>
-        public int Length => Bytes.Count;
+        public long Length => Bytes.Count;
 
         #region Constructors
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="byte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(byte b)
         {
-            Bytes = new List<byte>();
+            Bytes = new LongList<byte>();
             Bytes.Add(b);
             Sign = Sign.Positive;
         }
@@ -40,7 +41,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(short s, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new List<byte>();
+            Bytes = new LongList<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(s)));
             Sign = s >= 0 ? Sign.Positive : Sign.Negative;
             if (removeUnnecessaryBytes)
@@ -51,7 +52,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(int i, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new List<byte>();
+            Bytes = new LongList<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(i)));
             Sign = i >= 0 ? Sign.Positive : Sign.Negative;
             if (removeUnnecessaryBytes)
@@ -62,7 +63,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(long l, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new List<byte>();
+            Bytes = new LongList<byte>();
             Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(l)));
             Sign = l >= 0 ? Sign.Positive : Sign.Negative;
             if (removeUnnecessaryBytes)
@@ -72,7 +73,7 @@ namespace EML.NumericTypes
         /// <param name="b">The <seealso cref="sbyte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(sbyte b)
         {
-            Bytes = new List<byte>();
+            Bytes = new LongList<byte>();
             Bytes.Add((byte)General.AbsoluteValue(b));
             Sign = b >= 0 ? Sign.Positive : Sign.Negative;
         }
@@ -81,7 +82,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(ushort s, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new List<byte>();
+            Bytes = new LongList<byte>();
             Bytes.AddRange(BitConverter.GetBytes(s));
             Sign = Sign.Positive;
             if (removeUnnecessaryBytes)
@@ -92,7 +93,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(uint i, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new List<byte>();
+            Bytes = new LongList<byte>();
             Bytes.AddRange(BitConverter.GetBytes(i));
             Sign = Sign.Positive;
             if (removeUnnecessaryBytes)
@@ -103,7 +104,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(ulong l, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new List<byte>();
+            Bytes = new LongList<byte>();
             Bytes.AddRange(BitConverter.GetBytes(l));
             Sign = Sign.Positive;
             if (removeUnnecessaryBytes)
@@ -147,7 +148,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(LargeDecimal d, bool removeUnnecessaryBytes = true)
         {
-            Bytes = d.RightBytes;
+            Bytes = d.LeftBytes; // TODO: Fix the LargeDecimal with the LongList implementation too and do not forget to remove that comment once that's done
             Sign = d.Sign;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
@@ -157,8 +158,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(byte[] b, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new List<byte>();
-            Bytes.AddRange(b);
+            Bytes = new LongList<byte>(b);
             Sign = Sign.Positive;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
@@ -168,8 +168,7 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(List<byte> b, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new List<byte>();
-            Bytes.AddRange(b);
+            Bytes = new LongList<byte>(b);
             Sign = Sign.Positive;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
@@ -203,7 +202,7 @@ namespace EML.NumericTypes
         {
             if (a.Length <= 2)
             {
-                List<byte> bytes = a.Bytes;
+                LongList<byte> bytes = a.Bytes;
                 bytes.AddRange(new byte[2 - bytes.Count]);
                 return BitConverter.ToInt16(bytes.ToArray(), 0);
             }
@@ -214,7 +213,7 @@ namespace EML.NumericTypes
         {
             if (a.Length <= 4)
             {
-                List<byte> bytes = a.Bytes;
+                LongList<byte> bytes = a.Bytes;
                 bytes.AddRange(new byte[4 - bytes.Count]);
                 return BitConverter.ToInt32(bytes.ToArray(), 0);
             }
@@ -225,7 +224,7 @@ namespace EML.NumericTypes
         {
             if (a.Length <= 8)
             {
-                List<byte> bytes = a.Bytes;
+                LongList<byte> bytes = a.Bytes;
                 bytes.AddRange(new byte[8 - bytes.Count]);
                 return BitConverter.ToInt64(bytes.ToArray(), 0);
             }
@@ -243,7 +242,7 @@ namespace EML.NumericTypes
         {
             if (a.Length <= 2)
             {
-                List<byte> bytes = a.Bytes;
+                LongList<byte> bytes = a.Bytes;
                 bytes.AddRange(new byte[2 - bytes.Count]);
                 return BitConverter.ToUInt16(bytes.ToArray(), 0);
             }
@@ -254,7 +253,7 @@ namespace EML.NumericTypes
         {
             if (a.Length <= 4)
             {
-                List<byte> bytes = a.Bytes;
+                LongList<byte> bytes = a.Bytes;
                 bytes.AddRange(new byte[4 - bytes.Count]);
                 return BitConverter.ToUInt32(bytes.ToArray(), 0);
             }
@@ -265,7 +264,7 @@ namespace EML.NumericTypes
         {
             if (a.Length <= 8)
             {
-                List<byte> bytes = a.Bytes;
+                LongList<byte> bytes = a.Bytes;
                 bytes.AddRange(new byte[8 - bytes.Count]);
                 return BitConverter.ToUInt64(bytes.ToArray(), 0);
             }
@@ -278,7 +277,7 @@ namespace EML.NumericTypes
             try
             {
                 float result = 0;
-                for (int i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 4, 0); i--)
+                for (long i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 4, 0); i--)
                     result += a.Bytes[i] * (float)General.Power(2, i * 8);
                 result = result * (int)a.Sign;
                 return result;
@@ -294,7 +293,7 @@ namespace EML.NumericTypes
             try
             {
                 double result = 0;
-                for (int i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 8, 0); i--)
+                for (long i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 8, 0); i--)
                     result += a.Bytes[i] * General.Power(2, i * 8);
                 result = result * (int)a.Sign;
                 return result;
@@ -310,7 +309,7 @@ namespace EML.NumericTypes
             try
             {
                 decimal result = 0;
-                for (int i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 12, 0); i--)
+                for (long i = a.Bytes.Count - 1; i > General.Max(a.Bytes.Count - 12, 0); i--)
                     result += a.Bytes[i] * (decimal)General.Power(2, i * 8);
                 result = result * (int)a.Sign;
                 return result;
@@ -571,7 +570,7 @@ namespace EML.NumericTypes
                 {
                     for (int i = 0; i < result.Length - fullShifts; i++)
                         result.Bytes[i] = result.Bytes[i + fullShifts];
-                    result.Bytes.RemoveRange(result.Length - fullShifts, fullShifts);
+                    result.Bytes.RemoveLast(fullShifts);
                 }
                 if (shifts > 0)
                 {
@@ -590,18 +589,19 @@ namespace EML.NumericTypes
                 LargeInteger result = left;
                 int shifts = right % 8;
                 int fullShifts = right / 8;
-                for (int i = 0; i < fullShifts; i++)
+                result.Bytes.AddRange(new byte[fullShifts]);
+                for (long i = 0; i < fullShifts; i++)
                     result.Bytes.Add(result.Bytes[result.Bytes.Count - i - 1]);
                 if (fullShifts > 0)
                 {
-                    for (int i = result.Length - fullShifts; i > fullShifts; i--)
+                    for (long i = result.Length - fullShifts; i > fullShifts; i--)
                         result.Bytes[i] = result.Bytes[i - fullShifts];
                     result.Bytes[fullShifts] = 0;
                     fullShifts++;
                 }
                 if (shifts > 0)
                 {
-                    for (int i = result.Length - 1; i > fullShifts; i--)
+                    for (long i = result.Length - 1; i > fullShifts; i--)
                         result.Bytes[i] = (byte)((result.Bytes[i - 1] << shifts) | (result.Bytes[i] >> (8 - shifts)));
                     result.Bytes[fullShifts] = (byte)(result.Bytes[fullShifts] << shifts);
                 }
@@ -616,9 +616,9 @@ namespace EML.NumericTypes
         }
         public static LargeInteger operator &(LargeInteger left, LargeInteger right)
         {
-            int minLength = General.Min(left.Length, right.Length);
+            long minLength = General.Min(left.Length, right.Length);
             byte[] bytes = new byte[minLength];
-            for (int i = 0; i < minLength; i++)
+            for (long i = 0; i < minLength; i++)
                 bytes[i] = (byte)(left.Bytes[i] & right.Bytes[i]);
             LargeInteger result = new LargeInteger(bytes);
             result.Sign = left.Sign & right.Sign;
@@ -626,16 +626,16 @@ namespace EML.NumericTypes
         }
         public static LargeInteger operator |(LargeInteger left, LargeInteger right)
         {
-            int minLength = General.Min(left.Length, right.Length);
-            int maxLength = General.Max(left.Length, right.Length);
+            long minLength = General.Min(left.Length, right.Length);
+            long maxLength = General.Max(left.Length, right.Length);
             byte[] bytes = new byte[maxLength];
-            for (int i = 0; i < minLength; i++)
+            for (long i = 0; i < minLength; i++)
                 bytes[i] = (byte)(left.Bytes[i] | right.Bytes[i]);
             if (left.Length > right.Length)
-                for (int i = minLength; i < maxLength; i++)
+                for (long i = minLength; i < maxLength; i++)
                     bytes[i] = left.Bytes[i];
             else
-                for (int i = minLength; i < maxLength; i++)
+                for (long i = minLength; i < maxLength; i++)
                     bytes[i] = right.Bytes[i];
             LargeInteger result = new LargeInteger(bytes);
             result.Sign = left.Sign | right.Sign;
@@ -643,16 +643,16 @@ namespace EML.NumericTypes
         }
         public static LargeInteger operator ^(LargeInteger left, LargeInteger right)
         {
-            int minLength = General.Min(left.Length, right.Length);
-            int maxLength = General.Max(left.Length, right.Length);
+            long minLength = General.Min(left.Length, right.Length);
+            long maxLength = General.Max(left.Length, right.Length);
             byte[] bytes = new byte[maxLength];
-            for (int i = 0; i < minLength; i++)
+            for (long i = 0; i < minLength; i++)
                 bytes[i] = (byte)(left.Bytes[i] ^ right.Bytes[i]);
             if (left.Length > right.Length)
-                for (int i = minLength; i < maxLength; i++)
+                for (long i = minLength; i < maxLength; i++)
                     bytes[i] = left.Bytes[i];
             else
-                for (int i = minLength; i < maxLength; i++)
+                for (long i = minLength; i < maxLength; i++)
                     bytes[i] = right.Bytes[i];
             LargeInteger result = new LargeInteger(bytes);
             result.Sign = left.Sign ^ right.Sign;
@@ -660,7 +660,7 @@ namespace EML.NumericTypes
         }
         public static LargeInteger operator ~(LargeInteger l)
         {
-            for (int i = 0; i < l.Length; i++)
+            for (long i = 0; i < l.Length; i++)
                 l.Bytes[i] = (byte)~l.Bytes[i];
             return l;
         }
@@ -673,7 +673,7 @@ namespace EML.NumericTypes
                 else if (left.Length < right.Length)
                     return false;
                 else
-                    for (int i = left.Length - 1; i >= 0; i--)
+                    for (long i = left.Length - 1; i >= 0; i--)
                         if (left.Bytes[left.Length - 1] > right.Bytes[left.Length - 1])
                             return true;
                 return false;
@@ -685,7 +685,7 @@ namespace EML.NumericTypes
                 else if (left.Length > right.Length)
                     return false;
                 else
-                    for (int i = left.Length - 1; i >= 0; i--)
+                    for (long i = left.Length - 1; i >= 0; i--)
                         if (left.Bytes[left.Length - 1] < right.Bytes[left.Length - 1])
                             return true;
                 return false;
@@ -701,7 +701,7 @@ namespace EML.NumericTypes
                 else if (left.Length > right.Length)
                     return false;
                 else
-                    for (int i = left.Length - 1; i >= 0; i--)
+                    for (long i = left.Length - 1; i >= 0; i--)
                         if (left.Bytes[left.Length - 1] < right.Bytes[left.Length - 1])
                             return true;
                 return false;
@@ -713,7 +713,7 @@ namespace EML.NumericTypes
                 else if (left.Length < right.Length)
                     return false;
                 else
-                    for (int i = left.Length - 1; i >= 0; i--)
+                    for (long i = left.Length - 1; i >= 0; i--)
                         if (left.Bytes[left.Length - 1] > right.Bytes[left.Length - 1])
                             return true;
                 return false;
@@ -727,7 +727,7 @@ namespace EML.NumericTypes
             if (left.Length != right.Length)
                 return false;
             else if (left.Length == right.Length)
-                for (int i = 0; i < left.Length; i++)
+                for (long i = 0; i < left.Length; i++)
                     if (left.Bytes[i] != right.Bytes[i])
                         return false;
             return true;
@@ -737,17 +737,21 @@ namespace EML.NumericTypes
             if (left.Length != right.Length)
                 return true;
             else if (left.Length == right.Length)
-                for (int i = 0; i < left.Length; i++)
+                for (long i = 0; i < left.Length; i++)
                     if (left.Bytes[i] != right.Bytes[i])
                         return true;
             return false;
         }
         #endregion
         #region Operations
-        /// <summary>Determines whether the <seealso cref="LargeInteger"/> is even.</summary>
+        /// <summary>Determines whether this <seealso cref="LargeInteger"/> is even.</summary>
         public bool IsEven() => (this & 1) == 0;
-        /// <summary>Determines whether the <seealso cref="LargeInteger"/> is odd.</summary>
+        /// <summary>Determines whether this <seealso cref="LargeInteger"/> is a Fibonacci number or not.</summary>
+        public bool IsFibonacci() => IsFibonacci(this);
+        /// <summary>Determines whether this <seealso cref="LargeInteger"/> is odd.</summary>
         public bool IsOdd() => (this & 1) == 1;
+        /// <summary>Determines whether this <seealso cref="LargeInteger"/> is a prime or not.</summary>
+        public bool IsPrime() => IsPrime(this);
         /// <summary>Determines whether a <seealso cref="LargeInteger"/> is even.</summary>
         /// <param name="n">The <seealso cref="LargeInteger"/> to check for being even.</param>
         public static bool IsEven(LargeInteger n) => (n & 1) == 0;
@@ -774,9 +778,8 @@ namespace EML.NumericTypes
         {
             bool result = false;
             LargeInteger sqrt = SquareRoot(l);
-            for (int i = 2; i <= sqrt; i++)
-                if (l % i == 0) break;
-                else result = i == sqrt;
+            for (LargeInteger i = 2; i <= sqrt && l % i != 0; i++)
+                result = i == sqrt;
             return result;
         }
         /// <summary>Parses a <seealso cref="string"/> as a <seealso cref="LargeInteger"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeInteger"/>, otherwise <see langword="false"/>.</summary>
@@ -804,10 +807,10 @@ namespace EML.NumericTypes
         }
         /// <summary>Gets the decimal digit count of a <seealso cref="LargeInteger"/>.</summary>
         /// <param name="l">The <seealso cref="LargeInteger"/> whose decimal digits to get.</param>
-        public static int GetDecimalDigitCount(LargeInteger l)
+        public static long GetDecimalDigitCount(LargeInteger l)
         {
-            int digCount = (l.Length - 1) * 2 + 1;
-            for (int i = digCount; i < l.Length * 3; i++)
+            long digCount = (l.Length - 1) * 2 + 1;
+            for (long i = digCount; i < l.Length * 3; i++)
                 if (l % Power(10, i) > 0)
                     digCount = i;
             return digCount;
@@ -834,6 +837,11 @@ namespace EML.NumericTypes
                 return max;
             return value;
         }
+        public LargeInteger Clone() => new LargeInteger
+        {
+            Bytes = Bytes.Clone(),
+            Sign = Sign
+        };
         /// <summary>Returns the factorial of a <seealso cref="LargeInteger"/>.</summary>
         /// <param name="l">The <seealso cref="LargeInteger"/> whose factorial to get.</param>
         public static LargeInteger Factorial(LargeInteger l)
@@ -844,7 +852,7 @@ namespace EML.NumericTypes
             return result;
         }
         /// <summary>Returns the n-th Fibonacci with n being an one-based index with the list starting from 0 (0, 1, 1, 2, 3, 5, ...).</summary>
-        /// <param name="n">The one-based index index of the prime to return.</param>
+        /// <param name="n">The one-based index of the prime to return.</param>
         public static LargeInteger GetNthFibonacci(int n)
         {
             if (n <= 0) throw new ArgumentOutOfRangeException();
@@ -858,7 +866,7 @@ namespace EML.NumericTypes
             }
         }
         /// <summary>Returns the n-th prime with n being an one-based index.</summary>
-        /// <param name="n">The one-based index index of the prime to return.</param>
+        /// <param name="n">The one-based index of the prime to return.</param>
         public static LargeInteger GetNthPrime(int n)
         {
             if (n <= 0) throw new ArgumentOutOfRangeException();
@@ -942,6 +950,7 @@ namespace EML.NumericTypes
             }
             if (str.Length > 0)
             {
+                // High chance of failing the parsing for >= 2 GB strings
                 for (int i = 0; i < str.Length; i++)
                     if (str[i] < '0' || str[i] > '9') // If it's not a number character
                         throw new FormatException("The string is not a valid integral value.");
@@ -983,11 +992,11 @@ namespace EML.NumericTypes
         }
         /// <summary>Returns a random <seealso cref="LargeInteger"/> with a specified length.</summary>
         /// <param name="length">The length in bytes of the random <seealso cref="LargeInteger"/>.</param>
-        public static LargeInteger Random(int length)
+        public static LargeInteger Random(long length)
         {
             LargeInteger result = new LargeInteger();
             Random shit = new Random();
-            result.Bytes = new List<byte>(length);
+            result.Bytes = new LongList<byte>(length);
             for (int i = 0; i < length - 1; i++)
                 result.Bytes.Add((byte)shit.Next(0, 255));
             result.Bytes.Add((byte)shit.Next(1, 255));
@@ -996,13 +1005,19 @@ namespace EML.NumericTypes
         /// <summary>Returns a random <seealso cref="LargeInteger"/> with a length that is within a specified range.</summary>
         /// <param name="minLength">The smallest possible length in bytes of the random <seealso cref="LargeInteger"/>.</param>
         /// <param name="maxLength">The largest possible length in bytes of the random <seealso cref="LargeInteger"/>.</param>
-        public static LargeInteger Random(int minLength, int maxLength)
+        public static LargeInteger Random(long minLength, long maxLength)
         {
             LargeInteger result = new LargeInteger();
             Random shit = new Random();
-            int length = shit.Next(minLength, maxLength);
-            result.Bytes = new List<byte>(length);
-            for (int i = 0; i < length - 1; i++)
+            int minLengthLeft = (int)(minLength >> 32);
+            int maxLengthLeft = (int)(maxLength >> 32);
+            int minLengthRight = (int)((minLength << 32) >> 32);
+            int maxLengthRight = (int)((maxLength << 32) >> 32);
+            int lengthLeft = shit.Next(minLengthLeft, maxLengthLeft);
+            int lengthRight = shit.Next(minLengthRight, maxLengthRight);
+            long length = ((long)lengthLeft << 32) | lengthRight;
+            result.Bytes = new LongList<byte>(length);
+            for (long i = 0; i < length - 1; i++)
                 result.Bytes.Add((byte)shit.Next(0, 255));
             result.Bytes.Add((byte)shit.Next(1, 255));
             return result;
@@ -1020,9 +1035,16 @@ namespace EML.NumericTypes
                 Random shit = new Random();
                 bool matchesMin = false;
                 bool matchesMax = false;
-                int length = shit.Next(min.Length, max.Length);
-                result.Bytes = new List<byte>(length);
-                for (int i = 0; i < length; i++)
+                // Random is such a fucking useful class I ADORE IT
+                int minLengthLeft = (int)(min.Length >> 32);
+                int maxLengthLeft = (int)(max.Length >> 32);
+                int minLengthRight = (int)((min.Length << 32) >> 32);
+                int maxLengthRight = (int)((max.Length << 32) >> 32);
+                int lengthLeft = shit.Next(minLengthLeft, maxLengthLeft);
+                int lengthRight = shit.Next(minLengthRight, maxLengthRight);
+                long length = ((long)lengthLeft << 32) | lengthRight;
+                result.Bytes = new LongList<byte>(length);
+                for (long i = 0; i < length; i++)
                     result.Bytes.Add(0);
                 if (length == min.Length)
                 {
@@ -1034,7 +1056,7 @@ namespace EML.NumericTypes
                     result.Bytes[length - 1] = (byte)shit.Next(1, max.Bytes[length - 1]);
                     matchesMax = result.Bytes[length - 1] == max.Bytes[length - 1];
                 }
-                for (int i = length - 2; i >= 0; i--)
+                for (long i = length - 2; i >= 0; i--)
                 {
                     if (matchesMin)
                     {
@@ -1057,10 +1079,10 @@ namespace EML.NumericTypes
         /// <param name="l">The <seealso cref="LargeInteger"/> to remove the useless null bytes of.</param>
         private static LargeInteger RemoveUnnecessaryBytes(LargeInteger l)
         {
-            int i = l.Length;
-            while (i > 1 && l.Bytes[i - 1] == 0)
-                i--;
-            l.Bytes.RemoveRange(i, l.Length - i);
+            long i = 0;
+            while (i < l.Length && l.Bytes[l.Bytes.Count - i - 1] == 0)
+                i++;
+            l.Bytes.RemoveLast(i);
             return l;
         }
         /// <summary>Returns the square root of any number rounded to the closest integer. Since this is an approximation for decimal integers, it's suggested that this function is only used for integers whose n-th root is an integer.</summary>
@@ -1074,9 +1096,9 @@ namespace EML.NumericTypes
             else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
             else if (b > 1)
             {
-                int digCount = GetDecimalDigitCount(b);
-                int maxRootCount = digCount / 2 + 1;
-                int minRootCount = General.Max((digCount / 2 - 1), 1);
+                long digCount = GetDecimalDigitCount(b);
+                long maxRootCount = digCount / 2 + 1;
+                long minRootCount = General.Max((digCount / 2 - 1), 1);
                 LargeInteger start = Power(10, (minRootCount - 1));
                 LargeInteger end = Power(10, maxRootCount) - 1;
                 LargeInteger middle = (start + end) / 2;
@@ -1094,9 +1116,9 @@ namespace EML.NumericTypes
             }
             else // if (0 < b < 1)
             {
-                int digCount = GetDecimalDigitCount(b);
-                int maxRootCount = digCount / 2 + 1;
-                int minRootCount = General.Max((digCount / 2 - 1), 1);
+                long digCount = GetDecimalDigitCount(b);
+                long maxRootCount = digCount / 2 + 1;
+                long minRootCount = General.Max((digCount / 2 - 1), 1);
                 LargeInteger start = Power(10, (minRootCount - 1));
                 LargeInteger end = Power(10, maxRootCount) - 1;
                 LargeInteger middle = (start + end) / 2;

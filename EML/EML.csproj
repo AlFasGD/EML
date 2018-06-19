@@ -88,6 +88,7 @@
     <Compile Include="Expressions\Operations\Basic\Addition.cs" />
     <Compile Include="Expressions\Operations\Basic\Subtraction.cs" />
     <Compile Include="Extensions\GenericExtensions.cs" />
+    <Compile Include="Extensions\LongList.cs" />
     <Compile Include="Sets\Operations\CartesianProduct.cs" />
     <Compile Include="Sets\Operations\Difference.cs" />
     <Compile Include="Sets\Operations\Intersection.cs" />
