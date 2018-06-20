@@ -173,6 +173,16 @@ namespace EML.NumericTypes
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="b">The <seealso cref="byte"/> list to create the <seealso cref="LargeInteger"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
+        public LargeInteger(LongList<byte> b, bool removeUnnecessaryBytes = true)
+        {
+            Bytes = b.Clone();
+            Sign = Sign.Positive;
+            if (removeUnnecessaryBytes)
+                RemoveUnnecessaryBytes(this);
+        }
         #endregion
         #region Implicit Conversions
         public static implicit operator LargeInteger(byte a) => new LargeInteger(a);
@@ -185,6 +195,7 @@ namespace EML.NumericTypes
         public static implicit operator LargeInteger(ulong a) => new LargeInteger(a);
         #endregion
         #region Explicit Conversions
+        public static explicit operator LargeInteger(bool a) => a ? 1 : 0;
         public static explicit operator LargeInteger(float a) => new LargeInteger(a);
         public static explicit operator LargeInteger(double a) => new LargeInteger(a);
         public static explicit operator LargeInteger(decimal a) => new LargeInteger(a);
@@ -289,7 +300,6 @@ namespace EML.NumericTypes
         }
         public static explicit operator double(LargeInteger a)
         {
-            // Obviously not the most optimal way to go, but I'm not gonna bother unless someone implements those structures more developer-friendly
             try
             {
                 double result = 0;
@@ -305,7 +315,6 @@ namespace EML.NumericTypes
         }
         public static explicit operator decimal(LargeInteger a)
         {
-            // Obviously not the most optimal way to go, but I'm not gonna bother unless someone implements those structures more developer-friendly
             try
             {
                 decimal result = 0;
@@ -456,6 +465,7 @@ namespace EML.NumericTypes
         // Original (C#):                    q = ~((t & 0x80000000) >> 31);
         // Original (C# - General-purpose):  q = ~((t & (1 << (t.Length * 8 - 1))) >> (t.Length * 8 - 1));
         // Fixed (C# - General-purpose):     q = ~(t & (1 << (t.Length * 8 - 1))) >> (t.Length * 8 - 1);
+        // Fixed (C# - Long shifts):         q = ~ShiftRight(t & ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
         // The only results that would be produced from the original in C++ would either be 0xFFFFFFFF or 0x00000000 which is unwanted.
         // That is, only if the compiler takes the parentheses into consideration properly
         public static LargeInteger operator /(LargeInteger left, LargeInteger right)
@@ -465,21 +475,21 @@ namespace EML.NumericTypes
                 LargeInteger absoluteLeft = AbsoluteValue(left);
                 LargeInteger absoluteRight = AbsoluteValue(right);
                 if (absoluteLeft == absoluteRight)
-                    return left.Sign == right.Sign ? 1 : -1;
+                    return (int)SignFunctions.Multiply(left.Sign, right.Sign);
                 else if (absoluteRight == 1)
-                    return left * (left.Sign == right.Sign ? 1 : -1);
+                    return left * (int)SignFunctions.Multiply(left.Sign, right.Sign);
                 else if (absoluteLeft < absoluteRight)
                     return 0;
                 else
                 {
                     LargeInteger result = 0;
-                    result.BoolSign = left.Sign == right.Sign;
+                    result.Sign = SignFunctions.Multiply(left.Sign, right.Sign);
                     LargeInteger numBits = absoluteLeft.Length * 8;
                     LargeInteger t, q, bit, d = 0;
                     LargeInteger remainder = 0;
                     while (remainder < absoluteRight)
                     {
-                        bit = (absoluteLeft & (1 << (absoluteLeft.Length * 8 - 1))) >> (absoluteLeft.Length * 8 - 1);
+                        bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         d = absoluteLeft;
                         absoluteLeft <<= 1;
@@ -496,10 +506,10 @@ namespace EML.NumericTypes
 
                     for (LargeInteger i = 0; i < numBits; i++)
                     {
-                        bit = (absoluteLeft & (1 << (absoluteLeft.Length * 8 - 1))) >> (absoluteLeft.Length * 8 - 1);
+                        bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         t = remainder - absoluteRight;
-                        q = ~(t & (1 << (t.Length * 8 - 1))) >> (t.Length * 8 - 1);
+                        q = ~ShiftRight(t & ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
                         absoluteLeft <<= 1;
                         result = (result << 1) | q;
                         if (q != 0)
@@ -508,7 +518,8 @@ namespace EML.NumericTypes
                     return result;
                 }
             }
-            else throw new DivideByZeroException("Cannot divide by zero.");
+            else
+                throw new DivideByZeroException("Cannot divide by zero.");
         }
         public static LargeInteger operator %(LargeInteger left, LargeInteger right)
         {
@@ -527,7 +538,7 @@ namespace EML.NumericTypes
                     LargeInteger remainder = 0;
                     while (remainder < absoluteRight)
                     {
-                        bit = (absoluteLeft & (1 << (absoluteLeft.Length * 8 - 1))) >> (absoluteLeft.Length * 8 - 1);
+                        bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         d = absoluteLeft;
                         absoluteLeft <<= 1;
@@ -544,10 +555,10 @@ namespace EML.NumericTypes
 
                     for (LargeInteger i = 0; i < numBits; i++)
                     {
-                        bit = (absoluteLeft & (1 << (absoluteLeft.Length * 8 - 1))) >> (absoluteLeft.Length * 8 - 1);
+                        bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         t = remainder - absoluteRight;
-                        q = ~(t & (1 << (t.Length * 8 - 1))) >> (t.Length * 8 - 1);
+                        q = ~ShiftRight(t & ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
                         absoluteLeft <<= 1;
                         if (q != 0)
                             remainder = t;
@@ -555,60 +566,13 @@ namespace EML.NumericTypes
                     return remainder;
                 }
             }
-            else throw new DivideByZeroException("Cannot divide by zero.");
+            else
+                throw new DivideByZeroException("Cannot divide by zero.");
         }
         public static LargeInteger operator ++(LargeInteger l) => l + 1;
         public static LargeInteger operator --(LargeInteger l) => l - 1;
-        public static LargeInteger operator >>(LargeInteger left, int right)
-        {
-            if (left != 0)
-            {
-                LargeInteger result = left;
-                int shifts = right % 8;
-                int fullShifts = right / 8;
-                if (fullShifts > 0)
-                {
-                    for (int i = 0; i < result.Length - fullShifts; i++)
-                        result.Bytes[i] = result.Bytes[i + fullShifts];
-                    result.Bytes.RemoveLast(fullShifts);
-                }
-                if (shifts > 0)
-                {
-                    for (int i = 0; i < result.Length - 1; i++)
-                        result.Bytes[i] = (byte)((result.Bytes[i] >> shifts) + (result.Bytes[i + 1] << (8 - shifts)));
-                    result.Bytes[result.Length - 1] = (byte)(result.Bytes[result.Length - 1] >> shifts);
-                }
-                return result;
-            }
-            else return 0;
-        }
-        public static LargeInteger operator <<(LargeInteger left, int right)
-        {
-            if (left != 0)
-            {
-                LargeInteger result = left;
-                int shifts = right % 8;
-                int fullShifts = right / 8;
-                result.Bytes.AddRange(new byte[fullShifts]);
-                for (long i = 0; i < fullShifts; i++)
-                    result.Bytes.Add(result.Bytes[result.Bytes.Count - i - 1]);
-                if (fullShifts > 0)
-                {
-                    for (long i = result.Length - fullShifts; i > fullShifts; i--)
-                        result.Bytes[i] = result.Bytes[i - fullShifts];
-                    result.Bytes[fullShifts] = 0;
-                    fullShifts++;
-                }
-                if (shifts > 0)
-                {
-                    for (long i = result.Length - 1; i > fullShifts; i--)
-                        result.Bytes[i] = (byte)((result.Bytes[i - 1] << shifts) | (result.Bytes[i] >> (8 - shifts)));
-                    result.Bytes[fullShifts] = (byte)(result.Bytes[fullShifts] << shifts);
-                }
-                return result;
-            }
-            else return 0;
-        }
+        public static LargeInteger operator >>(LargeInteger left, int right) => ShiftRight(left, right);
+        public static LargeInteger operator <<(LargeInteger left, int right) => ShiftLeft(left, right);
         public static LargeInteger operator -(LargeInteger l)
         {
             l.BoolSign = !l.BoolSign;
@@ -837,6 +801,7 @@ namespace EML.NumericTypes
                 return max;
             return value;
         }
+        /// <summary>Clones this <seealso cref="LargeInteger"/>.</summary>
         public LargeInteger Clone() => new LargeInteger
         {
             Bytes = Bytes.Clone(),
@@ -1134,6 +1099,65 @@ namespace EML.NumericTypes
                 middle.BoolSign = !negative;
                 return middle;
             }
+        }
+        /// <summary>Shifts the <seealso cref="LargeInteger"/> to the left by a number of positions.</summary>
+        /// <param name="left">The number to shift.</param>
+        /// <param name="right">The positions to shift this number to.</param>
+        public static LargeInteger ShiftLeft(LargeInteger left, long right)
+        {
+            if (left != 0)
+            {
+                LargeInteger result = left.Clone();
+                int shifts = (int)(right % 8);
+                long fullShifts = right / 8;
+                result.Bytes.AddRange(new byte[fullShifts]);
+                for (long i = 0; i < fullShifts; i++)
+                    result.Bytes.Add(result.Bytes[result.Bytes.Count - i - 1]);
+                if (fullShifts > 0)
+                {
+                    for (long i = result.Length - fullShifts; i > fullShifts; i--)
+                        result.Bytes[i] = result.Bytes[i - fullShifts];
+                    for (long i = 0; i < fullShifts; i++)
+                        result.Bytes[i] = 0;
+                    fullShifts++;
+                }
+                if (shifts > 0)
+                {
+                    for (long i = result.Length - 1; i > fullShifts; i--)
+                        result.Bytes[i] = (byte)((result.Bytes[i - 1] << shifts) | (result.Bytes[i] >> (8 - shifts)));
+                    result.Bytes[fullShifts] = (byte)(result.Bytes[fullShifts] << shifts);
+                }
+                return result;
+            }
+            else
+                return 0;
+        }
+        /// <summary>Shifts the <seealso cref="LargeInteger"/> to the right by a number of positions.</summary>
+        /// <param name="left">The number to shift.</param>
+        /// <param name="right">The positions to shift this number to.</param>
+        public static LargeInteger ShiftRight(LargeInteger left, long right)
+        {
+            if (left != 0)
+            {
+                LargeInteger result = left.Clone();
+                int shifts = (int)(right % 8);
+                long fullShifts = right / 8;
+                if (fullShifts > 0)
+                {
+                    for (long i = 0; i < result.Length - fullShifts; i++)
+                        result.Bytes[i] = result.Bytes[i + fullShifts];
+                    result.Bytes.RemoveLast(fullShifts);
+                }
+                if (shifts > 0)
+                {
+                    for (long i = 0; i < result.Length - 1; i++)
+                        result.Bytes[i] = (byte)((result.Bytes[i] >> shifts) + (result.Bytes[i + 1] << (8 - shifts)));
+                    result.Bytes[result.Length - 1] = (byte)(result.Bytes[result.Length - 1] >> shifts);
+                }
+                return result;
+            }
+            else
+                return 0;
         }
         /// <summary>Returns the sum of a number of <seealso cref="LargeInteger"/>s.</summary>
         /// <param name="a">The array of <seealso cref="LargeInteger"/>s to calculate the sum of.</param>

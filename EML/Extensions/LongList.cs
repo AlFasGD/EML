@@ -94,20 +94,23 @@ namespace EML.Extensions
         /// <param name="item">The item to add to the list.</param>
         public void AddRange(T[] items)
         {
-            // Implement this
-            if (((Count << 32) >> 32) < int.MaxValue)
-                list[list.Count - 1].Add(item);
-            else
-                list.Add(new List<T> { item });
+            long a = 0;
+            while (a < items.Length)
+            {
+                for (int i = list[list.Count - 1].Count; i < int.MaxValue && a < items.Length; i++, a++)
+                    list[list.Count - 1].Add(items[a]);
+                if (a > 0)
+                    list.Add(new List<T>());
+            }
             enumerator.MoveToLast();
-            count++;
+            count += items.Length;
         }
         /// <summary>Removes a number of the last elements in the list.</summary>
         public void RemoveLast(long count)
         {
             if (count < 0)
                 throw new ArgumentException("The count of elements to be removed cannot be a negative number.");
-            else if (count > Count)
+            if (count > Count)
                 throw new ArgumentException("The count of elements to be removed cannot be greater than the count of the contained elements in the list.");
             while (count > 0)
             {
