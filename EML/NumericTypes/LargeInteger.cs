@@ -14,10 +14,44 @@ namespace EML.NumericTypes
     /// <summary>Represents an arbitrarily large integer.</summary>
     public struct LargeInteger
     {
+        private LongList<byte> bytes;
+        private Sign sign;
+        private Sign? previousSign;
+
         /// <summary>The <seealso cref="byte"/> list representing the digits of the number.</summary>
-        public LongList<byte> Bytes { get; set; }
+        public LongList<byte> Bytes
+        {
+            get => bytes;
+            set
+            {
+                bytes = value;
+                // What could go wrong, right?
+                if (this == 0)
+                {
+                    previousSign = sign;
+                    sign = Sign.Zero;
+                }
+                else if (sign == Sign.Zero)
+                {
+                    sign = previousSign ?? Sign.Positive;
+                    previousSign = Sign.Zero;
+                }
+            }
+        }
         /// <summary>The <seealso cref="Tools.Enumerations.Sign"/> of the <seealso cref="LargeInteger"/>.</summary>
-        public Sign Sign { get; set; }
+        public Sign Sign
+        {
+            get => sign;
+            set
+            {
+                if (this == 0 && value != Sign.Zero)
+                    throw new ArgumentException("The value is zero, therefore it cannot accept a sign.");
+                if (this != 0 && value == Sign.Zero)
+                    throw new ArgumentException("The value is non-zero, therefore it must have a sign.");
+                previousSign = sign;
+                sign = value;
+            }
+        }
         /// <summary>The sign of the <seealso cref="LargeInteger"/> as a <seealso cref="bool"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
         public bool BoolSign
         {
@@ -32,18 +66,18 @@ namespace EML.NumericTypes
         /// <param name="b">The <seealso cref="byte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(byte b)
         {
-            Bytes = new LongList<byte>();
-            Bytes.Add(b);
-            Sign = Sign.Positive;
+            bytes = new LongList<byte>(b);
+            sign = b > 0 ? Sign.Positive : Sign.Zero;
+            previousSign = null;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="s">The <seealso cref="short"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(short s, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new LongList<byte>();
-            Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(s)));
-            Sign = s >= 0 ? Sign.Positive : Sign.Negative;
+            bytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(s)));
+            sign = s > 0 ? Sign.Positive : (s == 0 ? Sign.Zero : Sign.Negative);
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -52,9 +86,9 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(int i, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new LongList<byte>();
-            Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(i)));
-            Sign = i >= 0 ? Sign.Positive : Sign.Negative;
+            bytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(i)));
+            sign = i > 0 ? Sign.Positive : (i == 0 ? Sign.Zero : Sign.Negative);
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -63,9 +97,9 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(long l, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new LongList<byte>();
-            Bytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(l)));
-            Sign = l >= 0 ? Sign.Positive : Sign.Negative;
+            bytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(l)));
+            sign = l > 0 ? Sign.Positive : (l == 0 ? Sign.Zero : Sign.Negative);
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -73,18 +107,18 @@ namespace EML.NumericTypes
         /// <param name="b">The <seealso cref="sbyte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         public LargeInteger(sbyte b)
         {
-            Bytes = new LongList<byte>();
-            Bytes.Add((byte)General.AbsoluteValue(b));
-            Sign = b >= 0 ? Sign.Positive : Sign.Negative;
+            bytes = new LongList<byte>((byte)General.AbsoluteValue(b));
+            sign = b > 0 ? Sign.Positive : (b == 0 ? Sign.Zero : Sign.Negative);
+            previousSign = null;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="s">The <seealso cref="ushort"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(ushort s, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new LongList<byte>();
-            Bytes.AddRange(BitConverter.GetBytes(s));
-            Sign = Sign.Positive;
+            bytes = new LongList<byte>(BitConverter.GetBytes(s));
+            sign = s > 0 ? Sign.Positive : Sign.Zero;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -93,9 +127,9 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(uint i, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new LongList<byte>();
-            Bytes.AddRange(BitConverter.GetBytes(i));
-            Sign = Sign.Positive;
+            bytes = new LongList<byte>(BitConverter.GetBytes(i));
+            sign = i > 0 ? Sign.Positive : Sign.Zero;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -104,9 +138,9 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(ulong l, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new LongList<byte>();
-            Bytes.AddRange(BitConverter.GetBytes(l));
-            Sign = Sign.Positive;
+            bytes = new LongList<byte>(BitConverter.GetBytes(l));
+            sign = l > 0 ? Sign.Positive : Sign.Zero;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -116,8 +150,9 @@ namespace EML.NumericTypes
         public LargeInteger(float f, bool removeUnnecessaryBytes = true)
         {
             LargeInteger n = Parse(f.ToString(CultureInfo.InvariantCulture).Split('.').First());
-            Bytes = n.Bytes;
-            Sign = n.Sign;
+            bytes = n.Bytes;
+            sign = n.Sign;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -127,8 +162,9 @@ namespace EML.NumericTypes
         public LargeInteger(double d, bool removeUnnecessaryBytes = true)
         {
             LargeInteger n = Parse(d.ToString(CultureInfo.InvariantCulture).Split('.').First());
-            Bytes = n.Bytes;
-            Sign = n.Sign;
+            bytes = n.Bytes;
+            sign = n.Sign;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -138,8 +174,9 @@ namespace EML.NumericTypes
         public LargeInteger(decimal d, bool removeUnnecessaryBytes = true)
         {
             LargeInteger n = Parse(d.ToString(CultureInfo.InvariantCulture).Split('.').First());
-            Bytes = n.Bytes;
-            Sign = n.Sign;
+            bytes = n.Bytes;
+            sign = n.Sign;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -148,8 +185,9 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(LargeDecimal d, bool removeUnnecessaryBytes = true)
         {
-            Bytes = d.LeftBytes; // TODO: Fix the LargeDecimal with the LongList implementation too and do not forget to remove that comment once that's done
-            Sign = d.Sign;
+            bytes = d.LeftBytes;
+            sign = d.Sign;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -158,8 +196,9 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(byte[] b, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new LongList<byte>(b);
-            Sign = Sign.Positive;
+            bytes = new LongList<byte>(b);
+            sign = Sign.Positive;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -168,8 +207,9 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(List<byte> b, bool removeUnnecessaryBytes = true)
         {
-            Bytes = new LongList<byte>(b);
-            Sign = Sign.Positive;
+            bytes = new LongList<byte>(b);
+            sign = Sign.Positive;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -178,8 +218,9 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
         public LargeInteger(LongList<byte> b, bool removeUnnecessaryBytes = true)
         {
-            Bytes = b.Clone();
-            Sign = Sign.Positive;
+            bytes = b.Clone();
+            sign = Sign.Positive;
+            previousSign = null;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -1040,8 +1081,8 @@ namespace EML.NumericTypes
             }
             else return min;
         }
-        /// <summary>Removes the useless null bytes in the <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="l">The <seealso cref="LargeInteger"/> to remove the useless null bytes of.</param>
+        /// <summary>Removes the unnecessary null bytes in the <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> to remove the unnecessary null bytes of.</param>
         private static LargeInteger RemoveUnnecessaryBytes(LargeInteger l)
         {
             long i = 0;
@@ -1170,6 +1211,14 @@ namespace EML.NumericTypes
         /// <summary>Returns the square root of any number rounded to the closest integer. Since this is an approximation for decimal integers, it's suggested that this function is only used for perfect squares.</summary>
         /// <param name="b">The integer to find the square root of.</param>
         public static LargeInteger SquareRoot(LargeInteger b) => Root(b, 2);
+        #endregion
+        #region Constants
+        /// <summary>Represents the number 0.</summary>
+        public static readonly LargeInteger Zero = new LargeInteger(0);
+        /// <summary>Represents the number 1.</summary>
+        public static readonly LargeInteger One = new LargeInteger(1);
+        /// <summary>Represents the number -1.</summary>
+        public static readonly LargeInteger NegativeOne = new LargeInteger(-1);
         #endregion
         #region Overrides
         /// <summary>Returns the <seealso cref="string"/> representation of the <seealso cref="LargeInteger"/>.</summary>
