@@ -1105,32 +1105,31 @@ namespace EML.NumericTypes
         /// <param name="right">The positions to shift this number to.</param>
         public static LargeInteger ShiftLeft(LargeInteger left, long right)
         {
-            if (left != 0)
+            if (left != 0 && right > 0)
             {
                 LargeInteger result = left.Clone();
                 int shifts = (int)(right % 8);
                 long fullShifts = right / 8;
                 result.Bytes.AddRange(new byte[fullShifts]);
-                for (long i = 0; i < fullShifts; i++)
-                    result.Bytes.Add(result.Bytes[result.Bytes.Count - i - 1]);
+                for (long i = result.Length - 1; i >= result.Length - fullShifts - 1; i--)
+                    result.Bytes[i] = result.Bytes[i - fullShifts];
                 if (fullShifts > 0)
-                {
-                    for (long i = result.Length - fullShifts; i > fullShifts; i--)
-                        result.Bytes[i] = result.Bytes[i - fullShifts];
                     for (long i = 0; i < fullShifts; i++)
                         result.Bytes[i] = 0;
-                    fullShifts++;
-                }
                 if (shifts > 0)
                 {
+                    result.Bytes.Add(0);
                     for (long i = result.Length - 1; i > fullShifts; i--)
-                        result.Bytes[i] = (byte)((result.Bytes[i - 1] << shifts) | (result.Bytes[i] >> (8 - shifts)));
+                        result.Bytes[i] = (byte)((result.Bytes[i] << shifts) | (result.Bytes[i - 1] >> (8 - shifts)));
                     result.Bytes[fullShifts] = (byte)(result.Bytes[fullShifts] << shifts);
                 }
                 return result;
             }
-            else
-                return 0;
+            if (right == 0)
+                return left.Clone();
+            if (right < 0)
+                throw new ArgumentException("The count of positions to shift the number left cannot be a negative number.");
+            return 0;
         }
         /// <summary>Shifts the <seealso cref="LargeInteger"/> to the right by a number of positions.</summary>
         /// <param name="left">The number to shift.</param>
@@ -1177,11 +1176,12 @@ namespace EML.NumericTypes
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();
-            if (Sign == Sign.Negative)
-                result.Append("-");
-            LargeInteger currentIntPart = this;
-            for (LargeInteger i = 1; (currentIntPart = this / i) > 0; i *= 10)
-                result.Insert(0, (char)((currentIntPart % 10) + 48));
+            // Uncomment once other things are tested properly to avoid potential infinite processing
+            //if (Sign == Sign.Negative)
+            //    result.Append("-");
+            //LargeInteger currentIntPart = this;
+            //for (LargeInteger i = 1; (currentIntPart = this / i) > 0; i *= 10)
+            //    result.Insert(0, (char)((currentIntPart % 10) + 48));
             return result.ToString();
         }
         /// <summary>Returns a value indicating whether an object is equal to another.</summary>

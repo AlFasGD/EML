@@ -12,39 +12,34 @@ namespace EML.Extensions
     {
         private List<List<T>> list;
 
-        private long count = -1;
-        public long Count
-        {
-            get
-            {
-                if (count == -1)
-                {
-                    count = 0;
-                    for (int i = 0; i < list.Count; i++)
-                        count += list[i].Count;
-                }
-                return count;
-            }
-        }
+        /// <summary>The total count of all the elements in the <seealso cref="LongList{T}"/>.</summary>
+        public long Count { get; private set; } = -1;
 
         private LongListEnumerator<T> enumerator;
-        
+
         #region Constructors
+        /// <summary>Creates a new instance of the <seealso cref="LongList{T}"/> class.</summary>
         public LongList()
         {
-            list = new List<List<T>>();
+            list = new List<List<T>> { new List<T>() };
             enumerator = new LongListEnumerator<T>(this);
+            Count = 0;
         }
+        /// <summary>Creates a new instance of the <seealso cref="LongList{T}"/> class that contains an item.</summary>
+        /// <param name="item">The item to add to the <seealso cref="LongList{T}"/>.</param>
         public LongList(T item)
         {
             list = new List<List<T>> { new List<T> { item } };
             enumerator = new LongListEnumerator<T>(this);
+            Count = 1;
         }
+        /// <summary>Creates a new instance of the <seealso cref="LongList{T}"/> class that contains a specified amount of empty elements.</summary>
+        /// <param name="emptyElements">The amount of empty elements to add to the <seealso cref="LongList{T}"/>.</param>
         public LongList(long emptyElements)
         {
             if (emptyElements >= 0)
             {
-                list = new List<List<T>>();
+                list = new List<List<T>> { new List<T>() };
                 int outers = (int)(emptyElements >> 32);
                 for (int i = 0; i < outers; i++)
                 {
@@ -60,35 +55,40 @@ namespace EML.Extensions
                         list[outers + 1].Add(default);
                 }
                 enumerator = new LongListEnumerator<T>(this);
+                Count = emptyElements;
             }
             else
                 throw new ArgumentException("The count of empty elements cannot be a negative number.");
         }
+        /// <summary>Creates a new instance of the <seealso cref="LongList{T}"/> class that contains elements from a <seealso cref="List{T}"/>.</summary>
+        /// <param name="l">The <seealso cref="List{T}"/> whose elements to add to the <seealso cref="LongList{T}"/>.</param>
         public LongList(List<T> l)
         {
             list = new List<List<T>> { l };
             enumerator = new LongListEnumerator<T>(this);
+            Count = l.Count;
         }
+        /// <summary>Creates a new instance of the <seealso cref="LongList{T}"/> class that contains elements from an array.</summary>
+        /// <param name="ar">The array whose elements to add to the <seealso cref="LongList{T}"/>.</param>
         public LongList(T[] ar)
         {
             list = new List<List<T>> { ar.ToList() };
             enumerator = new LongListEnumerator<T>(this);
+            Count = ar.Length;
         }
         #endregion
 
         #region Operations
-        // TODO: Implement remove, insert functions
         /// <summary>Adds a new item to the list.</summary>
         /// <param name="item">The item to add to the list.</param>
         public void Add(T item)
         {
-            // Ensure the list has less than the maximum possible number of elements before adding the new element to that, otherwise create a new list
             if (((Count << 32) >> 32) < int.MaxValue)
                 list[list.Count - 1].Add(item);
             else
                 list.Add(new List<T> { item });
             enumerator.MoveToLast();
-            count++;
+            Count++;
         }
         /// <summary>Adds a new item to the list.</summary>
         /// <param name="item">The item to add to the list.</param>
@@ -99,11 +99,11 @@ namespace EML.Extensions
             {
                 for (int i = list[list.Count - 1].Count; i < int.MaxValue && a < items.Length; i++, a++)
                     list[list.Count - 1].Add(items[a]);
-                if (a > 0)
+                if (a < items.Length)
                     list.Add(new List<T>());
             }
             enumerator.MoveToLast();
-            count += items.Length;
+            Count += items.Length;
         }
         /// <summary>Removes a number of the last elements in the list.</summary>
         public void RemoveLast(long count)
@@ -112,6 +112,7 @@ namespace EML.Extensions
                 throw new ArgumentException("The count of elements to be removed cannot be a negative number.");
             if (count > Count)
                 throw new ArgumentException("The count of elements to be removed cannot be greater than the count of the contained elements in the list.");
+            Count -= count;
             while (count > 0)
             {
                 int max = list[list.Count - 1].Count;
@@ -122,19 +123,20 @@ namespace EML.Extensions
                     list[list.Count - 1].RemoveRange(max - c, c);
                 count -= c;
             }
-            this.count -= count;
+            enumerator.MoveToLast();
         }
         /// <summary>Clears the entire list.</summary>
         public void Clear()
         {
             list = new List<List<T>>();
-            count = 0;
+            Count = 0;
+            enumerator.Reset();
         }
         /// <summary>Clones this list and returns a cloned copy of it.</summary>
         public LongList<T> Clone()
         {
             LongList<T> result = new LongList<T>();
-            for (int i = 0; i < list.Count; i++)
+            for (long i = 0; i < Count; i++)
                 result.Add(this[i]);
             return result;
         }
@@ -166,7 +168,6 @@ namespace EML.Extensions
             else
                 throw new ArgumentException("The ending element cannot be less than the starting element.");
         }
-
         #endregion
 
         public IEnumerator<T> GetEnumerator() => new LongListEnumerator<T>(this);
@@ -195,10 +196,12 @@ namespace EML.Extensions
     
     public class LongListEnumerator<T> : IEnumerator<T>
     {
+        /// <summary>The <seealso cref="LongList{T}"/> to enumerate.</summary>
         public LongList<T> List;
 
-        long position = -1;
-        long Position
+        private long position = -1;
+        /// <summary>The position of the <seealso cref="LongListEnumerator{T}"/>.</summary>
+        public long Position
         {
             get => position;
             set
@@ -208,14 +211,17 @@ namespace EML.Extensions
                 position = value;
             }
         }
-        int positionOuter = 0;
-        int positionInner = -1;
-        
+        private int positionOuter = 0;
+        private int positionInner = -1;
+
+        /// <summary>Creates a new instance of the <seealso cref="LongListEnumerator{T}"/> class referring to a <seealso cref="LongList{T}"/> that will be enumerated.</summary>
+        /// <param name="list">The <seealso cref="LongList{T}"/> to enumerate.</param>
         public LongListEnumerator(LongList<T> list)
         {
             List = list;
         }
 
+        /// <summary>Moves the current position of the <seealso cref="LongListEnumerator{T}"/> to the next position. Returns <see langword="true"/> if the position is a valid index, otherwise <see langword="false"/>.</summary>
         public bool MoveNext()
         {
             if (positionInner < int.MaxValue)
@@ -229,17 +235,26 @@ namespace EML.Extensions
             return position < List.Count;
         }
 
+        /// <summary>Moves the current position of the <seealso cref="LongListEnumerator{T}"/> to the last position.</summary>
         public void MoveToLast()
         {
-            position = List.Count - 1;
+            Position = List.Count - 1;
         }
 
-        public void Reset() => position = -1;
+        /// <summary>Resets the current position of the <seealso cref="LongListEnumerator{T}"/> to the default position.</summary>
+        public void Reset()
+        {
+            position = -1;
+            positionInner = -1;
+            positionOuter = 0;
+        }
 
         object IEnumerator.Current => Current;
 
+        /// <summary>Disposes this <seealso cref="LongListEnumerator{T}"/>.</summary>
         public void Dispose() { }
 
+        /// <summary>The current element that is being iterated in the <seealso cref="LongList{T}"/>.</summary>
         public T Current
         {
             get
