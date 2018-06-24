@@ -17,7 +17,7 @@ namespace EML.NumericTypes
 
         public Infinity(Sign sign)
         {
-            if (sign != Sign.Zero)
+            if (sign != Sign.Neutral)
                 Sign = sign;
             else
                 throw new ArgumentException("Infinity cannot be zero.");

@@ -16,7 +16,7 @@ namespace EML.NumericTypes
     {
         private LongList<byte> bytes;
         private Sign sign;
-        private Sign? previousSign;
+        private Sign signDirection;
 
         /// <summary>The <seealso cref="byte"/> list representing the digits of the number.</summary>
         public LongList<byte> Bytes
@@ -26,16 +26,24 @@ namespace EML.NumericTypes
             {
                 bytes = value;
                 // What could go wrong, right?
-                if (this == 0)
+                if (this == Zero)
                 {
-                    previousSign = sign;
-                    sign = Sign.Zero;
+                    signDirection = sign;
+                    sign = Sign.Neutral;
                 }
-                else if (sign == Sign.Zero)
-                {
-                    sign = previousSign ?? Sign.Positive;
-                    previousSign = Sign.Zero;
-                }
+                else if (sign == Sign.Neutral)
+                    sign = signDirection;
+            }
+        }
+        public Sign SignDirection
+        {
+            get => signDirection;
+            set
+            {
+                if (value == Sign.Neutral)
+                    throw new InvalidOperationException("The direction of the sign cannot be neutral since it determines the direction of the number once its value changes.");
+                if (signDirection != value)
+                    signDirection = value;
             }
         }
         /// <summary>The <seealso cref="Tools.Enumerations.Sign"/> of the <seealso cref="LargeInteger"/>.</summary>
@@ -44,11 +52,11 @@ namespace EML.NumericTypes
             get => sign;
             set
             {
-                if (this == 0 && value != Sign.Zero)
-                    throw new ArgumentException("The value is zero, therefore it cannot accept a sign.");
-                if (this != 0 && value == Sign.Zero)
-                    throw new ArgumentException("The value is non-zero, therefore it must have a sign.");
-                previousSign = sign;
+                if (this == Zero && value != Sign.Neutral)
+                    throw new InvalidOperationException("The value is zero, therefore it has a neutral sign.");
+                if (this != Zero && value == Sign.Neutral)
+                    throw new InvalidOperationException("The value is non-zero, therefore it has a non-neutral sign.");
+                signDirection = sign;
                 sign = value;
             }
         }
@@ -56,7 +64,15 @@ namespace EML.NumericTypes
         public bool BoolSign
         {
             get => Sign == Sign.Positive;
-            set => Sign = value ? Sign.Positive : Sign.Negative;
+            set
+            {
+                try
+                {
+                    Sign = value ? Sign.Positive : Sign.Negative;
+                }
+                catch { } // The value is zero, therefore we cannot manually set the actual sign, that's why the sign direction is also being changed ensuring it's not neutral
+                SignDirection = value ? Sign.Positive : Sign.Negative;
+            }
         }
         /// <summary>The length of the <seealso cref="LargeInteger"/>.</summary>
         public long Length => Bytes.Count;
@@ -67,49 +83,51 @@ namespace EML.NumericTypes
         public LargeInteger(byte b)
         {
             bytes = new LongList<byte>(b);
-            sign = b > 0 ? Sign.Positive : Sign.Zero;
-            previousSign = null;
+            sign = b > 0 ? Sign.Positive : Sign.Neutral;
+            signDirection = Sign.Positive;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="s">The <seealso cref="short"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
-        public LargeInteger(short s, bool removeUnnecessaryBytes = true)
+        public LargeInteger(short s, Sign signDirection = Sign.Positive, bool removeUnnecessaryBytes = true)
         {
+            if (signDirection == Sign.Neutral)
+                throw new ArgumentException("The direction of the sign cannot be neutral since it determines the direction of the number once its value changes.");
             bytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(s)));
-            sign = s > 0 ? Sign.Positive : (s == 0 ? Sign.Zero : Sign.Negative);
-            previousSign = null;
+            sign = s > 0 ? Sign.Positive : (s == 0 ? Sign.Neutral : Sign.Negative);
+            this.signDirection = sign != Sign.Neutral ? sign : signDirection;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="i">The <seealso cref="int"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
-        public LargeInteger(int i, bool removeUnnecessaryBytes = true)
+        public LargeInteger(int i, Sign signDirection = Sign.Positive, bool removeUnnecessaryBytes = true)
         {
             bytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(i)));
-            sign = i > 0 ? Sign.Positive : (i == 0 ? Sign.Zero : Sign.Negative);
-            previousSign = null;
+            sign = i > 0 ? Sign.Positive : (i == 0 ? Sign.Neutral : Sign.Negative);
+            this.signDirection = sign != Sign.Neutral ? sign : signDirection;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="l">The <seealso cref="long"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
-        public LargeInteger(long l, bool removeUnnecessaryBytes = true)
+        public LargeInteger(long l, Sign signDirection = Sign.Positive, bool removeUnnecessaryBytes = true)
         {
             bytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(l)));
-            sign = l > 0 ? Sign.Positive : (l == 0 ? Sign.Zero : Sign.Negative);
-            previousSign = null;
+            sign = l > 0 ? Sign.Positive : (l == 0 ? Sign.Neutral : Sign.Negative);
+            this.signDirection = sign != Sign.Neutral ? sign : signDirection;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The <seealso cref="sbyte"/> value to create the <seealso cref="LargeInteger"/> from.</param>
-        public LargeInteger(sbyte b)
+        public LargeInteger(sbyte b, Sign signDirection = Sign.Positive)
         {
             bytes = new LongList<byte>((byte)General.AbsoluteValue(b));
-            sign = b > 0 ? Sign.Positive : (b == 0 ? Sign.Zero : Sign.Negative);
-            previousSign = null;
+            sign = b > 0 ? Sign.Positive : (b == 0 ? Sign.Neutral : Sign.Negative);
+            this.signDirection = sign != Sign.Neutral ? sign : signDirection;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="s">The <seealso cref="ushort"/> value to create the <seealso cref="LargeInteger"/> from.</param>
@@ -117,8 +135,8 @@ namespace EML.NumericTypes
         public LargeInteger(ushort s, bool removeUnnecessaryBytes = true)
         {
             bytes = new LongList<byte>(BitConverter.GetBytes(s));
-            sign = s > 0 ? Sign.Positive : Sign.Zero;
-            previousSign = null;
+            sign = s > 0 ? Sign.Positive : Sign.Neutral;
+            signDirection = Sign.Positive;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -128,8 +146,8 @@ namespace EML.NumericTypes
         public LargeInteger(uint i, bool removeUnnecessaryBytes = true)
         {
             bytes = new LongList<byte>(BitConverter.GetBytes(i));
-            sign = i > 0 ? Sign.Positive : Sign.Zero;
-            previousSign = null;
+            sign = i > 0 ? Sign.Positive : Sign.Neutral;
+            signDirection = Sign.Positive;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -139,44 +157,44 @@ namespace EML.NumericTypes
         public LargeInteger(ulong l, bool removeUnnecessaryBytes = true)
         {
             bytes = new LongList<byte>(BitConverter.GetBytes(l));
-            sign = l > 0 ? Sign.Positive : Sign.Zero;
-            previousSign = null;
+            sign = l > 0 ? Sign.Positive : Sign.Neutral;
+            signDirection = Sign.Positive;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="f">The <seealso cref="float"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
-        public LargeInteger(float f, bool removeUnnecessaryBytes = true)
+        public LargeInteger(float f, Sign signDirection = Sign.Positive, bool removeUnnecessaryBytes = true)
         {
             LargeInteger n = Parse(f.ToString(CultureInfo.InvariantCulture).Split('.').First());
             bytes = n.Bytes;
             sign = n.Sign;
-            previousSign = null;
+            this.signDirection = sign != Sign.Neutral ? sign : signDirection;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="d">The <seealso cref="double"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
-        public LargeInteger(double d, bool removeUnnecessaryBytes = true)
+        public LargeInteger(double d, Sign signDirection = Sign.Positive, bool removeUnnecessaryBytes = true)
         {
             LargeInteger n = Parse(d.ToString(CultureInfo.InvariantCulture).Split('.').First());
             bytes = n.Bytes;
             sign = n.Sign;
-            previousSign = null;
+            this.signDirection = sign != Sign.Neutral ? sign : signDirection;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
         /// <summary>Creates a new instance of <seealso cref="LargeInteger"/>.</summary>
         /// <param name="d">The <seealso cref="decimal"/> value to create the <seealso cref="LargeInteger"/> from.</param>
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeInteger"/> or not.</param>
-        public LargeInteger(decimal d, bool removeUnnecessaryBytes = true)
+        public LargeInteger(decimal d, Sign signDirection = Sign.Positive, bool removeUnnecessaryBytes = true)
         {
             LargeInteger n = Parse(d.ToString(CultureInfo.InvariantCulture).Split('.').First());
             bytes = n.Bytes;
             sign = n.Sign;
-            previousSign = null;
+            this.signDirection = sign != Sign.Neutral ? sign : signDirection;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -187,7 +205,7 @@ namespace EML.NumericTypes
         {
             bytes = d.LeftBytes;
             sign = d.Sign;
-            previousSign = null;
+            signDirection = d.Sign; // Implement something similar in that class too
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -198,7 +216,7 @@ namespace EML.NumericTypes
         {
             bytes = new LongList<byte>(b);
             sign = Sign.Positive;
-            previousSign = null;
+            signDirection = Sign.Positive;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -209,7 +227,7 @@ namespace EML.NumericTypes
         {
             bytes = new LongList<byte>(b);
             sign = Sign.Positive;
-            previousSign = null;
+            signDirection = Sign.Positive;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -220,7 +238,7 @@ namespace EML.NumericTypes
         {
             bytes = b.Clone();
             sign = Sign.Positive;
-            previousSign = null;
+            signDirection = Sign.Positive;
             if (removeUnnecessaryBytes)
                 RemoveUnnecessaryBytes(this);
         }
@@ -374,56 +392,54 @@ namespace EML.NumericTypes
         #region Operators
         public static LargeInteger operator +(LargeInteger left, LargeInteger right)
         {
+            // Avoid unnecessary operations early
+            if (left == 0)
+                return right;
+            if (right == 0)
+                return left;
+
             // Add the maximum number of bytes between the two integers and another one to avoid overflows
-            LargeInteger result = new LargeInteger(new byte[General.Max(left.Length, right.Length) + 1], false);
+            LargeInteger result = new LargeInteger(new byte[General.Max(left.Length, right.Length) + (left.BoolSign == right.BoolSign ? 1 : 0)], false);
 
             // Determine the sign of the result
-            if (!left.BoolSign && !right.BoolSign)
-                result.BoolSign = false;
-            else if (left.BoolSign && right.BoolSign)
-                result.BoolSign = true;
-            else if (!left.BoolSign && right.BoolSign)
+            if (left.BoolSign == right.BoolSign)
+                result.BoolSign = left.BoolSign;
+            else
             {
-                if (left.Length > right.Length)
-                    result.BoolSign = false;
-                else if (left.Length < right.Length)
-                    result.BoolSign = true;
-                else if (left.Length == right.Length)
-                    for (int i = 0; i < left.Length; i++)
+                if (left.Length == right.Length)
+                {
+                    for (long i = left.Length - 1; i >= 0; i--)
                         if (left.Bytes[i] != right.Bytes[i])
                         {
-                            result.BoolSign = left.Bytes[left.Length - 1] < right.Bytes[right.Length - 1];
+                            result.BoolSign = (left.Bytes[i] > right.Bytes[i]) && left.BoolSign;
                             break;
                         }
+                }
+                else
+                    result.BoolSign = (left.Length > right.Length) && left.BoolSign;
+                // Avoid directly calculating negative sums, simply negate the sum of both numbers whose sum is a positive one
+                if (!result.BoolSign)
+                {
+                    Sign r = result.Sign;
+                    result = (-right - left);
+                    result.Sign = r;
+                    return result;
+                }
             }
-            else if (left.BoolSign && !right.BoolSign)
-            {
-                if (left.Length > right.Length)
-                    result.BoolSign = true;
-                else if (left.Length < right.Length)
-                    result.BoolSign = false;
-                else if (left.Length == right.Length)
-                    for (int i = 0; i < left.Length; i++)
-                        if (left.Bytes[i] != right.Bytes[i])
-                        {
-                            result.BoolSign = left.Bytes[left.Length - 1] > right.Bytes[right.Length - 1];
-                            break;
-                        }
-            }
-
+            
             // Perform the calculation
-            for (int i = 0; i < result.Length - 1; i++) // Insert the result per bytes
+            for (int i = 0; i < result.Length; i++) // Insert the result per bytes
             {
                 int sum = 0;
-                if (i < left.Length && i < right.Length) // Add both numbers in the sum if the byte positions are in the bounds of both numbers' byte list
+                if (i < left.Length && i < right.Length)
                     sum = left.Bytes[i] * (int)left.Sign + right.Bytes[i] * (int)right.Sign;
-                else if (i < left.Length && i >= right.Length) // Only add the left number in the byte position if the byte index is out of range of the right number's byte list
+                else if (i < left.Length && i >= right.Length)
                     sum = left.Bytes[i] * (int)left.Sign;
-                else if (i >= left.Length && i < right.Length) // Only add the right number in the byte position if the byte index is out of range of the left number's byte list
+                else if (i >= left.Length && i < right.Length)
                     sum = right.Bytes[i] * (int)right.Sign;
 
-                //if (sum == 0) // Ignore the sum if it's 0
-                //    continue;
+                if (sum == 0) // Ignore the sum if it's 0
+                    continue;
                 if (sum >= 256 - result.Bytes[i]) // If the sum is positive and adding that to the current byte will cause an overflow
                 {
                     result.Bytes[i] = (byte)((sum + result.Bytes[i]) % 256);
@@ -461,13 +477,13 @@ namespace EML.NumericTypes
         {
             if (left == 0 || right == 0)
                 return 0;
-            else if (left == 1)
+            else if (left == One)
                 return right;
-            else if (right == 1)
+            else if (right == One)
                 return left;
-            else if (left == -1)
+            else if (left == NegativeOne)
                 return -right;
-            else if (right == -1)
+            else if (right == NegativeOne)
                 return -left;
             else
             {
@@ -479,7 +495,8 @@ namespace EML.NumericTypes
                 while (right > 0)
                 {
                     LargeInteger temp = (right >> 1) << 1;
-                    if (temp != right) result += left;
+                    if (temp != right)
+                        result += left;
                     if ((left.Bytes[left.Length - 1] & 0x80) == 1)
                         left.Bytes.Add(0);
                     left <<= 1;
@@ -616,8 +633,9 @@ namespace EML.NumericTypes
         public static LargeInteger operator <<(LargeInteger left, int right) => ShiftLeft(left, right);
         public static LargeInteger operator -(LargeInteger l)
         {
-            l.BoolSign = !l.BoolSign;
-            return l;
+            LargeInteger n = l.Clone();
+            n.BoolSign = !n.BoolSign;
+            return n;
         }
         public static LargeInteger operator &(LargeInteger left, LargeInteger right)
         {
@@ -665,9 +683,10 @@ namespace EML.NumericTypes
         }
         public static LargeInteger operator ~(LargeInteger l)
         {
-            for (long i = 0; i < l.Length; i++)
-                l.Bytes[i] = (byte)~l.Bytes[i];
-            return l;
+            LargeInteger n = l.Clone();
+            for (long i = 0; i < n.Length; i++)
+                n.Bytes[i] = (byte)~n.Bytes[i];
+            return n;
         }
         public static bool operator >(LargeInteger left, LargeInteger right)
         {
@@ -1213,12 +1232,13 @@ namespace EML.NumericTypes
         public static LargeInteger SquareRoot(LargeInteger b) => Root(b, 2);
         #endregion
         #region Constants
+        // The constant values are converted to sbytes so as to minimize the cost of removing bytes
         /// <summary>Represents the number 0.</summary>
-        public static readonly LargeInteger Zero = new LargeInteger(0);
+        public static readonly LargeInteger Zero = new LargeInteger((byte)0);
         /// <summary>Represents the number 1.</summary>
-        public static readonly LargeInteger One = new LargeInteger(1);
+        public static readonly LargeInteger One = new LargeInteger((byte)1);
         /// <summary>Represents the number -1.</summary>
-        public static readonly LargeInteger NegativeOne = new LargeInteger(-1);
+        public static readonly LargeInteger NegativeOne = new LargeInteger((sbyte)-1);
         #endregion
         #region Overrides
         /// <summary>Returns the <seealso cref="string"/> representation of the <seealso cref="LargeInteger"/>.</summary>

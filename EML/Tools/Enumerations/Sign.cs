@@ -11,8 +11,8 @@ namespace EML.Tools.Enumerations
     {
         /// <summary>The negative sign.</summary>
         Negative = -1,
-        /// <summary>The value zero.</summary>
-        Zero = 0,
+        /// <summary>The neutral sign (also denoetd as zero).</summary>
+        Neutral = 0,
         /// <summary>The positive sign.</summary>
         Positive = 1
     }

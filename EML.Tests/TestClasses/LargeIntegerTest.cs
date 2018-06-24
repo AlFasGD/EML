@@ -35,7 +35,7 @@ namespace EML.Tests.TestClasses
 
             Assert.IsTrue(a + b == A + B);
             Console.WriteLine("Addition was successful.");
-            
+
             Assert.IsTrue(a - b == A - B);
             Console.WriteLine("Subtraction was successful.");
 
