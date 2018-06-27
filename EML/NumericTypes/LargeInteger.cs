@@ -644,7 +644,7 @@ namespace EML.NumericTypes
             for (long i = 0; i < minLength; i++)
                 bytes[i] = (byte)(left.Bytes[i] & right.Bytes[i]);
             LargeInteger result = new LargeInteger(bytes);
-            result.Sign = left.Sign & right.Sign;
+            result.BoolSign = left.BoolSign == right.BoolSign;
             return result;
         }
         public static LargeInteger operator |(LargeInteger left, LargeInteger right)
@@ -661,7 +661,7 @@ namespace EML.NumericTypes
                 for (long i = minLength; i < maxLength; i++)
                     bytes[i] = right.Bytes[i];
             LargeInteger result = new LargeInteger(bytes);
-            result.Sign = left.Sign | right.Sign;
+            result.BoolSign = left.BoolSign == right.BoolSign;
             return result;
         }
         public static LargeInteger operator ^(LargeInteger left, LargeInteger right)
@@ -678,7 +678,7 @@ namespace EML.NumericTypes
                 for (long i = minLength; i < maxLength; i++)
                     bytes[i] = right.Bytes[i];
             LargeInteger result = new LargeInteger(bytes);
-            result.Sign = left.Sign ^ right.Sign;
+            result.BoolSign = left.BoolSign == right.BoolSign;
             return result;
         }
         public static LargeInteger operator ~(LargeInteger l)
@@ -1100,7 +1100,7 @@ namespace EML.NumericTypes
             }
             else return min;
         }
-        /// <summary>Removes the unnecessary null bytes in the <seealso cref="LargeInteger"/>.</summary>
+        /// <summary>Removes the unnecessary null bytes in the <seealso cref="LargeInteger"/>. Returns an instance of the processed <seealso cref="LargeInteger"/>.</summary>
         /// <param name="l">The <seealso cref="LargeInteger"/> to remove the unnecessary null bytes of.</param>
         private static LargeInteger RemoveUnnecessaryBytes(LargeInteger l)
         {
@@ -1189,13 +1189,15 @@ namespace EML.NumericTypes
                 return left.Clone();
             if (right < 0)
                 throw new ArgumentException("The count of positions to shift the number left cannot be a negative number.");
-            return 0;
+            return Zero;
         }
         /// <summary>Shifts the <seealso cref="LargeInteger"/> to the right by a number of positions.</summary>
         /// <param name="left">The number to shift.</param>
         /// <param name="right">The positions to shift this number to.</param>
         public static LargeInteger ShiftRight(LargeInteger left, long right)
         {
+            if (right > left.Length * 8)
+                return Zero;
             if (left != 0)
             {
                 LargeInteger result = left.Clone();
@@ -1203,20 +1205,24 @@ namespace EML.NumericTypes
                 long fullShifts = right / 8;
                 if (fullShifts > 0)
                 {
-                    for (long i = 0; i < result.Length - fullShifts; i++)
-                        result.Bytes[i] = result.Bytes[i + fullShifts];
+                    for (long i = fullShifts; i < result.Length; i++)
+                        result.Bytes[i - fullShifts] = result.Bytes[i];
                     result.Bytes.RemoveLast(fullShifts);
                 }
                 if (shifts > 0)
                 {
                     for (long i = 0; i < result.Length - 1; i++)
-                        result.Bytes[i] = (byte)((result.Bytes[i] >> shifts) + (result.Bytes[i + 1] << (8 - shifts)));
+                        result.Bytes[i] = (byte)((result.Bytes[i] >> shifts) | (result.Bytes[i + 1] << (8 - shifts)));
                     result.Bytes[result.Length - 1] = (byte)(result.Bytes[result.Length - 1] >> shifts);
                 }
+                RemoveUnnecessaryBytes(result);
                 return result;
             }
-            else
-                return 0;
+            if (right == 0)
+                return left.Clone();
+            if (right < 0)
+                throw new ArgumentException("The count of positions to shift the number left cannot be a negative number.");
+            return Zero;
         }
         /// <summary>Returns the sum of a number of <seealso cref="LargeInteger"/>s.</summary>
         /// <param name="a">The array of <seealso cref="LargeInteger"/>s to calculate the sum of.</param>
