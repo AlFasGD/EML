@@ -1015,6 +1015,21 @@ namespace EML.NumericTypes
             else
                 throw new ElevateZeroToThePowerOfZeroException();
         }
+        /// <summary>Returns the product of a number of <seealso cref="LargeInteger"/>s.</summary>
+        /// <param name="a">The <seealso cref="LargeInteger"/>s to calculate the product of.</param>
+        public static LargeInteger Product(params LargeInteger[] a)
+        {
+            List<LargeInteger> products = new List<LargeInteger>();
+            for (int i = 0; i < a.Length; i++)
+                products.Add(a[i]); // Do not clone the instances unnecessarily
+            while (products.Count > 1)
+            {
+                for (int i = 0; i < a.Length - 1; i += 2)
+                    products[i >> 1] = a[i] * a[i + 1];
+                products.RemoveRange((a.Length + 1) / 2, a.Length / 2);
+            }
+            return products[0];
+        }
         /// <summary>Returns a random <seealso cref="LargeInteger"/> with a specified length.</summary>
         /// <param name="length">The length in bytes of the random <seealso cref="LargeInteger"/>.</param>
         public static LargeInteger Random(long length)
@@ -1225,13 +1240,19 @@ namespace EML.NumericTypes
             return Zero;
         }
         /// <summary>Returns the sum of a number of <seealso cref="LargeInteger"/>s.</summary>
-        /// <param name="a">The array of <seealso cref="LargeInteger"/>s to calculate the sum of.</param>
+        /// <param name="a">The <seealso cref="LargeInteger"/>s to calculate the sum of.</param>
         public static LargeInteger Sum(params LargeInteger[] a)
         {
-            LargeInteger result = 0;
+            List<LargeInteger> sums = new List<LargeInteger>();
             for (int i = 0; i < a.Length; i++)
-                result += a[i];
-            return result;
+                sums.Add(a[i]); // Do not clone the instances unnecessarily
+            while (sums.Count > 1)
+            {
+                for (int i = 0; i < a.Length - 1; i += 2)
+                    sums[i >> 1] = a[i] + a[i + 1];
+                sums.RemoveRange((a.Length + 1) / 2, a.Length / 2);
+            }
+            return sums[0];
         }
         /// <summary>Returns the square root of any number rounded to the closest integer. Since this is an approximation for decimal integers, it's suggested that this function is only used for perfect squares.</summary>
         /// <param name="b">The integer to find the square root of.</param>
