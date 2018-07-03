@@ -63,7 +63,7 @@ namespace EML.NumericTypes
         /// <summary>The sign of the <seealso cref="LargeInteger"/> as a <seealso cref="bool"/>. If the sign is positive, this value is <see langword="true"/>, otherwise <see langword="false"/>.</summary>
         public bool BoolSign
         {
-            get => Sign == Sign.Positive;
+            get => Sign == Sign.Positive || Sign == Sign.Neutral && SignDirection == Sign.Positive;
             set
             {
                 try
@@ -393,9 +393,9 @@ namespace EML.NumericTypes
         public static LargeInteger operator +(LargeInteger left, LargeInteger right)
         {
             // Avoid unnecessary operations early
-            if (left == 0)
+            if (left == Zero)
                 return right;
-            if (right == 0)
+            if (right == Zero)
                 return left;
 
             // Add the maximum number of bytes between the two integers and another one to avoid overflows
@@ -475,8 +475,8 @@ namespace EML.NumericTypes
         public static LargeInteger operator -(LargeInteger left, LargeInteger right) => left + (-right);
         public static LargeInteger operator *(LargeInteger left, LargeInteger right)
         {
-            if (left == 0 || right == 0)
-                return 0;
+            if (left == Zero || right == Zero)
+                return Zero;
             else if (left == One)
                 return right;
             else if (right == One)
@@ -487,15 +487,14 @@ namespace EML.NumericTypes
                 return -left;
             else
             {
-                LargeInteger result = 0;
+                LargeInteger result = Zero;
                 result.BoolSign = left.Sign == right.Sign;
                 left = AbsoluteValue(left);
                 right = AbsoluteValue(right);
 
-                while (right > 0)
+                while (right > Zero)
                 {
-                    LargeInteger temp = (right >> 1) << 1;
-                    if (temp != right)
+                    if ((right & One) == One)
                         result += left;
                     if ((left.Bytes[left.Length - 1] & 0x80) == 1)
                         left.Bytes.Add(0);
