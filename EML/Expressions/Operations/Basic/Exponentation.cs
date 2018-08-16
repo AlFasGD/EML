@@ -17,5 +17,13 @@ namespace EML.Expressions.Operations.Basic
             Base = b;
             Exponent = exponent;
         }
+		
+		/// <summary>Differentiates the current expression.</summary>
+		public override Operation Differentiate()
+		{
+			if (Base is e)
+				return Exponent.Differentiate() * new Exponentation(Base, Exponent);
+			return new Exponentation(new e(), Exponent * new Ln(Base)).Differentiate();
+		}
     }
 }

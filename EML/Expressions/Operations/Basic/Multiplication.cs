@@ -17,5 +17,8 @@ namespace EML.Expressions.Operations.Basic
             Left = left;
             Right = right;
         }
+		
+		/// <summary>Differentiates the current expression.</summary>
+		public override Operation Differentiate() => Left.Differentiate() * Right + Left * Right.Differentiate();
     }
 }
