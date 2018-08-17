@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EML.Expressions;
+using EML.Expressions.NumberExpressions;
 using EML.Expressions.Operations;
 using EML.Expressions.Operations.Basic;
 

@@ -7,6 +7,7 @@ using EML.NumericTypes;
 using EML.Sets;
 using EML.Tools;
 using EML.Exceptions;
+using EML.Expressions.NumberExpressions;
 
 namespace EML.Expressions
 {
