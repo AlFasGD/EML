@@ -12,14 +12,12 @@ namespace EML.Expressions.NumberExpressions
 {
     public class NumberExpression : Expression
     {
-        Operation Operation { get; set; }
-        Expression[] Expressions { get; set; }
-        SpecialNumberSet ExpressionDomain { get; set; }
+        public Operation Operation { get; set; }
+        public SpecialNumberSet ExpressionDomain { get; set; }
         
-        public NumberExpression(Expression[] expressions, SpecialNumberSet expressionDomain, Operation operation)
+        public NumberExpression(Operation operation, SpecialNumberSet expressionDomain)
         {
             Operation = operation;
-            Expressions = expressions;
             ExpressionDomain = expressionDomain;
         }
 
