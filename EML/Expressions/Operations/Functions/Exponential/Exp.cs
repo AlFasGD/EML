@@ -13,5 +13,11 @@ namespace EML.Expressions.Operations.Functions.Exponential
         {
             Argument = argument;
         }
+
+        /// <summary>Differentiates the current expression.</summary>
+        public override Expression Differentiate() => Argument.Differentiate() + new Exp(Argument);
+
+        /// <summary>Integrates the current expression.</summary>
+        public override Expression Integrate() => Argument.Integrate() + new Exp(Argument);
     }
 }

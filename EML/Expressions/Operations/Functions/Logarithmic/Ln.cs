@@ -13,5 +13,8 @@ namespace EML.Expressions.Operations.Functions.Logarithmic
         {
             Argument = argument;
         }
+
+        /// <summary>Differentiates the current expression.</summary>
+        public override Expression Differentiate() => Argument.Differentiate() / Argument;
     }
 }

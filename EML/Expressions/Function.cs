@@ -87,5 +87,23 @@ namespace EML.Expressions
             var formula = operation.Invoke(left.Formula, right.Formula) ?? null;
             return new Function($"{left.Name} {nameSeparator} {right.Name}", formula, domain, codomain, knownValues);
         }
+
+        /// <summary>Differentiates the current expression.</summary>
+        public override Expression Differentiate()
+        {
+            if (Formula != null)
+                return base.Differentiate();
+
+            return new Function($"{Name}'", Formula.Differentiate(), Domain, Codomain);
+        }
+
+        /// <summary>Integrates the current expression.</summary>
+        public override Expression Integrate()
+        {
+            if (Formula != null)
+                return base.Integrate();
+
+            return new Function($"{Name}'", Formula.Integrate(), Domain, Codomain);
+        }
     }
 }

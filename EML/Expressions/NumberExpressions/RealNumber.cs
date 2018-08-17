@@ -30,5 +30,8 @@ namespace EML.Expressions.NumberExpressions
         public static implicit operator RealNumber(LargeInteger value) => new RealNumber(value);
         public static implicit operator RealNumber(LargeDecimal value) => new RealNumber(value);
         #endregion
+
+        /// <summary>Differentiates the current expression.</summary>
+        public override Expression Differentiate() => new RealNumber(0);
     }
 }

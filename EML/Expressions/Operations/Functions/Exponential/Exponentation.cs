@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EML.Expressions.Operations.Functions.Logarithmic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,11 @@ namespace EML.Expressions.Operations.Functions.Exponential
             Base = b;
             Argument = argument;
         }
+
+        /// <summary>Differentiates the current expression.</summary>
+        public override Expression Differentiate() => new Exp(Argument * new Ln(Base)).Differentiate();
+
+        /// <summary>Integrates the current expression.</summary>
+        public override Expression Integrate() => new Exp(Argument * new Ln(Base)).Integrate();
     }
 }

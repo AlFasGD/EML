@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EML.Expressions.NumberExpressions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,8 @@ namespace EML.Expressions.Operations.Functions.Logarithmic
             Base = b;
             Argument = argument;
         }
+
+        /// <summary>Differentiates the current expression.</summary>
+        public override Expression Differentiate() => (new Ln(Argument) / new Ln(Base)).Differentiate();
     }
 }
