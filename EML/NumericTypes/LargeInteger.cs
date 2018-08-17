@@ -1185,7 +1185,8 @@ namespace EML.NumericTypes
                 int shifts = (int)(right % 8);
                 long fullShifts = right / 8;
                 result.Bytes.AddRange(new byte[fullShifts]);
-                for (long i = result.Length - 1; i >= result.Length - fullShifts - 1; i--)
+                long end = General.Max(result.Length - fullShifts - 1, fullShifts);
+                for (long i = result.Length - 1; i >= end; i--)
                     result.Bytes[i] = result.Bytes[i - fullShifts];
                 if (fullShifts > 0)
                     for (long i = 0; i < fullShifts; i++)
