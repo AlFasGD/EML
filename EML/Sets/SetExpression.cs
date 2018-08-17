@@ -7,6 +7,7 @@ using EML.Expressions;
 
 namespace EML.Sets
 {
+    /// <summary>Represents a set expression.</summary>
     public abstract class SetExpression
     {
 

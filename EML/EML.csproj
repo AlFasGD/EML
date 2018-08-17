@@ -98,6 +98,15 @@
     <Compile Include="Sets\Operations\SymmetricDifference.cs" />
     <Compile Include="Sets\Operations\Union.cs" />
     <Compile Include="Sets\SetExpression.cs" />
+    <Compile Include="Sets\SpecialNumberSets\Octonions.cs" />
+    <Compile Include="Sets\SpecialNumberSets\Quartenions.cs" />
+    <Compile Include="Sets\SpecialNumberSets\Rational.cs" />
+    <Compile Include="Sets\SpecialNumberSets\Complex.cs" />
+    <Compile Include="Sets\Types\ISpecialNumberSet.cs" />
+    <Compile Include="Sets\SpecialNumberSets\Integer.cs" />
+    <Compile Include="Sets\SpecialNumberSets\Natural.cs" />
+    <Compile Include="Sets\SpecialNumberSets\RealExtended.cs" />
+    <Compile Include="Sets\SpecialNumberSets\Real.cs" />
     <Compile Include="Tools\AngleMeasurementUnit.cs" />
     <Compile Include="Tools\Enumerations\Comparison.cs" />
     <Compile Include="NumericTypes\Complex.cs" />
@@ -120,7 +129,6 @@
     <Compile Include="Expressions\NumberExpressions\RealNumberExpression.cs" />
     <Compile Include="Sets\NumberSet.cs" />
     <Compile Include="Sets\SetOperation.cs" />
-    <Compile Include="Sets\SpecialNumberSet.cs" />
     <Compile Include="Tools\Geometry.cs" />
     <Compile Include="Tools\Functions\HyperbolicFunctions.cs" />
     <Compile Include="Tools\Functions\TrigonometricFunctions.cs" />
