@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EML.Expressions.NumberExpressions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,6 @@ namespace EML.Expressions.Operations.Basic
         }
 		
 		/// <summary>Differentiates the current expression.</summary>
-		public override Operation Differentiate() => (Left.Differentiate() * Right - Left * Right.Differentiate()) / new Exponentation(Right, 2);
+		public override Expression Differentiate() => (Left.Differentiate() * Right - Left * Right.Differentiate()) / new Exponentation(Right, new RealNumber(2));
     }
 }

@@ -8,10 +8,11 @@ using EML.Sets;
 using EML.Tools;
 using EML.Exceptions;
 
-namespace EML.Expressions
+namespace EML.Expressions.NumberExpressions
 {
     public class NumberExpression : Expression
     {
+        Operation Operation { get; set; }
         Expression[] Expressions { get; set; }
         SpecialNumberSet ExpressionDomain { get; set; }
         

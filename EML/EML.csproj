@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Expressions\Constant.cs" />
+    <Compile Include="Expressions\Constants\e.cs" />
+    <Compile Include="Expressions\NumberExpressions\RealNumber.cs" />
     <Compile Include="Expressions\Operations\Advanced\ConditionalSummation.cs" />
     <Compile Include="Expressions\Operations\Advanced\Limit.cs" />
     <Compile Include="Expressions\Operations\Advanced\SequentialProduct.cs" />
@@ -98,7 +101,6 @@
     <Compile Include="Tools\AngleMeasurementUnit.cs" />
     <Compile Include="Tools\Enumerations\Comparison.cs" />
     <Compile Include="NumericTypes\Complex.cs" />
-    <Compile Include="Constant.cs" />
     <Compile Include="Expressions\Expression.cs" />
     <Compile Include="Expressions\Function.cs" />
     <Compile Include="Tools\General.cs" />
@@ -111,11 +113,11 @@
     <Compile Include="NumericTypes\LargeInteger.cs" />
     <Compile Include="Exceptions\ElevateZeroToThePowerOfZeroException.cs" />
     <Compile Include="Exceptions\NegativeNumberFactorialException.cs" />
-    <Compile Include="Expressions\NumberExpression.cs" />
+    <Compile Include="Expressions\NumberExpressions\NumberExpression.cs" />
     <Compile Include="Sets\NumberInterval.cs" />
     <Compile Include="NumericTypes\PrecisionExponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Expressions\RealNumberExpression.cs" />
+    <Compile Include="Expressions\NumberExpressions\RealNumberExpression.cs" />
     <Compile Include="Sets\NumberSet.cs" />
     <Compile Include="Sets\SetOperation.cs" />
     <Compile Include="Sets\SpecialNumberSet.cs" />

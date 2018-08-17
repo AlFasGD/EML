@@ -14,11 +14,15 @@ namespace EML.Expressions
 {
     public abstract class Expression
     {
-        public Operation Operation { get; set; }
-
         public static Addition operator +(Expression left, Expression right) => new Addition(left, right);
         public static Subtraction operator -(Expression left, Expression right) => new Subtraction(left, right);
         public static Multiplication operator *(Expression left, Expression right) => new Multiplication(left, right);
         public static Division operator /(Expression left, Expression right) => new Division(left, right);
+
+        /// <summary>Differentiates the current expression.</summary>
+        public virtual Expression Differentiate() => null;
+
+        /// <summary>Integrates the current expression.</summary>
+        public virtual Expression Integrate() => null;
     }
 }

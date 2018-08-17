@@ -10,10 +10,5 @@ namespace EML.Expressions
     /// <summary>Represents an operation.</summary>
     public abstract class Operation : Expression
     {
-		/// <summary>Differentiates the current expression.</summary>
-		public virtual Operation Differentiate() => null;
-		
-		/// <summary>Integrates the current expression.</summary>
-		public virtual Operation Integrate() => null;
     }
 }

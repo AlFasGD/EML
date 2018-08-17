@@ -19,9 +19,9 @@ namespace EML.Expressions.Operations.Basic
         }
 		
 		/// <summary>Differentiates the current expression.</summary>
-		public override Operation Differentiate() => Left.Differentiate() + Right.Differentiate();
+		public override Expression Differentiate() => Left.Differentiate() + Right.Differentiate();
 		
 		/// <summary>Integrates the current expression.</summary>
-		public override Operation Integrate() => Left.Integrate() + Right.Integrate();
+		public override Expression Integrate() => Left.Integrate() + Right.Integrate();
     }
 }

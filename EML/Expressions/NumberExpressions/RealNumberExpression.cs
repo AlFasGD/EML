@@ -10,16 +10,17 @@ using EML.Exceptions;
 using EML.Expressions.Operations;
 using EML.Expressions.Operations.Basic;
 
-namespace EML.Expressions
+namespace EML.Expressions.NumberExpressions
 {
     public class RealNumberExpression : Expression
     {
+        public Expression Expression { get; set; }
         public string Name { get; set; }
 
         /// <summary>Initializes a new instance of the <seealso cref="RealNumberExpression"/> class.</summary>
-        public RealNumberExpression(string name, Operation operation)
+        public RealNumberExpression(string name, Expression expression)
         {
-            Operation = operation;
+            Expression = expression;
             Name = name;
         }
 

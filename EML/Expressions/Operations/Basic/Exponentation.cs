@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EML.Expressions.Constants;
+using EML.Expressions.Operations.Functions.Logarithmic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +21,7 @@ namespace EML.Expressions.Operations.Basic
         }
 		
 		/// <summary>Differentiates the current expression.</summary>
-		public override Operation Differentiate()
+		public override Expression Differentiate()
 		{
 			if (Base is e)
 				return Exponent.Differentiate() * new Exponentation(Base, Exponent);
