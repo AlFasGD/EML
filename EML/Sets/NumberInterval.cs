@@ -5,13 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using EML.Expressions;
 using EML.Expressions.NumberExpressions;
+using EML.Sets.SpecialNumberSets;
+using EML.Sets.Types;
 
 namespace EML.Sets
 {
     /// <summary>Represents a number interval.</summary>
     public class RealNumberInterval
     {
-        public SpecialNumberSet IntervalDomain { get; set; }
+        public ISpecialNumberSet IntervalDomain { get; set; }
         public bool IsCompleteIntervalDomain { get; set; }
         public NumberExpression Left { get; set; }
         public NumberExpression Right { get; set; }
@@ -20,14 +22,14 @@ namespace EML.Sets
 
         public RealNumberInterval(NumberExpression left, NumberExpression right, bool closedLeft, bool closedRight)
         {
-            IntervalDomain = SpecialNumberSet.Real;
+            IntervalDomain = new Real();
             IsCompleteIntervalDomain = false;
             Left = left;
             Right = right;
             ClosedLeft = closedLeft;
             ClosedRight = closedRight;
         }
-        public RealNumberInterval(NumberExpression left, NumberExpression right, bool closedLeft, bool closedRight, SpecialNumberSet s)
+        public RealNumberInterval(NumberExpression left, NumberExpression right, bool closedLeft, bool closedRight, ISpecialNumberSet s)
         {
             IntervalDomain = s;
             IsCompleteIntervalDomain = false;
@@ -36,7 +38,7 @@ namespace EML.Sets
             ClosedRight = closedRight;
             Right = right;
         }
-        public RealNumberInterval(SpecialNumberSet s)
+        public RealNumberInterval(ISpecialNumberSet s)
         {
             IntervalDomain = s;
             IsCompleteIntervalDomain = true;
