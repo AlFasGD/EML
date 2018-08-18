@@ -19,6 +19,7 @@ namespace EML.Expressions.Operations.Functions.Logarithmic
         }
 
         /// <summary>Differentiates the current expression.</summary>
-        public override Expression Differentiate() => (new Ln(Argument) / new Ln(Base)).Differentiate();
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public override Expression Differentiate(Expression expression) => (new Ln(Argument) / new Ln(Base)).Differentiate(expression);
     }
 }

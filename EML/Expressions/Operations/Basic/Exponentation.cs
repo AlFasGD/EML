@@ -19,13 +19,14 @@ namespace EML.Expressions.Operations.Basic
             Base = b;
             Exponent = exponent;
         }
-		
-		/// <summary>Differentiates the current expression.</summary>
-		public override Expression Differentiate()
+
+        /// <summary>Differentiates the current expression.</summary>
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public override Expression Differentiate(Expression expression)
 		{
 			if (Base is e)
-				return Exponent.Differentiate() * new Exponentation(Base, Exponent);
-			return new Exponentation(new e(), Exponent * new Ln(Base)).Differentiate();
+				return Exponent.Differentiate(expression) * new Exponentation(Base, Exponent);
+			return new Exponentation(new e(), Exponent * new Ln(Base)).Differentiate(expression);
 		}
     }
 }

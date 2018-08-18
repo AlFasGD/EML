@@ -89,21 +89,23 @@ namespace EML.Expressions
         }
 
         /// <summary>Differentiates the current expression.</summary>
-        public override Expression Differentiate()
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public override Expression Differentiate(Expression expression)
         {
             if (Formula != null)
-                return base.Differentiate();
+                return base.Differentiate(expression);
 
-            return new Function($"{Name}'", Formula.Differentiate(), Domain, Codomain);
+            return new Function($"{Name}'", Formula.Differentiate(expression), Domain, Codomain);
         }
 
         /// <summary>Integrates the current expression.</summary>
-        public override Expression Integrate()
+        /// <param name="expression">The expression that will be regarded when integrating.</param>
+        public override Expression Integrate(Expression expression)
         {
             if (Formula != null)
-                return base.Integrate();
+                return base.Integrate(expression);
 
-            return new Function($"{Name}'", Formula.Integrate(), Domain, Codomain);
+            return new Function($"{Name}'", Formula.Integrate(expression), Domain, Codomain);
         }
     }
 }

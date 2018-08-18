@@ -17,8 +17,9 @@ namespace EML.Expressions.Operations.Basic
             Left = left;
             Right = right;
         }
-		
-		/// <summary>Differentiates the current expression.</summary>
-		public override Expression Differentiate() => Left.Differentiate() * Right + Left * Right.Differentiate();
+
+        /// <summary>Differentiates the current expression.</summary>
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public override Expression Differentiate(Expression expression) => Left.Differentiate(expression) * Right + Left * Right.Differentiate(expression);
     }
 }

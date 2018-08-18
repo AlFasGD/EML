@@ -19,9 +19,11 @@ namespace EML.Expressions.Operations.Functions.Exponential
         }
 
         /// <summary>Differentiates the current expression.</summary>
-        public override Expression Differentiate() => new Exp(Argument * new Ln(Base)).Differentiate();
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public override Expression Differentiate(Expression expression) => new Exp(Argument * new Ln(Base)).Differentiate(expression);
 
         /// <summary>Integrates the current expression.</summary>
-        public override Expression Integrate() => new Exp(Argument * new Ln(Base)).Integrate();
+        /// <param name="expression">The expression that will be regarded when integrating.</param>
+        public override Expression Integrate(Expression expression) => new Exp(Argument * new Ln(Base)).Integrate(expression);
     }
 }

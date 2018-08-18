@@ -20,9 +20,11 @@ namespace EML.Expressions
         public static Division operator /(Expression left, Expression right) => new Division(left, right);
 
         /// <summary>Differentiates the current expression.</summary>
-        public virtual Expression Differentiate() => throw new InvalidOperationException("Cannot differentiate the current expression.");
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public virtual Expression Differentiate(Expression expression) => throw new InvalidOperationException("Cannot differentiate the current expression.");
 
         /// <summary>Integrates the current expression.</summary>
-        public virtual Expression Integrate() => throw new InvalidOperationException("Cannot integrate the current expression.");
+        /// <param name="expression">The expression that will be regarded when integrating.</param>
+        public virtual Expression Integrate(Expression expression) => throw new InvalidOperationException("Cannot integrate the current expression.");
     }
 }

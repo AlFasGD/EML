@@ -32,6 +32,7 @@ namespace EML.Expressions.NumberExpressions
         #endregion
 
         /// <summary>Differentiates the current expression.</summary>
-        public override Expression Differentiate() => new RealNumber(0);
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public override Expression Differentiate(Expression expression) => new RealNumber(0);
     }
 }
