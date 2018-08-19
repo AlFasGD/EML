@@ -11,5 +11,10 @@ namespace EML.Expressions.Operations.Functions
     {
         /// <summary>The argument of the function.</summary>
         public Expression Argument;
+
+        public FunctionOperation(Expression argument)
+        {
+            Argument = argument;
+        }
     }
 }

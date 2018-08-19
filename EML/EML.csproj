@@ -58,6 +58,7 @@
     <Compile Include="Expressions\Operations\Functions\Exponential\Exp.cs" />
     <Compile Include="Expressions\Operations\Functions\Exponential\Exponentation.cs" />
     <Compile Include="Expressions\Operations\Functions\FunctionOperation.cs" />
+    <Compile Include="Expressions\Operations\Functions\General\Absolute.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Cosecanth.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Cosineh.cs" />
     <Compile Include="Expressions\Operations\Functions\Hyperbolic\Cotangenth.cs" />

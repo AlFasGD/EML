@@ -10,9 +10,12 @@ namespace EML.Expressions.Operations.Functions.Trigonometric
     /// <summary>Represents the cosine (cos) operation.</summary>
     public class Cosine : FunctionOperation
     {
-        public Cosine(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="Cosine"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public Cosine(NumberExpression argument) : base(argument) { }
+
+        /// <summary>Differentiates the current expression.</summary>
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public override Expression Differentiate(Expression expression) => Argument.Differentiate(expression) * new Cosine(Argument as NumberExpression);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EML.Expressions.NumberExpressions;
+using EML.Expressions.Operations.Basic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,12 @@ namespace EML.Expressions.Operations.Functions.Trigonometric
     /// <summary>Represents the secant (sec) operation.</summary>
     public class Secant : FunctionOperation
     {
-        public Secant(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="Secant"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public Secant(NumberExpression argument) : base(argument) { }
+
+        /// <summary>Differentiates the current expression.</summary>
+        /// <param name="expression">The expression that will be regarded when differentiating.</param>
+        public override Expression Differentiate(Expression expression) => Argument.Differentiate(expression) * new Sine(Argument as NumberExpression) / new Exponentation(new Cosine(Argument as NumberExpression), new RealNumber(2));
     }
 }
