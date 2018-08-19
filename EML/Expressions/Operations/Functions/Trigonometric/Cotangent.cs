@@ -13,7 +13,7 @@ namespace EML.Expressions.Operations.Functions.Trigonometric
     {
         /// <summary>Creates a new instance of the <see cref="Cotangent"/> class.</summary>
         /// <param name="argument">The argument of the function.</param>
-        public Cotangent(NumberExpression argument) : base(argument) { }
+        public Cotangent(Expression argument) : base(argument) { }
 
         /// <summary>Differentiates the current expression.</summary>
         /// <param name="expression">The expression that will be regarded when differentiating.</param>

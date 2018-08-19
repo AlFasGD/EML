@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the hyperbolic cotangent (coth) operation.</summary>
     public class Cotangenth : FunctionOperation
     {
-        public Cotangenth(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="Cotangenth"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public Cotangenth(Expression argument) : base(argument) { }
     }
 }

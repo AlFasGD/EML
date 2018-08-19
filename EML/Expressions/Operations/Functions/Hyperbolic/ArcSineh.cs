@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the inverse hyperbolic sine (arcsinh) operation.</summary>
     public class ArcSineh : FunctionOperation
     {
-        public ArcSineh(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcSineh"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcSineh(Expression argument) : base(argument) { }
     }
 }

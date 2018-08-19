@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the hyperbolic cosecant (csch) operation.</summary>
     public class Cosecanth : FunctionOperation
     {
-        public Cosecanth(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="Cosecanth"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public Cosecanth(Expression argument) : base(argument) { }
     }
 }

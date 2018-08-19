@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the hyperbolic sine (sinh) operation.</summary>
     public class Sineh : FunctionOperation
     {
-        public Sineh(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="Sineh"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public Sineh(Expression argument) : base(argument) { }
     }
 }

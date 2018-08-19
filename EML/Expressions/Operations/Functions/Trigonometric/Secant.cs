@@ -13,7 +13,7 @@ namespace EML.Expressions.Operations.Functions.Trigonometric
     {
         /// <summary>Creates a new instance of the <see cref="Secant"/> class.</summary>
         /// <param name="argument">The argument of the function.</param>
-        public Secant(NumberExpression argument) : base(argument) { }
+        public Secant(Expression argument) : base(argument) { }
 
         /// <summary>Differentiates the current expression.</summary>
         /// <param name="expression">The expression that will be regarded when differentiating.</param>

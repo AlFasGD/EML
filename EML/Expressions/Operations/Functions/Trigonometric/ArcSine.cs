@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Trigonometric
     /// <summary>Represents the inverse sine (arcsin) operation.</summary>
     public class ArcSine : FunctionOperation
     {
-        public ArcSine(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcSine"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcSine(Expression argument) : base(argument) { }
     }
 }

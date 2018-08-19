@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the inverse hyperbolic secant (arcsech) operation.</summary>
     public class ArcSecanth : FunctionOperation
     {
-        public ArcSecanth(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcSecanth"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcSecanth(Expression argument) : base(argument) { }
     }
 }

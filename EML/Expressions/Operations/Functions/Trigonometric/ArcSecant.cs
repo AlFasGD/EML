@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Trigonometric
     /// <summary>Represents the inverse secant (arcsec) operation.</summary>
     public class ArcSecant : FunctionOperation
     {
-        public ArcSecant(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcSecant"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcSecant(Expression argument) : base(argument) { }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EML.Expressions.NumberExpressions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.General
     /// <summary>Represents the absolute value operation.</summary>
     public class Absolute : FunctionOperation
     {
-        public Absolute(Expression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="Absolute"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public Absolute(Expression argument) : base(argument) { }
     }
 }

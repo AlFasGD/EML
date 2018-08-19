@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the inverse hyperbolic cotangent (arccoth) operation.</summary>
     public class ArcCotangenth : FunctionOperation
     {
-        public ArcCotangenth(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcCotangenth"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcCotangenth(Expression argument) : base(argument) { }
     }
 }

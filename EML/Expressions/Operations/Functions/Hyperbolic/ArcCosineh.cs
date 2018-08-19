@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the inverse hyperbolic cosine (arccosh) operation.</summary>
     public class ArcCosineh : FunctionOperation
     {
-        public ArcCosineh(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcCosineh"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcCosineh(Expression argument) : base(argument) { }
     }
 }

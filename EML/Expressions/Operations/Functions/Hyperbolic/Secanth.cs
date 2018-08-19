@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the hyperbolic secant (sech) operation.</summary>
     public class Secanth : FunctionOperation
     {
-        public Secanth(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="Secanth"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public Secanth(Expression argument) : base(argument) { }
     }
 }

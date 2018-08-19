@@ -10,10 +10,9 @@ namespace EML.Expressions.Operations.Functions.Logarithmic
     /// <summary>Represents the lb (logarithm base 2) operation.</summary>
     public class Lb : FunctionOperation
     {
-        public Lb(Expression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="Lb"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public Lb(Expression argument) : base(argument) { }
 
         /// <summary>Differentiates the current expression.</summary>
         /// <param name="expression">The expression that will be regarded when differentiating.</param>

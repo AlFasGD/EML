@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the inverse hyperbolic cosecant (arccsch) operation.</summary>
     public class ArcCosecanth : FunctionOperation
     {
-        public ArcCosecanth(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcCosecanth"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcCosecanth(Expression argument) : base(argument) { }
     }
 }

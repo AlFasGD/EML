@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Hyperbolic
     /// <summary>Represents the inverse hyperbolic tangent (arctanh) operation.</summary>
     public class ArcTangenth : FunctionOperation
     {
-        public ArcTangenth(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcTangenth"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcTangenth(Expression argument) : base(argument) { }
     }
 }

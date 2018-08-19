@@ -10,9 +10,8 @@ namespace EML.Expressions.Operations.Functions.Trigonometric
     /// <summary>Represents the inverse tangent (arctan) operation.</summary>
     public class ArcTangent : FunctionOperation
     {
-        public ArcTangent(NumberExpression argument)
-        {
-            Argument = argument;
-        }
+        /// <summary>Creates a new instance of the <see cref="ArcTangent"/> class.</summary>
+        /// <param name="argument">The argument of the function.</param>
+        public ArcTangent(Expression argument) : base(argument) { }
     }
 }
