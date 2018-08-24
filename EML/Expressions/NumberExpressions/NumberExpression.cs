@@ -13,16 +13,16 @@ namespace EML.Expressions.NumberExpressions
 {
     public class NumberExpression : Expression
     {
-        public Operation Operation { get; set; }
+        public Expression Expression { get; set; }
         public SetExpression ExpressionDomain { get; set; }
         
-        public NumberExpression(Operation operation, SetExpression expressionDomain)
+        public NumberExpression(Expression expression, SetExpression expressionDomain)
         {
-            Operation = operation;
+            Expression = expression;
             ExpressionDomain = expressionDomain;
         }
 
-        // Only needed for compilation
+        // TODO: Find a way to implement comparison
         public static bool operator ==(NumberExpression left, NumberExpression right)
         {
             return false;
