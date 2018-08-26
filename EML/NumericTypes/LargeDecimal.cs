@@ -171,8 +171,109 @@ namespace EML.NumericTypes
         #region Operators
         public static LargeDecimal operator +(LargeDecimal left, LargeDecimal right)
         {
+            // Avoid unnecessary operations early
+            if (left == Zero)
+                return right;
+            if (right == Zero)
+                return left;
+
             // Add the maximum number of bytes between the two integers and another one to avoid overflows
             LargeDecimal result = new LargeDecimal(new byte[General.Max(left.LeftLength, right.LeftLength) + 1], new byte[General.Max(left.RightLength, right.RightLength) + 1], false);
+
+            // Determine the sign of the result
+            if (left.BoolSign == right.BoolSign)
+                result.BoolSign = left.BoolSign;
+            else
+            {
+                if (left.LeftLength == right.LeftLength)
+                {
+                    bool done = false;
+                    if (left.LeftLength == 1 && left.LeftBytes[0] == 0 && right.LeftBytes[0] == 0) // Expensive check for whether both numbers are within (-1, 1)
+                    {
+                        for (long i = 0; i < left.RightLength && !done; i++)
+                            if (done = left.RightBytes[i] != right.RightBytes[i])
+                                result.BoolSign = (left.RightBytes[i] > right.RightBytes[i]) && left.BoolSign;
+                        if (!done)
+                        {
+                            // Check the periods, implement this at 28/08/2018 14:25
+                        }
+                    }
+                    else
+                        for (long i = left.LeftLength - 1; i >= 0 && !done; i--)
+                            if (done = left.LeftBytes[i] != right.LeftBytes[i])
+                                result.BoolSign = (left.LeftBytes[i] > right.LeftBytes[i]) && left.BoolSign;
+                }
+                else
+                    result.BoolSign = (left.LeftLength > right.LeftLength) && left.BoolSign;
+                // Avoid directly calculating negative sums, simply negate the sum of both numbers whose sum is a positive one
+                if (!result.BoolSign)
+                {
+                    Sign r = result.Sign;
+                    result = -right - left;
+                    result.Sign = r;
+                    return result;
+                }
+            }
+
+            // Perform the calculation
+            for (long i = -result.RightLength; i < result.LeftLength; i++) // Insert the result per bytes
+            {
+                int sum = 0;
+                if (i >= 0)
+                {
+                    if (i < left.LeftLength && i < right.LeftLength)
+                        sum = left.LeftBytes[i] * (int)left.Sign + right.LeftBytes[i] * (int)right.Sign;
+                    else if (i < left.LeftLength && i >= right.LeftLength)
+                        sum = left.LeftBytes[i] * (int)left.Sign;
+                    else if (i >= left.LeftLength && i < right.LeftLength)
+                        sum = right.LeftBytes[i] * (int)right.Sign;
+                }
+                else // Re-evaluate in case it's wrong
+                {
+                    long index = -i - 1;
+                    if (index < left.RightLength && index < right.RightLength)
+                        sum = left.RightBytes[index] * (int)left.Sign + right.RightBytes[index] * (int)right.Sign;
+                    else if (index < left.RightLength && index >= right.RightLength)
+                        sum = left.RightBytes[index] * (int)left.Sign;
+                    else if (index >= left.RightLength && index < right.RightLength)
+                        sum = right.RightBytes[index] * (int)right.Sign;
+                }
+
+                if (sum == 0) // Ignore the sum if it's 0
+                    continue;
+                if (sum >= 256 - result.LeftBytes[i]) // If the sum is positive and adding that to the current byte will cause an overflow
+                {
+                    result.LeftBytes[i] = (byte)((sum + result.LeftBytes[i]) % 256);
+                    int t;
+                    long j = i + 1;
+                    do
+                    {
+                        t = result.LeftBytes[j] + 1;
+                        result.LeftBytes[j] = (byte)(t % 256);
+                        j++;
+                    }
+                    while (j < result.LeftLength && t / 256 != 0);
+                }
+                else if (sum <= -result.LeftBytes[i]) // If the sum is negative and adding its absolute value to the current byte will cause an overflow
+                {
+                    result.LeftBytes[i] = (byte)(256 + sum - result.LeftBytes[i]);
+                    int t;
+                    long j = i + 1;
+                    do
+                    {
+                        t = result.LeftBytes[j] - 1;
+                        result.LeftBytes[j]--;
+                        j++;
+                    }
+                    while (j < result.LeftLength && t < 0);
+                }
+                else // The sum can be normally added
+                    result.LeftBytes[i] += (byte)sum;
+            }
+
+            return RemoveUnnecessaryBytes(result);
+
+            // -----------------------
 
             // Determine the sign of the result
             if (!left.BoolSign && !right.BoolSign)
@@ -508,6 +609,15 @@ namespace EML.NumericTypes
             }
             return true;
         }
+        #endregion
+        #region Constants
+        // The constant values are converted to sbytes so as to minimize the cost of removing bytes
+        /// <summary>Represents the number 0.</summary>
+        public static readonly LargeDecimal Zero = new LargeDecimal((byte)0);
+        /// <summary>Represents the number 1.</summary>
+        public static readonly LargeDecimal One = new LargeDecimal((byte)1);
+        /// <summary>Represents the number -1.</summary>
+        public static readonly LargeDecimal NegativeOne = new LargeDecimal((sbyte)-1);
         #endregion
         #region Operations
         /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeDecimal"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeDecimal"/>, otherwise <see langword="false"/>.</summary>
