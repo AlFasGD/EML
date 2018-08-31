@@ -30,8 +30,8 @@ namespace EML.NumericTypes
         public long LeftLength { get { return LeftBytes.Count; } }
         /// <summary>The length of the right part of the instance of <seealso cref="LargeDecimal"/>.</summary>
         public long RightLength { get { return RightBytes.Count; } }
-        /// <summary>The period part of the instance of <seealso cref="LargeDecimal"/>. The first item represents the period's beginning point and the second represents the length of the period in bits.</summary>
-        public (long, long) Period { get; }
+        /// <summary>The period part of the instance of <seealso cref="LargeDecimal"/>. It represents the length of the period.</summary>
+        public long PeriodLength { get; }
 
         #region Constants
         /// <summary>The constant π with a 100-digit precision.</summary>
@@ -50,8 +50,7 @@ namespace EML.NumericTypes
             LeftBytes.Add(b);
             RightBytes = new LongList<byte>();
             Sign = Sign.Positive;
-
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(short s, bool removeUnnecessaryBytes = true)
         {
@@ -59,7 +58,7 @@ namespace EML.NumericTypes
             LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(s)));
             RightBytes = new LongList<byte>();
             Sign = s >= 0 ? Sign.Positive : Sign.Negative;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(int i, bool removeUnnecessaryBytes = true)
         {
@@ -67,7 +66,7 @@ namespace EML.NumericTypes
             LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(i)));
             RightBytes = new LongList<byte>();
             Sign = i >= 0 ? Sign.Positive : Sign.Negative;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(long l, bool removeUnnecessaryBytes = true)
         {
@@ -75,7 +74,7 @@ namespace EML.NumericTypes
             LeftBytes.AddRange(BitConverter.GetBytes(General.AbsoluteValue(l)));
             RightBytes = new LongList<byte>();
             Sign = l >= 0 ? Sign.Positive : Sign.Negative;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(sbyte b, bool removeUnnecessaryBytes = true)
         {
@@ -83,7 +82,7 @@ namespace EML.NumericTypes
             LeftBytes.Add((byte)General.AbsoluteValue(b));
             RightBytes = new LongList<byte>();
             Sign = b >= 0 ? Sign.Positive : Sign.Negative;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(ushort s, bool removeUnnecessaryBytes = true)
         {
@@ -91,7 +90,7 @@ namespace EML.NumericTypes
             LeftBytes.AddRange(BitConverter.GetBytes(s));
             RightBytes = new LongList<byte>();
             Sign = Sign.Positive;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(uint i, bool removeUnnecessaryBytes = true)
         {
@@ -99,7 +98,7 @@ namespace EML.NumericTypes
             LeftBytes.AddRange(BitConverter.GetBytes(i));
             RightBytes = new LongList<byte>();
             Sign = Sign.Positive;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(ulong l, bool removeUnnecessaryBytes = true)
         {
@@ -107,7 +106,7 @@ namespace EML.NumericTypes
             LeftBytes.AddRange(BitConverter.GetBytes(l));
             RightBytes = new LongList<byte>();
             Sign = Sign.Positive;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(float f, bool removeUnnecessaryBytes = true)
         {
@@ -115,7 +114,7 @@ namespace EML.NumericTypes
             LeftBytes = a.LeftBytes;
             RightBytes = a.RightBytes;
             Sign = a.Sign;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(double d, bool removeUnnecessaryBytes = true)
         {
@@ -123,7 +122,7 @@ namespace EML.NumericTypes
             LeftBytes = a.LeftBytes;
             RightBytes = a.RightBytes;
             Sign = a.Sign;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(decimal d, bool removeUnnecessaryBytes = true)
         {
@@ -131,14 +130,14 @@ namespace EML.NumericTypes
             LeftBytes = a.LeftBytes;
             RightBytes = a.RightBytes;
             Sign = a.Sign;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(LargeInteger l, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = l.Bytes;
             RightBytes = new LongList<byte>();
             Sign = l.Sign;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(byte[] leftBytes, byte[] rightBytes, bool removeUnnecessaryBytes = true)
         {
@@ -147,7 +146,7 @@ namespace EML.NumericTypes
             RightBytes = new LongList<byte>();
             RightBytes.AddRange(rightBytes);
             Sign = Sign.Positive;
-            Period = (0, 0);
+            PeriodLength = 0;
         }
         public LargeDecimal(string s, bool removeUnnecessaryBytes = true)
         {
@@ -195,7 +194,19 @@ namespace EML.NumericTypes
                                 result.BoolSign = (left.RightBytes[i] > right.RightBytes[i]) && left.BoolSign;
                         if (!done)
                         {
-                            // Check the periods, implement this at 28/08/2018 14:25
+                            // Optimized for taking care of potentially identical period parts
+                            // May need to prioritize more general functionality and let really similar periods take little more time to process
+                            var leftPeriod = left.GetPeriod();
+                            var rightPeriod = right.GetPeriod();
+                            if (leftPeriod == rightPeriod)
+                                return Zero;
+                            for (long i = 0; !done; i++)
+                            {
+                                long l = i % left.PeriodLength;
+                                long r = i % right.PeriodLength;
+                                if (done = leftPeriod.GetBitAt(l) != rightPeriod.GetBitAt(r)) // Won't cause infinite loops
+                                    result.BoolSign = (leftPeriod.GetBitAt(l) > rightPeriod.GetBitAt(r)) && left.BoolSign;
+                            }
                         }
                     }
                     else
@@ -620,6 +631,18 @@ namespace EML.NumericTypes
         public static readonly LargeDecimal NegativeOne = new LargeDecimal((sbyte)-1);
         #endregion
         #region Operations
+        public LargeInteger GetPeriod()
+        {
+            if (PeriodLength == 0)
+                return LargeInteger.Zero;
+            LongList<byte> period = new LongList<byte>();
+            int s = (int)(PeriodLength % 8);
+            for (long i = PeriodLength; i > 0; i -= 8)
+                period.Add((byte)((RightBytes[i] >> s) | (RightBytes[i + 1] << (8 - s))));
+            return new LargeInteger(period);
+        }
+        #endregion
+        #region Static Operations
         /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeDecimal"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeDecimal"/>, otherwise <see langword="false"/>.</summary>
         /// <param name="str">The string to parse.</param>
         /// <param name="result">The variable to return the converted instance of <seealso cref="LargeDecimal"/> to.</param>

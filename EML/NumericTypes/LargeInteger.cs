@@ -775,6 +775,11 @@ namespace EML.NumericTypes
         public bool IsOdd() => (this & 1) == 1;
         /// <summary>Determines whether this <seealso cref="LargeInteger"/> is a prime or not.</summary>
         public bool IsPrime() => IsPrime(this);
+        /// <summary>Gets the selected bit at the specified index of this <seealso cref="LargeInteger"/> as a <seealso cref="byte"/>.</summary>
+        /// <param name="index">The index of the bit.</param>
+        public byte GetBitAt(long index) => (byte)((Bytes[index / 8] << (int)(8 - index % 8)) >> (int)(index % 8));
+        #endregion
+        #region Static Operations
         /// <summary>Determines whether a <seealso cref="LargeInteger"/> is even.</summary>
         /// <param name="n">The <seealso cref="LargeInteger"/> to check for being even.</param>
         public static bool IsEven(LargeInteger n) => (n & 1) == 0;
