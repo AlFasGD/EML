@@ -31,7 +31,7 @@ namespace EML.NumericTypes
         /// <summary>The length of the right part of the instance of <seealso cref="LargeDecimal"/>.</summary>
         public long RightLength { get { return RightBytes.Count; } }
         /// <summary>The period part of the instance of <seealso cref="LargeDecimal"/>. It represents the length of the period.</summary>
-        public long PeriodLength { get; }
+        public long PeriodLength { get; private set; }
 
         #region Constants
         /// <summary>The constant π with a 100-digit precision.</summary>
@@ -224,6 +224,125 @@ namespace EML.NumericTypes
                     result.Sign = r;
                     return result;
                 }
+            }
+
+            // If both numbers are repeating, expand them accordingly to calculate the repeating part
+            if ((left.PeriodLength | right.PeriodLength) > 0)
+            {
+                byte leftLast = left.GetLastDecimalBitIndex();
+                byte rightLast = right.GetLastDecimalBitIndex();
+
+                long leftCurrent = left.RightLength - 1;
+                long rightCurrent = right.RightLength - 1;
+
+                long leftCurrentBit = (left.RightLength - 1) * 8 + leftLast;
+                long rightCurrentBit = (right.RightLength - 1) * 8 + rightLast;
+
+                long leftNormalLastBit = leftCurrentBit - left.PeriodLength; // WARNING: Potential underflow when the period begins at the very start of the decimal part
+                long rightNormalLastBit = rightCurrentBit - right.PeriodLength;
+                long leftNormalLastIndex = leftNormalLastBit / 8;
+                long rightNormalLastIndex = rightNormalLastBit / 8;
+
+                // Ensure the normal part of both numbers is enough for the period parts to not interfere with the normal part
+                if (left.PeriodLength > 0)
+                    while (leftNormalLastBit < rightNormalLastBit)
+                    {
+                        byte s = (byte)(leftCurrentBit % 8);
+                        left.RightBytes[leftCurrent] |= (byte)((left.RightBytes[leftNormalLastIndex] << s) >> s); // Re-evaluate this
+                        leftNormalLastBit = leftCurrentBit += 8 - s;
+                        leftCurrent++;
+                        left.RightBytes.Add(0);
+                    }
+
+                if (right.PeriodLength > 0)
+                    while (rightNormalLastBit < leftNormalLastBit)
+                    {
+                        byte s = (byte)(rightCurrentBit % 8);
+                        right.RightBytes[rightCurrent] |= (byte)((right.RightBytes[rightNormalLastIndex] << s) >> s);
+                        rightNormalLastBit = rightCurrentBit += 8 - s;
+                        rightCurrent++;
+                        right.RightBytes.Add(0);
+                    }
+
+                long targetPeriodLength;
+                try
+                {
+                    targetPeriodLength = General.LeastCommonMultiple(left.PeriodLength, right.PeriodLength);
+                }
+                catch (DivideByZeroException) // In the case that one of the period lengths are 0, consider only using the one that's positive
+                {
+                    targetPeriodLength = General.Max(left.PeriodLength, right.PeriodLength);
+                }
+
+                long leftPeriodPart = left.PeriodLength;
+                long rightPeriodPart = right.PeriodLength;
+
+                // Ensure both periods are extended accordingly
+                if (leftPeriodPart > 0)
+                {
+                    long remaining = targetPeriodLength - leftPeriodPart;
+                    var p = left.GetPeriod(General.Min(remaining, left.PeriodLength));
+                    while (leftPeriodPart < targetPeriodLength)
+                    {
+                        byte b = (byte)(leftCurrentBit % 8);
+                        byte r = (byte)General.Min(8 - b, remaining);
+                        left.RightBytes[leftCurrent] |= (byte)((p.Bytes[(leftPeriodPart % left.PeriodLength) / 8] >> (8 - r)) << (int)(leftCurrent * 8 - leftCurrentBit - r));
+                        leftPeriodPart += r;
+                        leftCurrentBit += r;
+                        remaining -= r;
+                        leftCurrent++;
+                        left.RightBytes.Add(0);
+
+                        if (leftPeriodPart >= targetPeriodLength) // Needed to avoid the case of reaching target before this part
+                            break;
+                        
+                        b = (byte)(leftPeriodPart % 8);
+                        r = (byte)General.Min(8 - b, remaining);
+                        byte a = (byte)((b + r) % 8);
+                        left.RightBytes[leftCurrent] |= (byte)((p.Bytes[(leftPeriodPart % left.PeriodLength) / 8] >> a) << (int)(leftPeriodPart % 8 - a));
+                        leftPeriodPart += r;
+                        leftCurrentBit += r;
+                        remaining -= r;
+                        leftCurrent++;
+                    }
+                }
+
+                if (rightPeriodPart > 0)
+                {
+                    long remaining = targetPeriodLength - rightPeriodPart;
+                    var p = right.GetPeriod(General.Min(remaining, right.PeriodLength));
+                    while (rightPeriodPart < targetPeriodLength)
+                    {
+                        byte b = (byte)(rightCurrentBit % 8);
+                        byte r = (byte)General.Min(8 - b, remaining);
+                        right.RightBytes[rightCurrent] |= (byte)((p.Bytes[(rightPeriodPart % right.PeriodLength) / 8] >> (8 - r)) << (int)(rightCurrent * 8 - rightCurrentBit - r));
+                        rightPeriodPart += r;
+                        rightCurrentBit += r;
+                        remaining -= r;
+                        rightCurrent++;
+                        right.RightBytes.Add(0);
+
+                        if (rightPeriodPart >= targetPeriodLength) // Needed to avoid the case of reaching target before this part
+                            break;
+
+                        b = (byte)(rightPeriodPart % 8);
+                        r = (byte)General.Min(8 - b, remaining);
+                        byte a = (byte)((b + r) % 8);
+                        right.RightBytes[rightCurrent] |= (byte)((p.Bytes[(rightPeriodPart % right.PeriodLength) / 8] >> a) << (int)(rightPeriodPart % 8 - a));
+                        rightPeriodPart += r;
+                        rightCurrentBit += r;
+                        remaining -= r;
+                        rightCurrent++;
+                    }
+                }
+
+                // Clean potential leftovers
+                while (left.RightBytes.Last() == 0)
+                    left.RightBytes.RemoveLast(1);
+                while (right.RightBytes.Last() == 0)
+                    right.RightBytes.RemoveLast(1);
+
+                result.PeriodLength = targetPeriodLength;
             }
 
             // Perform the calculation
@@ -640,6 +759,24 @@ namespace EML.NumericTypes
             for (long i = PeriodLength; i > 0; i -= 8)
                 period.Add((byte)((RightBytes[i] >> s) | (RightBytes[i + 1] << (8 - s))));
             return new LargeInteger(period);
+        }
+        public LargeInteger GetPeriod(long range)
+        {
+            if (range == 0)
+                return LargeInteger.Zero;
+            LongList<byte> period = new LongList<byte>();
+            int s = (int)(range % 8);
+            for (long i = range; i > 0; i -= 8)
+                period.Add((byte)((RightBytes[i] >> s) | (RightBytes[i + 1] << (8 - s))));
+            return new LargeInteger(period);
+        }
+        internal byte GetLastDecimalBitIndex()
+        {
+            byte result = 7;
+            byte last = LeftBytes.Last();
+            while ((last << result) >> 8 == 0)
+                result--;
+            return result;
         }
         #endregion
         #region Static Operations
