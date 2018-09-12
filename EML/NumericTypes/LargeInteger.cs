@@ -967,21 +967,37 @@ namespace EML.NumericTypes
         public static LargeInteger Parse(string str)
         {
             LargeInteger result = 0;
+            LargeInteger e = 0;
+
             if (str[0] == '-') // If it's the negative sign symbol
             {
                 str = str.Remove(0, 1);
-                result.Sign = Sign.Negative;
+                result.BoolSign = false;
             }
-            if (str.Length > 0)
+
+            str = str.ToLower(); // To ensure the potential "E" character is not in capital
+            string[] s = str.Split('e');
+            if (s.Length == 2)
+                e = Parse(s[1]);
+            else if (s.Length != 1)
+                throw new FormatException("The string is not a valid numerical value.");
+
+            string[] split = s[0].Split('.');
+            if (s[0].Length > 0 && split.Length <= 2)
             {
-                // High chance of failing the parsing for >= 2 GB strings
-                for (int i = 0; i < str.Length; i++)
-                    if (str[i] < '0' || str[i] > '9') // If it's not a number character
-                        throw new FormatException("The string is not a valid integral value.");
-                for (int i = str.Length - 1; i >= 0; i--)
-                    result += str[i] * Power(10, i - str.Length + 1);
+                string l = split[0];
+                string r = split[1] ?? "";
+                LargeInteger currentPower = Power(10, l.Length - 1 + e);
+                for (int i = l.Length - 1; i >= -r.Length && currentPower > 0; i--, currentPower /= 10)
+                {
+                    char c = i >= 0 ? l[i] : r[-i - 1];
+                    if (c < '0' || c > '9') // If it's not a number character
+                        throw new FormatException("The string is not a valid numerical value.");
+                    result += (c - '0') * currentPower;
+                }
             }
-            else throw new FormatException("The string represents no integral value.");
+            else throw new FormatException("The string represents no numerical value.");
+
             return result;
         }
         /// <summary>Calculates the power of a <seealso cref="LargeInteger"/> raised to a <seealso cref="LargeInteger"/>.</summary>
