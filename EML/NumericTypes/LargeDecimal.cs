@@ -349,6 +349,7 @@ namespace EML.NumericTypes
             for (long i = -result.RightLength; i < result.LeftLength; i++) // Insert the result per bytes
             {
                 int sum = 0;
+
                 if (i >= 0)
                 {
                     if (i < left.LeftLength && i < right.LeftLength)
@@ -358,9 +359,10 @@ namespace EML.NumericTypes
                     else if (i >= left.LeftLength && i < right.LeftLength)
                         sum = right.LeftBytes[i] * (int)right.Sign;
                 }
-                else // Re-evaluate in case it's wrong
+                else
                 {
                     long index = -i - 1;
+
                     if (index < left.RightLength && index < right.RightLength)
                         sum = left.RightBytes[index] * (int)left.Sign + right.RightBytes[index] * (int)right.Sign;
                     else if (index < left.RightLength && index >= right.RightLength)
@@ -371,34 +373,71 @@ namespace EML.NumericTypes
 
                 if (sum == 0) // Ignore the sum if it's 0
                     continue;
-                if (sum >= 256 - result.LeftBytes[i]) // If the sum is positive and adding that to the current byte will cause an overflow
+
+                if (i >= 0)
                 {
-                    result.LeftBytes[i] = (byte)((sum + result.LeftBytes[i]) % 256);
-                    int t;
-                    long j = i + 1;
-                    do
+                    if (sum >= 256 - result.LeftBytes[i]) // If the sum is positive and adding that to the current byte will cause an overflow
                     {
-                        t = result.LeftBytes[j] + 1;
-                        result.LeftBytes[j] = (byte)(t % 256);
-                        j++;
+                        result.LeftBytes[i] = (byte)((sum + result.LeftBytes[i]) % 256);
+                        int t;
+                        long j = i + 1;
+                        do
+                        {
+                            t = result.LeftBytes[j] + 1;
+                            result.LeftBytes[j] = (byte)(t % 256);
+                            j++;
+                        }
+                        while (j < result.LeftLength && t / 256 != 0);
                     }
-                    while (j < result.LeftLength && t / 256 != 0);
+                    else if (sum <= -result.LeftBytes[i]) // If the sum is negative and adding its absolute value to the current byte will cause an overflow
+                    {
+                        result.LeftBytes[i] = (byte)(256 + sum - result.LeftBytes[i]);
+                        int t;
+                        long j = i + 1;
+                        do
+                        {
+                            t = result.LeftBytes[j] - 1;
+                            result.LeftBytes[j]--;
+                            j++;
+                        }
+                        while (j < result.LeftLength && t < 0);
+                    }
+                    else // The sum can be normally added
+                        result.LeftBytes[i] += (byte)sum;
                 }
-                else if (sum <= -result.LeftBytes[i]) // If the sum is negative and adding its absolute value to the current byte will cause an overflow
+                else // Re-evaluate
                 {
-                    result.LeftBytes[i] = (byte)(256 + sum - result.LeftBytes[i]);
-                    int t;
-                    long j = i + 1;
-                    do
+                    long index = -i - 1;
+
+                    if (sum >= 256 - result.RightBytes[index]) // If the sum is positive and adding that to the current byte will cause an overflow
                     {
-                        t = result.LeftBytes[j] - 1;
-                        result.LeftBytes[j]--;
-                        j++;
+                        result.RightBytes[index] = (byte)((sum + result.RightBytes[index]) % 256);
+                        int t;
+                        long j = index + 1;
+                        do
+                        {
+                            t = result.RightBytes[j] + 1;
+                            result.RightBytes[j] = (byte)(t % 256);
+                            j++;
+                        }
+                        while (j < result.RightLength && t / 256 != 0);
                     }
-                    while (j < result.LeftLength && t < 0);
+                    else if (sum <= -result.RightBytes[index]) // If the sum is negative and adding its absolute value to the current byte will cause an overflow
+                    {
+                        result.RightBytes[index] = (byte)(256 + sum - result.RightBytes[index]);
+                        int t;
+                        long j = index + 1;
+                        do
+                        {
+                            t = result.RightBytes[j] - 1;
+                            result.RightBytes[j]--;
+                            j++;
+                        }
+                        while (j < result.RightLength && t < 0);
+                    }
+                    else // The sum can be normally added
+                        result.RightBytes[index] += (byte)sum;
                 }
-                else // The sum can be normally added
-                    result.LeftBytes[i] += (byte)sum;
             }
 
             return RemoveUnnecessaryBytes(result);
