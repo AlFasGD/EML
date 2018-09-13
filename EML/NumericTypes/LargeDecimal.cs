@@ -535,8 +535,10 @@ namespace EML.NumericTypes
         {
             long minLeftLength = General.Min(left.LeftLength, right.LeftLength);
             long minRightLength = General.Min(left.RightLength, right.RightLength);
+
             byte[] leftBytes = new byte[minLeftLength];
             byte[] rightBytes = new byte[minRightLength];
+
             for (long i = 0; i < minLeftLength; i++)
                 leftBytes[i] = (byte)(left.LeftBytes[i] & right.LeftBytes[i]);
             for (long i = 0; i < minRightLength; i++)
