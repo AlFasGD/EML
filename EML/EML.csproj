@@ -87,6 +87,8 @@
     <Compile Include="Expressions\Operation.cs" />
     <Compile Include="Expressions\Operations\Basic\Addition.cs" />
     <Compile Include="Expressions\Operations\Basic\Subtraction.cs" />
+    <Compile Include="Extensions\FloatingPointHelpers\DoubleAnalyzer.cs" />
+    <Compile Include="Extensions\FloatingPointHelpers\FloatAnalyzer.cs" />
     <Compile Include="Extensions\GenericExtensions.cs" />
     <Compile Include="Extensions\LongList.cs" />
     <Compile Include="Sets\Operations\CartesianProduct.cs" />
