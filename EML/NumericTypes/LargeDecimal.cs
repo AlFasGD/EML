@@ -667,7 +667,7 @@ namespace EML.NumericTypes
         }
         public static bool operator <(LargeDecimal left, LargeDecimal right) => right > left;
         public static bool operator >=(LargeDecimal left, LargeDecimal right) => left > right || left == right;
-        public static bool operator <=(LargeDecimal left, LargeDecimal right) => left < right || left == right;
+        public static bool operator <=(LargeDecimal left, LargeDecimal right) => right >= left;
         public static bool operator ==(LargeDecimal left, LargeDecimal right)
         {
             if (left.LeftLength != right.LeftLength)
