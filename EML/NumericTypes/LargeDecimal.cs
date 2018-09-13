@@ -676,10 +676,10 @@ namespace EML.NumericTypes
                 return false;
             else
             {
-                for (int i = 0; i < left.LeftLength; i++)
+                for (long i = 0; i < left.LeftLength; i++)
                     if (left.LeftBytes[i] != right.LeftBytes[i])
                         return false;
-                for (int i = 0; i < left.RightLength; i++)
+                for (long i = 0; i < left.RightLength; i++)
                     if (left.RightBytes[i] != right.RightBytes[i])
                         return false;
                 return left.PeriodLength == left.RightLength;
@@ -693,10 +693,10 @@ namespace EML.NumericTypes
                 return true;
             else
             {
-                for (int i = 0; i < left.LeftLength; i++)
+                for (long i = 0; i < left.LeftLength; i++)
                     if (left.LeftBytes[i] != right.LeftBytes[i])
                         return true;
-                for (int i = 0; i < left.RightLength; i++)
+                for (long i = 0; i < left.RightLength; i++)
                     if (left.RightBytes[i] != right.RightBytes[i])
                         return true;
                 return left.PeriodLength != left.RightLength;
