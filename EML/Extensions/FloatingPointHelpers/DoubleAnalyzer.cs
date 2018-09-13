@@ -26,7 +26,7 @@ namespace EML.Extensions.FloatingPointHelpers
             {
                 v = value;
                 bytes = BitConverter.GetBytes(value);
-                byteSequence = BitConverter.ToInt32(bytes, 0);
+                byteSequence = BitConverter.ToInt64(bytes, 0);
             }
         }
 
