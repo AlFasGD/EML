@@ -605,66 +605,67 @@ namespace EML.NumericTypes
         }
         public static bool operator >(LargeDecimal left, LargeDecimal right)
         {
-            if (left.BoolSign && right.BoolSign)
+            if (left.BoolSign == right.BoolSign)
             {
-                if (left.LeftLength > right.LeftLength)
-                    return true;
-                else if (left.LeftLength < right.LeftLength)
-                    return false;
+                if (left.LeftLength != right.LeftLength)
+                    return left.BoolSign && left.LeftLength > right.LeftLength;
                 else
+                {
                     for (long i = left.LeftLength - 1; i >= 0; i--)
-                        if (left.LeftBytes[left.LeftLength - 1] > right.LeftBytes[left.LeftLength - 1])
-                            return true;
-                return false;
+                        if (left.LeftBytes[i] > right.LeftBytes[i])
+                            return left.BoolSign;
+
+                    long currentBitIndex = 0;
+
+                    long leftPeriodStart = left.RightLength * 8 - left.PeriodLength;
+                    long rightPeriodStart = right.RightLength * 8 - right.PeriodLength;
+
+                    long leftPeriodBitIndex = -1;
+                    long rightPeriodBitIndex = -1;
+
+                    long greaterPeriodBitIndex = General.Max(leftPeriodStart, rightPeriodStart);
+
+                    long leftPeriodStartBitIndex = (greaterPeriodBitIndex - leftPeriodStart) % left.PeriodLength;
+                    long rightPeriodStartBitIndex = (greaterPeriodBitIndex - rightPeriodStart) % right.PeriodLength;
+
+                    while (leftPeriodBitIndex != leftPeriodStartBitIndex || rightPeriodBitIndex != rightPeriodStartBitIndex)
+                    {
+                        if (currentBitIndex < leftPeriodStart && currentBitIndex < rightPeriodStart)
+                        {
+                            byte s = (byte)(8 - General.Min(leftPeriodStart - currentBitIndex, 8));
+                            byte leftByte = (byte)((left.RightBytes[currentBitIndex / 8] >> s) << s);
+                            byte rightByte = (byte)((right.RightBytes[currentBitIndex / 8] >> s) << s);
+
+                            if (leftByte > rightByte)
+                                return left.BoolSign;
+
+                            currentBitIndex += 8 - s;
+                        }
+                        else
+                        {
+                            if (leftPeriodBitIndex == -1)
+                                leftPeriodBitIndex = currentBitIndex >= leftPeriodStart ? (currentBitIndex - leftPeriodStart) % left.PeriodLength : -1;
+                            if (rightPeriodBitIndex == -1)
+                                rightPeriodBitIndex = currentBitIndex >= rightPeriodStart ? (currentBitIndex - rightPeriodStart) % right.PeriodLength : -1;
+
+                            byte leftByte = left.GetRightBitAt(leftPeriodBitIndex > -1 ? leftPeriodStart + leftPeriodBitIndex : currentBitIndex);
+                            byte rightByte = right.GetRightBitAt(rightPeriodBitIndex > -1 ? rightPeriodStart + rightPeriodBitIndex : currentBitIndex);
+
+                            if (leftByte > rightByte)
+                                return left.BoolSign;
+
+                            currentBitIndex++;
+                            leftPeriodBitIndex = ++leftPeriodBitIndex % left.PeriodLength;
+                            rightPeriodBitIndex = ++rightPeriodBitIndex % right.PeriodLength;
+                        }
+                    }
+                }
+                return !left.BoolSign;
             }
-            else if (!left.BoolSign && !right.BoolSign)
-            {
-                if (left.LeftLength < right.LeftLength)
-                    return true;
-                else if (left.LeftLength > right.LeftLength)
-                    return false;
-                else
-                    for (long i = left.LeftLength - 1; i >= 0; i--)
-                        if (left.LeftBytes[left.LeftLength - 1] < right.LeftBytes[left.LeftLength - 1])
-                            return true;
-                return false;
-            }
-            else if (!left.BoolSign && right.BoolSign)
-                return false;
             else
-                return true;
+                return left.BoolSign;
         }
-        public static bool operator <(LargeDecimal left, LargeDecimal right)
-        {
-            if (left.BoolSign && right.BoolSign)
-            {
-                if (left.LeftLength < right.LeftLength)
-                    return true;
-                else if (left.LeftLength > right.LeftLength)
-                    return false;
-                else
-                    for (long i = left.LeftLength - 1; i >= 0; i--)
-                        if (left.LeftBytes[left.LeftLength - 1] < right.LeftBytes[left.LeftLength - 1])
-                            return true;
-                return false;
-            }
-            else if (!left.BoolSign && !right.BoolSign)
-            {
-                if (left.LeftLength > right.LeftLength)
-                    return true;
-                else if (left.LeftLength < right.LeftLength)
-                    return false;
-                else
-                    for (long i = left.LeftLength - 1; i >= 0; i--)
-                        if (left.LeftBytes[left.LeftLength - 1] > right.LeftBytes[left.LeftLength - 1])
-                            return true;
-                return false;
-            }
-            else if (!left.BoolSign && right.BoolSign)
-                return true;
-            else
-                return false;
-        }
+        public static bool operator <(LargeDecimal left, LargeDecimal right) => right > left;
         public static bool operator >=(LargeDecimal left, LargeDecimal right) => left > right || left == right;
         public static bool operator <=(LargeDecimal left, LargeDecimal right) => left < right || left == right;
         public static bool operator ==(LargeDecimal left, LargeDecimal right)
@@ -736,6 +737,12 @@ namespace EML.NumericTypes
                 result--;
             return result;
         }
+        /// <summary>Gets the selected bit at the specified index of the left bytes of this <seealso cref="LargeDecimal"/> as a <seealso cref="byte"/>.</summary>
+        /// <param name="index">The index of the bit.</param>
+        public byte GetLeftBitAt(long index) => (byte)((LeftBytes[index / 8] << (int)(8 - index % 8)) >> (int)(index % 8));
+        /// <summary>Gets the selected bit at the specified index of the right bytes of this <seealso cref="LargeDecimal"/> as a <seealso cref="byte"/>.</summary>
+        /// <param name="index">The index of the bit.</param>
+        public byte GetRightBitAt(long index) => (byte)((RightBytes[index / 8] << (int)(8 - index % 8)) >> (int)(index % 8));
         #endregion
         #region Static Operations
         /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeDecimal"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeDecimal"/>, otherwise <see langword="false"/>.</summary>
