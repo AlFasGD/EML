@@ -670,9 +670,11 @@ namespace EML.NumericTypes
         public static bool operator <=(LargeDecimal left, LargeDecimal right) => left < right || left == right;
         public static bool operator ==(LargeDecimal left, LargeDecimal right)
         {
-            if (left.LeftLength != left.RightLength && right.LeftLength != right.RightLength)
+            if (left.LeftLength != right.LeftLength)
                 return false;
-            else if (left.LeftLength == left.RightLength && right.LeftLength == right.RightLength)
+            else if (left.RightLength != right.RightLength)
+                return false;
+            else
             {
                 for (int i = 0; i < left.LeftLength; i++)
                     if (left.LeftBytes[i] != right.LeftBytes[i])
@@ -680,23 +682,25 @@ namespace EML.NumericTypes
                 for (int i = 0; i < left.RightLength; i++)
                     if (left.RightBytes[i] != right.RightBytes[i])
                         return false;
+                return left.PeriodLength == left.RightLength;
             }
-            return true;
         }
         public static bool operator !=(LargeDecimal left, LargeDecimal right)
         {
-            if (left.LeftLength != left.RightLength && right.LeftLength != right.RightLength)
+            if (left.LeftLength != right.LeftLength)
                 return true;
-            else if (left.LeftLength == left.RightLength && right.LeftLength == right.RightLength)
+            else if (left.RightLength != right.RightLength)
+                return true;
+            else
             {
                 for (int i = 0; i < left.LeftLength; i++)
-                    if (left.LeftBytes[i] == right.LeftBytes[i])
-                        return false;
+                    if (left.LeftBytes[i] != right.LeftBytes[i])
+                        return true;
                 for (int i = 0; i < left.RightLength; i++)
-                    if (left.RightBytes[i] == right.RightBytes[i])
-                        return false;
+                    if (left.RightBytes[i] != right.RightBytes[i])
+                        return true;
+                return left.PeriodLength != left.RightLength;
             }
-            return true;
         }
         #endregion
         #region Constants
