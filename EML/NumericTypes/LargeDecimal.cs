@@ -545,54 +545,46 @@ namespace EML.NumericTypes
         }
         public static LargeDecimal operator |(LargeDecimal left, LargeDecimal right)
         {
-            long minLeftLength = General.Min(left.LeftLength, right.LeftLength);
-            long minRightLength = General.Min(left.RightLength, right.RightLength);
             long maxLeftLength = General.Max(left.LeftLength, right.LeftLength);
             long maxRightLength = General.Max(left.RightLength, right.RightLength);
-            byte[] leftBytes = new byte[minLeftLength];
-            byte[] rightBytes = new byte[minRightLength];
-            for (long i = 0; i < minLeftLength; i++)
-                leftBytes[i] = (byte)(left.LeftBytes[i] | right.LeftBytes[i]);
-            for (long i = 0; i < minRightLength; i++)
-                rightBytes[i] = (byte)(left.RightBytes[i] | right.RightBytes[i]);
-            if (left.LeftLength > right.LeftLength)
-                for (long i = minLeftLength; i < maxLeftLength; i++)
-                    leftBytes[i] = left.LeftBytes[i];
-            else
-                for (long i = minLeftLength; i < maxLeftLength; i++)
-                    leftBytes[i] = right.LeftBytes[i];
-            if (right.RightLength > right.RightLength)
-                for (long i = minRightLength; i < maxRightLength; i++)
-                    rightBytes[i] = right.RightBytes[i];
-            else
-                for (long i = minRightLength; i < maxRightLength; i++)
-                    rightBytes[i] = right.RightBytes[i];
+
+            byte[] leftBytes = new byte[maxLeftLength];
+            byte[] rightBytes = new byte[maxRightLength];
+
+            for (long i = 0; i < maxLeftLength; i++)
+            {
+                int l = i < left.LeftLength ? left.LeftBytes[i] : 0;
+                int r = i < right.LeftLength ? right.LeftBytes[i] : 0;
+                leftBytes[i] = (byte)(l | r);
+            }
+            for (long i = 0; i < maxRightLength; i++)
+            {
+                int l = i < left.RightLength ? left.RightBytes[i] : 0;
+                int r = i < right.RightLength ? right.RightBytes[i] : 0;
+                rightBytes[i] = (byte)(l | r);
+            }
             return new LargeDecimal(leftBytes, rightBytes);
         }
         public static LargeDecimal operator ^(LargeDecimal left, LargeDecimal right)
         {
-            long minLeftLength = General.Min(left.LeftLength, right.LeftLength);
-            long minRightLength = General.Min(left.RightLength, right.RightLength);
             long maxLeftLength = General.Max(left.LeftLength, right.LeftLength);
             long maxRightLength = General.Max(left.RightLength, right.RightLength);
-            byte[] leftBytes = new byte[minLeftLength];
-            byte[] rightBytes = new byte[minRightLength];
-            for (long i = 0; i < minLeftLength; i++)
-                leftBytes[i] = (byte)(left.LeftBytes[i] ^ right.LeftBytes[i]);
-            for (long i = 0; i < minRightLength; i++)
-                rightBytes[i] = (byte)(left.RightBytes[i] ^ right.RightBytes[i]);
-            if (left.LeftLength > right.LeftLength)
-                for (long i = minLeftLength; i < maxLeftLength; i++)
-                    leftBytes[i] = left.LeftBytes[i];
-            else
-                for (long i = minLeftLength; i < maxLeftLength; i++)
-                    leftBytes[i] = right.LeftBytes[i];
-            if (right.RightLength > right.RightLength)
-                for (long i = minRightLength; i < maxRightLength; i++)
-                    rightBytes[i] = right.RightBytes[i];
-            else
-                for (long i = minRightLength; i < maxRightLength; i++)
-                    rightBytes[i] = right.RightBytes[i];
+
+            byte[] leftBytes = new byte[maxLeftLength];
+            byte[] rightBytes = new byte[maxRightLength];
+
+            for (long i = 0; i < maxLeftLength; i++)
+            {
+                int l = i < left.LeftLength ? left.LeftBytes[i] : 0;
+                int r = i < right.LeftLength ? right.LeftBytes[i] : 0;
+                leftBytes[i] = (byte)(l ^ r);
+            }
+            for (long i = 0; i < maxRightLength; i++)
+            {
+                int l = i < left.RightLength ? left.RightBytes[i] : 0;
+                int r = i < right.RightLength ? right.RightBytes[i] : 0;
+                rightBytes[i] = (byte)(l ^ r);
+            }
             return new LargeDecimal(leftBytes, rightBytes);
         }
         public static LargeDecimal operator ~(LargeDecimal l)
