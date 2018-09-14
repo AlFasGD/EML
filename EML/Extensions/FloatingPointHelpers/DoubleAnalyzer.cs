@@ -13,6 +13,8 @@ namespace EML.Extensions.FloatingPointHelpers
         public int ExponentBits => 11;
         /// <summary>The bits dedicated to the mantissa.</summary>
         public int MantissaBits => 52;
+        /// <summary>The bias of the exponent.</summary>
+        public int ExponentBias => 1023;
 
         private long byteSequence;
         private byte[] bytes;
@@ -36,7 +38,7 @@ namespace EML.Extensions.FloatingPointHelpers
 
         private short? exponent;
         /// <summary>The exponent of the <see cref="double"/>.</summary>
-        public short Exponent => exponent ?? (exponent = (short)((byteSequence << 1) >> (MantissaBits + 1))).Value;
+        public short Exponent => exponent ?? (short)((exponent = (short)((byteSequence << 1) >> (MantissaBits + 1))).Value - ExponentBias);
 
         private long? mantissa;
         /// <summary>The mantissa of the <see cref="double"/>.</summary>
