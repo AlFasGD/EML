@@ -43,6 +43,9 @@ namespace EML.NumericTypes
         public static readonly LargeDecimal Phi = new LargeDecimal("1.6180339887498948482045868343656381177203091798057628621354486227052604628189024497072072041893911374");
         #endregion
         #region Constructors
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="b">The <seealso cref="byte"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(byte b, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>(b);
@@ -50,6 +53,9 @@ namespace EML.NumericTypes
             Sign = Sign.Positive;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="s">The <seealso cref="short"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(short s, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(s)));
@@ -57,6 +63,9 @@ namespace EML.NumericTypes
             Sign = s >= 0 ? Sign.Positive : Sign.Negative;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="i">The <seealso cref="int"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(int i, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(i)));
@@ -64,6 +73,9 @@ namespace EML.NumericTypes
             Sign = i >= 0 ? Sign.Positive : Sign.Negative;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="l">The <seealso cref="long"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(long l, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>(BitConverter.GetBytes(General.AbsoluteValue(l)));
@@ -71,6 +83,9 @@ namespace EML.NumericTypes
             Sign = l >= 0 ? Sign.Positive : Sign.Negative;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="b">The <seealso cref="sbyte"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(sbyte b, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>((byte)General.AbsoluteValue(b));
@@ -78,6 +93,9 @@ namespace EML.NumericTypes
             Sign = b >= 0 ? Sign.Positive : Sign.Negative;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="s">The <seealso cref="ushort"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(ushort s, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>(BitConverter.GetBytes(s));
@@ -85,6 +103,9 @@ namespace EML.NumericTypes
             Sign = Sign.Positive;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="i">The <seealso cref="uint"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(uint i, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>(BitConverter.GetBytes(i));
@@ -92,6 +113,9 @@ namespace EML.NumericTypes
             Sign = Sign.Positive;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="l">The <seealso cref="ulong"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(ulong l, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>(BitConverter.GetBytes(l));
@@ -99,6 +123,9 @@ namespace EML.NumericTypes
             Sign = Sign.Positive;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="f">The <seealso cref="float"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(float f, bool removeUnnecessaryBytes = true)
         {
             LargeDecimal a = Parse(f.ToString());
@@ -107,6 +134,9 @@ namespace EML.NumericTypes
             Sign = a.Sign;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="d">The <seealso cref="double"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(double d, bool removeUnnecessaryBytes = true)
         {
             LargeDecimal a = Parse(d.ToString());
@@ -115,6 +145,9 @@ namespace EML.NumericTypes
             Sign = a.Sign;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="d">The <seealso cref="decimal"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(decimal d, bool removeUnnecessaryBytes = true)
         {
             LargeDecimal a = Parse(d.ToString());
@@ -123,6 +156,9 @@ namespace EML.NumericTypes
             Sign = a.Sign;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeInteger"/> value to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(LargeInteger l, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = l.Bytes;
@@ -130,6 +166,10 @@ namespace EML.NumericTypes
             Sign = l.Sign;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="leftBytes">The array of <seealso cref="byte"/>s which will be used for the left part of the <seealso cref="LargeDecimal"/>.</param>
+        /// <param name="rightBytes">The array of <seealso cref="byte"/>s which will be used for the right part of the <seealso cref="LargeDecimal"/>.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(byte[] leftBytes, byte[] rightBytes, bool removeUnnecessaryBytes = true)
         {
             LeftBytes = new LongList<byte>(leftBytes);
@@ -137,6 +177,9 @@ namespace EML.NumericTypes
             Sign = Sign.Positive;
             PeriodLength = 0;
         }
+        /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="s">The <seealso cref="string"/> that will be parsed to create the <seealso cref="LargeDecimal"/> from.</param>
+        /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(string s, bool removeUnnecessaryBytes = true)
         {
             this = Parse(s);
@@ -687,7 +730,7 @@ namespace EML.NumericTypes
         }
         #endregion
         #region Constants
-        // The constant values are converted to sbytes so as to minimize the cost of removing bytes
+        // The constant values are converted to (s)bytes so as to minimize the cost of removing bytes
         /// <summary>Represents the number 0.</summary>
         public static readonly LargeDecimal Zero = new LargeDecimal((byte)0);
         /// <summary>Represents the number 1.</summary>
@@ -696,6 +739,7 @@ namespace EML.NumericTypes
         public static readonly LargeDecimal NegativeOne = new LargeDecimal((sbyte)-1);
         #endregion
         #region Operations
+        /// <summary>Gets the period of this <seealso cref="LargeDecimal"/> and returns it as a <seealso cref="LargeInteger"/>.</summary>
         public LargeInteger GetPeriod()
         {
             if (PeriodLength == 0)
@@ -706,6 +750,8 @@ namespace EML.NumericTypes
                 period.Add((byte)((RightBytes[i] >> s) | (RightBytes[i + 1] << (8 - s))));
             return new LargeInteger(period);
         }
+        /// <summary>Gets a part of the period of this <seealso cref="LargeDecimal"/> and returns it as a <seealso cref="LargeInteger"/>.</summary>
+        /// <param name="range">The total number of bits in the period that will be returned.</param>
         public LargeInteger GetPeriod(long range)
         {
             if (range == 0)
@@ -716,6 +762,7 @@ namespace EML.NumericTypes
                 period.Add((byte)((RightBytes[i] >> s) | (RightBytes[i + 1] << (8 - s))));
             return new LargeInteger(period);
         }
+        /// <summary>Gets the index of the last non-zero bit in the last byte of the right part of the <seealso cref="LargeDecimal"/>.</summary>
         internal byte GetLastDecimalBitIndex()
         {
             byte result = 7;
@@ -732,9 +779,9 @@ namespace EML.NumericTypes
         public byte GetRightBitAt(long index) => (byte)((RightBytes[index / 8] << (int)(8 - index % 8)) >> (int)(index % 8));
         #endregion
         #region Static Operations
-        /// <summary>Parses a <seealso cref="string"/> as an instance of <seealso cref="LargeDecimal"/>. Returns <see langword="true"/> if the string is valid <seealso cref="LargeDecimal"/>, otherwise <see langword="false"/>.</summary>
+        /// <summary>Parses a <seealso cref="string"/> as a <seealso cref="LargeDecimal"/>. Returns <see langword="true"/> if the string is a valid <seealso cref="LargeDecimal"/>, otherwise <see langword="false"/>.</summary>
         /// <param name="str">The string to parse.</param>
-        /// <param name="result">The variable to return the converted instance of <seealso cref="LargeDecimal"/> to.</param>
+        /// <param name="result">The variable to return the converted <seealso cref="LargeDecimal"/> to.</param>
         public static bool TryParse(string str, out LargeDecimal result)
         {
             result = 0;
@@ -742,9 +789,9 @@ namespace EML.NumericTypes
             catch (FormatException) { return false; }
             return true;
         }
-        /// <summary>Returns the relation between two instances of <seealso cref="LargeDecimal"/>. The result is the relation based on the left <seealso cref="LargeDecimal"/>.</summary>
-        /// <param name="a">The left instance of <seealso cref="LargeDecimal"/> to compare.</param>
-        /// <param name="b">The right instance of <seealso cref="LargeDecimal"/> to compare.</param>
+        /// <summary>Returns the relation between two <seealso cref="LargeDecimal"/>s. The result is the relation based on the left <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="a">The left <seealso cref="LargeDecimal"/> to compare.</param>
+        /// <param name="b">The right <seealso cref="LargeDecimal"/> to compare.</param>
         public static Comparison GetRelation(LargeDecimal a, LargeDecimal b)
         {
             if (a < b)
@@ -755,7 +802,7 @@ namespace EML.NumericTypes
                 return Comparison.GreaterThan;
             // Simple implementation, might need to optimize a bit
         }
-        /// <summary>Gets the decimal digit count of an instance of <seealso cref="LargeDecimal"/> (the decimal point does not count as part of the digit count).</summary>
+        /// <summary>Gets the decimal digit count of a <seealso cref="LargeDecimal"/> (the decimal point does not count as part of the digit count).</summary>
         /// <param name="l">The <seealso cref="LargeDecimal"/> whose decimal digits to get.</param>
         public static long GetDecimalDigitCount(LargeDecimal l)
         {
@@ -771,11 +818,11 @@ namespace EML.NumericTypes
             rightBytes >>= shifts;
             return LargeInteger.GetDecimalDigitCount(leftBytes) + LargeInteger.GetDecimalDigitCount(rightBytes);
         }
-        /// <summary>Returns the average of a number of instances of <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="a">The array of instances of <seealso cref="LargeInteger"/> to calculate the average of.</param>
+        /// <summary>Returns the average of a number of <seealso cref="LargeDecimal"/>s.</summary>
+        /// <param name="a">The array of <seealso cref="LargeDecimal"/>s to calculate the average of.</param>
         public static LargeDecimal Average(params LargeDecimal[] l) => Sum(l) / l.Length;
-        /// <summary>Returns the absolute value of a <seealso cref="LargeInteger"/>.</summary>
-        /// <param name="l">The <seealso cref="LargeInteger"/> whose absolute value to get.</param>
+        /// <summary>Returns the absolute value of a <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="l">The <seealso cref="LargeDecimal"/> whose absolute value to get.</param>
         public static LargeDecimal AbsoluteValue(LargeDecimal l) => l >= 0 ? l : -l;
         /// <summary>Calculates π using the Chudnovsky's formula with a specified number of terms to execute.</summary>
         /// <param name="n">The number of terms to execute.</param>
@@ -806,8 +853,8 @@ namespace EML.NumericTypes
                 return max;
             return value;
         }
-        /// <summary>Returns the exponentation of a number (e raised to a power).</summary>
-        /// <param name="n">The number to raise e.</param>
+        /// <summary>Returns the exponentation of a <seealso cref="LargeDecimal"/> (e raised to a power).</summary>
+        /// <param name="n">The <seealso cref="LargeDecimal"/> to raise e to.</param>
         public static LargeDecimal Exponentation(LargeDecimal n)
         {
             LargeDecimal result = 1;
@@ -825,15 +872,15 @@ namespace EML.NumericTypes
             }
             return result;
         }
-        /// <summary>Returns the binary logarithm (logarithm with base 2) of a number.</summary>
-        /// <param name="n">The number to find the binary logarithm of.</param>
+        /// <summary>Returns the binary logarithm (logarithm with base 2) of a <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="n">The <seealso cref="LargeDecimal"/> to find the binary logarithm of.</param>
         public static LargeDecimal Lb(LargeDecimal n)
         {
             if (n > 0) return Ln(n) / Ln(2);
             else throw new Exception(); // LogarithmOfNonPositiveNumberException
         }
-        /// <summary>Returns the natural logarithm (logarithm with base e) of a number.</summary>
-        /// <param name="n">The number to find the binary logarithm of.</param>
+        /// <summary>Returns the natural logarithm (logarithm with base e) of a <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="n">The <seealso cref="LargeDecimal"/> to find the binary logarithm of.</param>
         public static LargeDecimal Ln(LargeDecimal n) // The process will be infinitely continuing for numbers with too much precision - Maybe consider optimizing or anything?
         {
             if (n > 0)
@@ -847,15 +894,15 @@ namespace EML.NumericTypes
             }
             else throw new Exception(); // LogarithmOfNonPositiveNumberException
         }
-        /// <summary>Returns the binary logarithm (logarithm with base 10) of a number.</summary>
-        /// <param name="n">The number to find the binary logarithm of.</param>
+        /// <summary>Returns the binary logarithm (logarithm with base 10) of a <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="n">The <seealso cref="LargeDecimal"/> to find the binary logarithm of.</param>
         public static LargeDecimal Log(LargeDecimal n)
         {
             if (n > 0) return Ln(n) / Ln(10);
             else throw new Exception(); // LogarithmOfNonPositiveNumberException
         }
-        /// <summary>Returns the binary logarithm (logarithm with base b) of a number.</summary>
-        /// <param name="n">The number to find the binary logarithm of.</param>
+        /// <summary>Returns the binary logarithm (logarithm with base b) of a <seealso cref="LargeDecimal"/>.</summary>
+        /// <param name="n">The <seealso cref="LargeDecimal"/> to find the binary logarithm of.</param>
         public static LargeDecimal Log(LargeDecimal n, LargeDecimal b)
         {
             if (n > 0) return Ln(n) / Ln(n);
@@ -864,8 +911,8 @@ namespace EML.NumericTypes
         /// <summary>Returns the inverted value of the <seealso cref="LargeDecimal"/>.</summary>
         /// <param name="l">The <seealso cref="LargeDecimal"/> to invert.</param>
         public static LargeDecimal Invert(LargeDecimal l) => 1 / l;
-        /// <summary>Returns the largest <seealso cref="LargeDecimal"/> from an array of instances of <seealso cref="LargeDecimal"/>.</summary>
-        /// <param name="n">The array of instances of <seealso cref="LargeDecimal"/> to get the largest <seealso cref="LargeDecimal"/> of.</param>
+        /// <summary>Returns the largest <seealso cref="LargeDecimal"/> from an array of <seealso cref="LargeDecimal"/>s.</summary>
+        /// <param name="n">The array of <seealso cref="LargeDecimal"/>s to get the largest <seealso cref="LargeDecimal"/> of.</param>
         public static LargeDecimal Max(params LargeDecimal[] n)
         {
             LargeDecimal max = n[0];
@@ -874,8 +921,8 @@ namespace EML.NumericTypes
                     max = n[i];
             return max;
         }
-        /// <summary>Returns the smallest <seealso cref="LargeDecimal"/> from an array of instances of <seealso cref="LargeDecimal"/>.</summary>
-        /// <param name="n">The array of instances of <seealso cref="LargeDecimal"/> to get the smallest <seealso cref="LargeDecimal"/> of.</param>
+        /// <summary>Returns the smallest <seealso cref="LargeDecimal"/> from an array of <seealso cref="LargeDecimal"/>s.</summary>
+        /// <param name="n">The array of <seealso cref="LargeDecimal"/>s to get the smallest <seealso cref="LargeDecimal"/> of.</param>
         public static LargeDecimal Min(params LargeDecimal[] n)
         {
             LargeDecimal min = n[0];
@@ -955,7 +1002,7 @@ namespace EML.NumericTypes
             l.RightBytes.RemoveLast(i);
             return l;
         }
-        /// <summary>Returns an approximation of the root of a number. The approximation is limited to a given number of decimal digits at most.</summary>
+        /// <summary>Returns an approximation of the root of a <seealso cref="LargeDecimal"/>. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>
         /// <param name="rootClass">The class of the root.</param>
         /// <param name="decimalDigits">The number of decimal digits of the approximation.</param>
@@ -1093,8 +1140,8 @@ namespace EML.NumericTypes
             }
             return result;
         }
-        /// <summary>Returns the sum of a number of instances of <seealso cref="LargeDecimal"/>.</summary>
-        /// <param name="a">The array of instances of <seealso cref="LargeDecimal"/> to calculate the sum of.</param>
+        /// <summary>Returns the sum of a number of <seealso cref="LargeDecimal"/>s.</summary>
+        /// <param name="a">The array of <seealso cref="LargeDecimal"/>s to calculate the sum of.</param>
         public static LargeDecimal Sum(params LargeDecimal[] a)
         {
             LargeDecimal result = 0;
@@ -1102,7 +1149,7 @@ namespace EML.NumericTypes
                 result += a[i];
             return result;
         }
-        /// <summary>Returns an approximation of the square root of a number. The approximation is limited to a given number of decimal digits at most.</summary>
+        /// <summary>Returns an approximation of the square root of a <seealso cref="LargeDecimal"/>. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>
         /// <param name="decimalDigits">The number of decimal digits of the approximation.</param>
         public static LargeDecimal SquareRoot(LargeDecimal b, int decimalDigits) => Root(b, 2, decimalDigits);
@@ -1129,13 +1176,11 @@ namespace EML.NumericTypes
             }
             return result.ToString();
         }
-        /// <summary>Returns a value indicating whether an object is equal to another.</summary>
-        /// <param name="obj">The object to check whether the instance of <seealso cref="LargeDecimal"/> is equal to.</param>
+        /// <summary>Returns a value indicating whether a <seealso cref="LargeDecimal"/> is equal to another.</summary>
+        /// <param name="obj">The object to check whether the <seealso cref="LargeDecimal"/> is equal to.</param>
         public override bool Equals(object obj) => (LargeDecimal)obj == this;
-        // Get this fucking code copy-pasted bitch
         /// <summary>Returns the hash code of the <seealso cref="LargeDecimal"/>.</summary>
         public override int GetHashCode() => base.GetHashCode();
-        // I love copy-pasting my useless code everywhere because of someone being idiotic
         #endregion
     }
 }
