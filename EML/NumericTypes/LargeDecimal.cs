@@ -26,9 +26,9 @@ namespace EML.NumericTypes
             set => Sign = value ? Sign.Positive : Sign.Negative;
         }
         /// <summary>The length of the left part of the instance of <seealso cref="LargeDecimal"/>.</summary>
-        public long LeftLength { get => LeftBytes.Count; }
+        public long LeftLength => LeftBytes.Count;
         /// <summary>The length of the right part of the instance of <seealso cref="LargeDecimal"/>.</summary>
-        public long RightLength { get => RightBytes.Count; }
+        public long RightLength => RightBytes.Count;
         /// <summary>The period part of the instance of <seealso cref="LargeDecimal"/>. It represents the length of the period.</summary>
         public long PeriodLength { get; private set; }
 
