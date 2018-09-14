@@ -1022,12 +1022,14 @@ namespace EML.NumericTypes
         /// <param name="b">The number whose square root to find.</param>
         /// <param name="rootClass">The class of the root.</param>
         /// <param name="decimalDigits">The number of decimal digits of the approximation.</param>
-        public static LargeDecimal Root(LargeDecimal b, LargeInteger rootClass, int decimalDigits)
+        public static LargeDecimal Root(LargeDecimal b, LargeInteger rootClass, long decimalDigits)
         {
             bool negative = b < 0;
-            b.BoolSign = true; // Already checked if it's a negative number, needless to work around with the stupid negative sign
-            if (b == 0 || b == 1) return b;
-            else if (((rootClass & 1) == 0) && negative) throw new Exception(); // EvenClassRootOfNegativeNumberException
+            b.BoolSign = true; // Already checked if it's a negative number, needless to work around with the negative sign
+            if (rootClass.IsEven() && negative)
+                throw new Exception(); // EvenClassRootOfNegativeNumberException
+            else if (b == Zero || b == One)
+                return b;
             else if (b > 1)
             {
                 long digCount = GetDecimalDigitCount(b);
