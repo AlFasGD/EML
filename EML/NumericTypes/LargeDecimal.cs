@@ -819,22 +819,9 @@ namespace EML.NumericTypes
                 return Comparison.GreaterThan;
             // Simple implementation, might need to optimize a bit
         }
-        /// <summary>Gets the decimal digit count of a <seealso cref="LargeDecimal"/> (the decimal point does not count as part of the digit count).</summary>
+        /// <summary>Gets the decimal digit count of the left part of a <seealso cref="LargeDecimal"/>.</summary>
         /// <param name="l">The <seealso cref="LargeDecimal"/> whose decimal digits to get.</param>
-        public static long GetDecimalDigitCount(LargeDecimal l)
-        {
-            LargeInteger leftBytes = new LargeInteger(l.LeftBytes);
-            LargeInteger rightBytes = new LargeInteger(l.RightBytes);
-            int shifts = 0;
-            int power = 10;
-            while (rightBytes % power == 0)
-            {
-                shifts++;
-                power *= 10;
-            }
-            rightBytes >>= shifts;
-            return LargeInteger.GetDecimalDigitCount(leftBytes) + LargeInteger.GetDecimalDigitCount(rightBytes);
-        }
+        public static long GetLeftDecimalDigitCount(LargeDecimal l) => LargeInteger.GetDecimalDigitCount(new LargeInteger(l.LeftBytes));
         /// <summary>Returns the average of a number of <seealso cref="LargeDecimal"/>s.</summary>
         /// <param name="a">The array of <seealso cref="LargeDecimal"/>s to calculate the average of.</param>
         public static LargeDecimal Average(params LargeDecimal[] l) => Sum(l) / l.Length;
@@ -1032,7 +1019,7 @@ namespace EML.NumericTypes
                 return b;
             else if (b > 1)
             {
-                long digCount = GetDecimalDigitCount(b);
+                long digCount = GetLeftDecimalDigitCount(b);
                 long maxRootCount = digCount / 2 + 1;
                 long minRootCount = General.Max((digCount / 2 - 1), 1);
                 LargeDecimal start = Power(10, (minRootCount - 1));
@@ -1052,7 +1039,7 @@ namespace EML.NumericTypes
             }
             else // if (0 < b < 1)
             {
-                long digCount = GetDecimalDigitCount(b);
+                long digCount = GetLeftDecimalDigitCount(b);
                 long maxRootCount = digCount / 2 + 1;
                 long minRootCount = General.Max((digCount / 2 - 1), 1);
                 LargeDecimal start = Power(10, (minRootCount - 1));
