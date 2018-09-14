@@ -768,11 +768,11 @@ namespace EML.NumericTypes
         #endregion
         #region Operations
         /// <summary>Determines whether this <seealso cref="LargeInteger"/> is even.</summary>
-        public bool IsEven() => (this & 1) == 0;
+        public bool IsEven() => (Bytes[0] & 1) == 0;
         /// <summary>Determines whether this <seealso cref="LargeInteger"/> is a Fibonacci number or not.</summary>
         public bool IsFibonacci() => IsFibonacci(this);
         /// <summary>Determines whether this <seealso cref="LargeInteger"/> is odd.</summary>
-        public bool IsOdd() => (this & 1) == 1;
+        public bool IsOdd() => (Bytes[0] & 1) == 1;
         /// <summary>Determines whether this <seealso cref="LargeInteger"/> is a prime or not.</summary>
         public bool IsPrime() => IsPrime(this);
         /// <summary>Determines whether a <seealso cref="LargeInteger"/> is even.</summary>
