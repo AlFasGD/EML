@@ -472,7 +472,8 @@ namespace EML.NumericTypes
                 }
             }
 
-            return RemoveUnnecessaryBytes(result);
+            result.RemoveUnnecessaryBytes();
+            return result;
         }
         public static LargeDecimal operator -(LargeDecimal left, LargeDecimal right) => left + (-right);
         public static LargeDecimal operator *(LargeDecimal left, LargeDecimal right)
@@ -739,6 +740,10 @@ namespace EML.NumericTypes
         public static readonly LargeDecimal NegativeOne = new LargeDecimal((sbyte)-1);
         #endregion
         #region Operations
+        /// <summary>Returns the value enclosed between the minimum specified value and the maximum specified value.</summary>
+        /// <param name="min">The minimum specified value.</param>
+        /// <param name="max">The maximum specified value.</param>
+        public LargeDecimal Clamp(LargeDecimal min, LargeDecimal max) => Clamp(min, this, max);
         /// <summary>Gets the period of this <seealso cref="LargeDecimal"/> and returns it as a <seealso cref="LargeInteger"/>.</summary>
         public LargeInteger GetPeriod()
         {
@@ -766,7 +771,7 @@ namespace EML.NumericTypes
         internal byte GetLastDecimalBitIndex()
         {
             byte result = 7;
-            byte last = LeftBytes.Last();
+            byte last = RightBytes.Last();
             while ((last << result) >> 8 == 0)
                 result--;
             return result;
@@ -777,6 +782,18 @@ namespace EML.NumericTypes
         /// <summary>Gets the selected bit at the specified index of the right bytes of this <seealso cref="LargeDecimal"/> as a <seealso cref="byte"/>.</summary>
         /// <param name="index">The index of the bit.</param>
         public byte GetRightBitAt(long index) => (byte)((RightBytes[index / 8] << (int)(8 - index % 8)) >> (int)(index % 8));
+        /// <summary>Removes the useless null bytes in the <seealso cref="LargeDecimal"/>.</summary>
+        private void RemoveUnnecessaryBytes()
+        {
+            long i = 0;
+            while (i < LeftLength && LeftBytes[LeftLength - i - 1] == 0)
+                i++;
+            LeftBytes.RemoveLast(i);
+            i = 0;
+            while (i < RightLength && RightBytes[RightLength - i - 1] == 0)
+                i++;
+            RightBytes.RemoveLast(i);
+        }
         #endregion
         #region Static Operations
         /// <summary>Parses a <seealso cref="string"/> as a <seealso cref="LargeDecimal"/>. Returns <see langword="true"/> if the string is a valid <seealso cref="LargeDecimal"/>, otherwise <see langword="false"/>.</summary>
@@ -888,7 +905,7 @@ namespace EML.NumericTypes
                 LargeDecimal t = (n - 1) / (n + 1);
                 LargeDecimal result = t;
                 LargeDecimal previousResult = 0;
-                for (int i = 3; previousResult != result; i += 2)
+                for (long i = 3; previousResult != result; i += 2)
                     result += Power(t, i) / i;
                 return 2 * result;
             }
@@ -954,6 +971,19 @@ namespace EML.NumericTypes
             else throw new FormatException("The string represents no numerical value.");
             return result;
         }
+        /// <summary>Returns the product of a number of <seealso cref="LargeDecimal"/>s.</summary>
+        /// <param name="a">The <seealso cref="LargeDecimal"/>s to calculate the product of.</param>
+        public static LargeDecimal Product(params LargeDecimal[] a)
+        {
+            List<LargeDecimal> products = new List<LargeDecimal>(a);
+            while (products.Count > 1)
+            {
+                for (int i = 0; i < a.Length - 1; i += 2)
+                    products[i >> 1] = a[i] * a[i + 1];
+                products.RemoveRange((a.Length + 1) / 2, a.Length / 2);
+            }
+            return products[0];
+        }
         /// <summary>Calculates the power of a <seealso cref="LargeDecimal"/> raised to a <seealso cref="LargeInteger"/>.</summary>
         /// <param name="b">The base that will be raised to the power.</param>
         /// <param name="power">The power to raise the base to.</param>
@@ -988,20 +1018,6 @@ namespace EML.NumericTypes
         /// <param name="b">The base that will be raised to the power.</param>
         /// <param name="power">The power to raise the base to.</param>
         public static LargeDecimal Power(LargeDecimal b, LargeDecimal power) => Exponentation(power * Ln(b));
-        /// <summary>Removes the useless null bytes in the <seealso cref="LargeDecimal"/>.</summary>
-        /// <param name="l">The <seealso cref="LargeDecimal"/> to remove the useless null bytes of.</param>
-        private static LargeDecimal RemoveUnnecessaryBytes(LargeDecimal l)
-        {
-            long i = 0;
-            while (i < l.LeftLength && l.LeftBytes[l.LeftBytes.Count - i - 1] == 0)
-                i++;
-            l.LeftBytes.RemoveLast(i);
-            i = 0;
-            while (i < l.RightLength && l.RightBytes[l.RightBytes.Count - i - 1] == 0)
-                i++;
-            l.RightBytes.RemoveLast(i);
-            return l;
-        }
         /// <summary>Returns an approximation of the root of a <seealso cref="LargeDecimal"/>. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>
         /// <param name="rootClass">The class of the root.</param>
@@ -1141,13 +1157,17 @@ namespace EML.NumericTypes
             return result;
         }
         /// <summary>Returns the sum of a number of <seealso cref="LargeDecimal"/>s.</summary>
-        /// <param name="a">The array of <seealso cref="LargeDecimal"/>s to calculate the sum of.</param>
+        /// <param name="a">The <seealso cref="LargeDecimal"/>s to calculate the sum of.</param>
         public static LargeDecimal Sum(params LargeDecimal[] a)
         {
-            LargeDecimal result = 0;
-            for (int i = 0; i < a.Length; i++)
-                result += a[i];
-            return result;
+            List<LargeDecimal> sums = new List<LargeDecimal>(a);
+            while (sums.Count > 1)
+            {
+                for (int i = 0; i < a.Length - 1; i += 2)
+                    sums[i >> 1] = a[i] + a[i + 1];
+                sums.RemoveRange((a.Length + 1) / 2, a.Length / 2);
+            }
+            return sums[0];
         }
         /// <summary>Returns an approximation of the square root of a <seealso cref="LargeDecimal"/>. The approximation is limited to a given number of decimal digits at most.</summary>
         /// <param name="b">The number whose square root to find.</param>
