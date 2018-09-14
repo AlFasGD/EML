@@ -820,7 +820,7 @@ namespace EML.NumericTypes
             // Simple implementation, might need to optimize a bit
         }
         /// <summary>Gets the decimal digit count of the left part of a <seealso cref="LargeDecimal"/>.</summary>
-        /// <param name="l">The <seealso cref="LargeDecimal"/> whose decimal digits to get.</param>
+        /// <param name="l">The <seealso cref="LargeDecimal"/> whose decimal digit count on the left part to get.</param>
         public static long GetLeftDecimalDigitCount(LargeDecimal l) => LargeInteger.GetDecimalDigitCount(new LargeInteger(l.LeftBytes));
         /// <summary>Returns the average of a number of <seealso cref="LargeDecimal"/>s.</summary>
         /// <param name="a">The array of <seealso cref="LargeDecimal"/>s to calculate the average of.</param>
