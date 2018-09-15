@@ -131,8 +131,8 @@ namespace EML.NumericTypes
         {
             FloatAnalyzer a = new FloatAnalyzer(f);
             LeftBytes = new LongList<byte>(General.Max(a.Exponent / 8, 0) + 1);
-            RightBytes = new LongList<byte>(General.Max((a.MantissaBits - a.Exponent) / 8, 0) + 1);
-            for (int i = -1; i < a.MantissaBits;)
+            RightBytes = new LongList<byte>(General.Max((FloatAnalyzer.MantissaBits - a.Exponent) / 8, 0) + 1);
+            for (int i = -1; i < FloatAnalyzer.MantissaBits;)
             {
                 int currentExponent = a.Exponent - i + 1;
                 int r = 8 - currentExponent % 8;
@@ -152,8 +152,8 @@ namespace EML.NumericTypes
         {
             DoubleAnalyzer a = new DoubleAnalyzer(d);
             LeftBytes = new LongList<byte>(General.Max(a.Exponent / 8, 0) + 1);
-            RightBytes = new LongList<byte>(General.Max((a.MantissaBits - a.Exponent) / 8, 0) + 1);
-            for (int i = -1; i < a.MantissaBits;)
+            RightBytes = new LongList<byte>(General.Max((DoubleAnalyzer.MantissaBits - a.Exponent) / 8, 0) + 1);
+            for (int i = -1; i < DoubleAnalyzer.MantissaBits;)
             {
                 int currentExponent = a.Exponent - i + 1;
                 int r = 8 - currentExponent % 8;

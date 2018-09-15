@@ -10,11 +10,11 @@ namespace EML.Extensions.FloatingPointHelpers
     public class FloatAnalyzer
     {
         /// <summary>The bits dedicated to the exponent.</summary>
-        public int ExponentBits => 8;
+        public const int ExponentBits = 8;
         /// <summary>The bits dedicated to the mantissa.</summary>
-        public int MantissaBits => 23;
+        public const int MantissaBits = 23;
         /// <summary>The bias of the exponent.</summary>
-        public int ExponentBias => 127;
+        public const int ExponentBias = 127;
 
         private int byteSequence;
         private byte[] bytes;

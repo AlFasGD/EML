@@ -10,11 +10,11 @@ namespace EML.Extensions.FloatingPointHelpers
     public class DoubleAnalyzer
     {
         /// <summary>The bits dedicated to the exponent.</summary>
-        public int ExponentBits => 11;
+        public const int ExponentBits = 11;
         /// <summary>The bits dedicated to the mantissa.</summary>
-        public int MantissaBits => 52;
+        public const int MantissaBits = 52;
         /// <summary>The bias of the exponent.</summary>
-        public int ExponentBias => 1023;
+        public const int ExponentBias = 1023;
 
         private long byteSequence;
         private byte[] bytes;
