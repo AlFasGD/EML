@@ -7,6 +7,7 @@ using EML.Tools;
 using EML.Tools.Enumerations;
 using EML.Exceptions;
 using EML.Extensions;
+using EML.Extensions.FloatingPointHelpers;
 
 namespace EML.NumericTypes
 {
@@ -128,10 +129,20 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(float f, bool removeUnnecessaryBytes = true)
         {
-            LargeDecimal a = Parse(f.ToString());
-            LeftBytes = a.LeftBytes;
-            RightBytes = a.RightBytes;
-            Sign = a.Sign;
+            FloatAnalyzer a = new FloatAnalyzer(f);
+            LeftBytes = new LongList<byte>(General.Max(a.Exponent / 8, 0) + 1);
+            RightBytes = new LongList<byte>(General.Max((a.MantissaBits - a.Exponent) / 8, 0) + 1);
+            for (int i = -1; i < a.MantissaBits;)
+            {
+                int currentExponent = a.Exponent - i + 1;
+                int r = 8 - currentExponent % 8;
+                byte value = i > -1 ? (byte)((a.Mantissa << i) >> (32 - r)) : (byte)1;
+                if (currentExponent >= 0)
+                    LeftBytes[currentExponent / 8] |= value;
+                else
+                    RightBytes[-currentExponent / 8] |= value;
+            }
+            Sign = a.Sign ? Sign.Positive : Sign.Negative;
             PeriodLength = 0;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
@@ -139,10 +150,20 @@ namespace EML.NumericTypes
         /// <param name="removeUnnecessaryBytes">Determines whether the unnecessary bytes should be removed during the initialization of the <seealso cref="LargeDecimal"/> or not.</param>
         public LargeDecimal(double d, bool removeUnnecessaryBytes = true)
         {
-            LargeDecimal a = Parse(d.ToString());
-            LeftBytes = a.LeftBytes;
-            RightBytes = a.RightBytes;
-            Sign = a.Sign;
+            DoubleAnalyzer a = new DoubleAnalyzer(d);
+            LeftBytes = new LongList<byte>(General.Max(a.Exponent / 8, 0) + 1);
+            RightBytes = new LongList<byte>(General.Max((a.MantissaBits - a.Exponent) / 8, 0) + 1);
+            for (int i = -1; i < a.MantissaBits;)
+            {
+                int currentExponent = a.Exponent - i + 1;
+                int r = 8 - currentExponent % 8;
+                byte value = i > -1 ? (byte)((a.Mantissa << i) >> (64 - r)) : (byte)1;
+                if (currentExponent >= 0)
+                    LeftBytes[currentExponent / 8] |= value;
+                else
+                    RightBytes[-currentExponent / 8] |= value;
+            }
+            Sign = a.Sign ? Sign.Positive : Sign.Negative;
             PeriodLength = 0;
         }
         /// <summary>Creates a new instance of <seealso cref="LargeDecimal"/>.</summary>
@@ -327,7 +348,7 @@ namespace EML.NumericTypes
 
                         if (leftPeriodPart >= targetPeriodLength) // Needed to avoid the case of reaching target before this part
                             break;
-                        
+
                         b = (byte)(leftPeriodPart % 8);
                         r = (byte)General.Min(8 - b, remaining);
                         byte a = (byte)((b + r) % 8);
