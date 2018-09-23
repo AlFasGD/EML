@@ -541,7 +541,7 @@ namespace EML.NumericTypes
                 {
                     LargeInteger result = 0;
                     result.Sign = SignFunctions.Multiply(left.Sign, right.Sign);
-                    LargeInteger numBits = absoluteLeft.Length * 8;
+                    long numBits = absoluteLeft.Length * 8;
                     LargeInteger t, q, bit, d = 0;
                     LargeInteger remainder = 0;
                     while (remainder < absoluteRight)
@@ -558,19 +558,21 @@ namespace EML.NumericTypes
                        the last iteration is simply reversed. */
 
                     absoluteLeft = d;
-                    remainder = remainder >> 1;
+                    remainder >>= 1;
                     numBits++;
 
-                    for (LargeInteger i = 0; i < numBits; i++)
+                    for (long i = 0; i < numBits; i++)
                     {
                         bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         t = remainder - absoluteRight;
-                        q = ~ShiftRight(t & ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
                         absoluteLeft <<= 1;
-                        result = (result << 1) | q;
-                        if (q != 0)
-                            remainder = t;
+						result <<= 1;
+						if (!t.BoolSign)
+						{
+							result |= 1;
+                            remainder = AbsoluteValue(t);
+						}
                     }
                     return result;
                 }
@@ -603,22 +605,25 @@ namespace EML.NumericTypes
                     }
 
                     /* The loop, above, always goes one iteration too far.
-                        To avoid inserting an "if" statement inside the loop
-                        the last iteration is simply reversed. */
+                       To avoid inserting an "if" statement inside the loop
+                       the last iteration is simply reversed. */
 
                     absoluteLeft = d;
-                    remainder = remainder >> 1;
+                    remainder >>= 1;
                     numBits++;
 
-                    for (LargeInteger i = 0; i < numBits; i++)
+                    for (long i = 0; i < numBits; i++)
                     {
                         bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
                         remainder = (remainder << 1) | bit;
                         t = remainder - absoluteRight;
-                        q = ~ShiftRight(t & ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
                         absoluteLeft <<= 1;
-                        if (q != 0)
-                            remainder = t;
+						result <<= 1;
+						if (!t.BoolSign)
+						{
+							result |= 1;
+                            remainder = AbsoluteValue(t);
+						}
                     }
                     return remainder;
                 }
