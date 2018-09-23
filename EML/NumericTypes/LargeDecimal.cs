@@ -868,10 +868,17 @@ namespace EML.NumericTypes
         {
             if (n > 0)
             {
-                LargeDecimal result = 0;
-                for (LargeInteger i = 0; i <= n; i++)
-                    result += (LargeInteger.Factorial(6 * i) * (545140134 * i + 13591409)) / (LargeDecimal)(LargeInteger.Factorial(3 * i) * LargeInteger.Power(LargeInteger.Factorial(i), 3) * LargeInteger.Power(-262537412640768000, i));
-                return 426880 * SquareRoot(10005, 50) / result;
+                LargeInteger K = 6;
+                LargeDecimal M = 1, L = 13591409, X = 0, S = 13591409;
+                for (LargeInteger i = 1; i <= n; i++)
+                {
+                    M *= (LargeInteger.Power(K, 3) - 16 * K) / LargeInteger.Power(k + 1, 3);
+                    L += 545140134;
+                    X *= -262537412640768000;
+                    S += M * L / X;
+                    K += 12;
+                }
+                return 426880 * SquareRoot(10005, 50) / S;
             }
             else throw new ArgumentException();
         }
