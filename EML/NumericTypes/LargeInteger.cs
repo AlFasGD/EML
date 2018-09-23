@@ -567,7 +567,7 @@ namespace EML.NumericTypes
                         remainder = (remainder << 1) | bit;
                         t = remainder - absoluteRight;
                         absoluteLeft <<= 1;
-						result <<= 1;
+                        result <<= 1;
                         if (!t.BoolSign)
                         {
                             result |= 1;
@@ -618,7 +618,7 @@ namespace EML.NumericTypes
                         remainder = (remainder << 1) | bit;
                         t = remainder - absoluteRight;
                         absoluteLeft <<= 1;
-						result <<= 1;
+                        result <<= 1;
                         if (!t.BoolSign)
                         {
                             result |= 1;
