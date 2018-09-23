@@ -568,11 +568,11 @@ namespace EML.NumericTypes
                         t = remainder - absoluteRight;
                         absoluteLeft <<= 1;
 						result <<= 1;
-						if (!t.BoolSign)
-						{
-							result |= 1;
+                        if (!t.BoolSign)
+                        {
+                            result |= 1;
                             remainder = AbsoluteValue(t);
-						}
+                        }
                     }
                     return result;
                 }
@@ -619,11 +619,11 @@ namespace EML.NumericTypes
                         t = remainder - absoluteRight;
                         absoluteLeft <<= 1;
 						result <<= 1;
-						if (!t.BoolSign)
-						{
-							result |= 1;
+                        if (!t.BoolSign)
+                        {
+                            result |= 1;
                             remainder = AbsoluteValue(t);
-						}
+                        }
                     }
                     return remainder;
                 }
