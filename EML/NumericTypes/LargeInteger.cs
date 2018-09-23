@@ -516,15 +516,6 @@ namespace EML.NumericTypes
         */
         // The division and modulus operations are using copyrighted code form the owner as stated in the aforementioned pasted claim by Ian Kaplan
         // This is a transcription in C# from the source as written in C++, however copyright applies for the algorithm expressed as code
-        // Ironically enough, the code contained a mistake causing false results that be way off the expected
-        // In fact, the error was the following:
-        // Original (C++):                   q = !((t & 0x80000000) >> 31);
-        // Original (C#):                    q = ~((t & 0x80000000) >> 31);
-        // Original (C# - General-purpose):  q = ~((t & (1 << (t.Length * 8 - 1))) >> (t.Length * 8 - 1));
-        // Fixed (C# - General-purpose):     q = ~(t & (1 << (t.Length * 8 - 1))) >> (t.Length * 8 - 1);
-        // Fixed (C# - Long shifts):         q = ~ShiftRight(t & ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
-        // The only results that would be produced from the original in C++ would either be 0xFFFFFFFF or 0x00000000 which is unwanted.
-        // That is, only if the compiler takes the parentheses into consideration properly
         public static LargeInteger operator /(LargeInteger left, LargeInteger right)
         {
             if (right != 0)
