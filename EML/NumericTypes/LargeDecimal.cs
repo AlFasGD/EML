@@ -573,11 +573,15 @@ namespace EML.NumericTypes
 							result = (result << 1) | q;
 							if (q != 0)
 								remainder = t;
-							// Check here if the result is periodic
 						}
-						while (remainder > 0)
+						LongList<LargeInteger> previousRemainders = new List<LargeInteger>();
+						long l = -1; 
+						while (remainder > 0 && l == -1)
 						{
-							
+							// Calculate remainders and append them to the list
+							l = previousRemainders.GetIndexOf(remainder);
+							result.PeriodLength = (previousRemainders.Count - l) % (previousRemainders.Count + 1);
+							remainder <<= 1;
 						}
 						return result;
 					}
