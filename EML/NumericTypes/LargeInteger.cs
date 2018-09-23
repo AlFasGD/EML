@@ -533,35 +533,25 @@ namespace EML.NumericTypes
                     LargeInteger result = 0;
                     result.Sign = SignFunctions.Multiply(left.Sign, right.Sign);
                     long numBits = absoluteLeft.Length * 8;
-                    LargeInteger t, q, bit, d = 0;
-                    LargeInteger remainder = 0;
+                    LargeInteger t, q, remainder = 0;
                     while (remainder < absoluteRight)
-                    {
-                        bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
-                        remainder = (remainder << 1) | bit;
-                        d = absoluteLeft;
-                        absoluteLeft <<= 1;
-                        numBits--;
-                    }
+                        remainder = (remainder << 1) | absoluteLeft.GetBitAt(--numBits);
 
                     /* The loop, above, always goes one iteration too far.
                        To avoid inserting an "if" statement inside the loop
                        the last iteration is simply reversed. */
-
-                    absoluteLeft = d;
+                    
                     remainder >>= 1;
                     numBits++;
 
-                    for (long i = 0; i < numBits; i++)
+                    for (long i = 1; i <= numBits; i++)
                     {
-                        bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
-                        remainder = (remainder << 1) | bit;
+                        remainder = (remainder << 1) | absoluteLeft.GetBitAt(numBits - i);
                         t = remainder - absoluteRight;
-                        absoluteLeft <<= 1;
                         result <<= 1;
                         if (!t.BoolSign)
                         {
-                            result |= 1;
+                            result.Bytes[0] |= (byte)1;
                             remainder = AbsoluteValue(t);
                         }
                     }
@@ -583,38 +573,24 @@ namespace EML.NumericTypes
                     return left;
                 else
                 {
-                    LargeInteger numBits = left.Length * 8; // numBits = the number of bits of the dividend
-                    LargeInteger t, q, bit, d = 0; // t = temporary value, q = quotient, bit = last bit being checked, d = temporary dividend value for reversing previous operation
-                    LargeInteger remainder = 0;
+                    long numBits = absoluteLeft.Length * 8;
+                    LargeInteger t, q, remainder = 0;
                     while (remainder < absoluteRight)
-                    {
-                        bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
-                        remainder = (remainder << 1) | bit;
-                        d = absoluteLeft;
-                        absoluteLeft <<= 1;
-                        numBits--;
-                    }
+                        remainder = (remainder << 1) | absoluteLeft.GetBitAt(--numBits);
 
                     /* The loop, above, always goes one iteration too far.
                        To avoid inserting an "if" statement inside the loop
                        the last iteration is simply reversed. */
-
-                    absoluteLeft = d;
+                    
                     remainder >>= 1;
                     numBits++;
 
-                    for (long i = 0; i < numBits; i++)
+                    for (long i = 1; i <= numBits; i++)
                     {
-                        bit = ShiftRight(absoluteLeft & ShiftLeft(1, absoluteLeft.Length * 8 - 1), absoluteLeft.Length * 8 - 1);
-                        remainder = (remainder << 1) | bit;
+                        remainder = (remainder << 1) | absoluteLeft.GetBitAt(numBits - i);
                         t = remainder - absoluteRight;
-                        absoluteLeft <<= 1;
-                        result <<= 1;
                         if (!t.BoolSign)
-                        {
-                            result |= 1;
                             remainder = AbsoluteValue(t);
-                        }
                     }
                     return remainder;
                 }
