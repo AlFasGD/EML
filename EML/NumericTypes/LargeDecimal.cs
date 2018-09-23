@@ -533,45 +533,54 @@ namespace EML.NumericTypes
                     return (int)SignFunctions.Multiply(left.Sign, right.Sign);
                 else
                 {
-                    LargeInteger leftInt = new LargeInteger(ShiftLeft(left, left.RightLength * 8));
-                    LargeInteger rightInt = new LargeInteger(ShiftLeft(right, right.RightLength * 8));
-                    LargeDecimal result = 0;
-                    result.Sign = SignFunctions.Multiply(left.Sign, right.Sign);
-                    leftInt = LargeInteger.AbsoluteValue(leftInt);
-                    rightInt = LargeInteger.AbsoluteValue(rightInt);
-                    LargeInteger numBits = leftInt.Length * 8;
-                    LargeInteger t, q, bit, d = 0;
-                    LargeInteger remainder = 0;
-                    while (remainder < rightInt)
-                    {
-                        bit = LargeInteger.ShiftRight(leftInt & LargeInteger.ShiftLeft(1, leftInt.Length * 8 - 1), leftInt.Length * 8 - 1);
-                        remainder = (remainder << 1) | bit;
-                        d = leftInt;
-                        leftInt <<= 1;
-                        numBits--;
-                    }
+                    LargeInteger leftInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(left, left.RightLength * 8 - 7 + left.GetLastDecimalBitIndex())));
+                    LargeInteger rightInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(right, right.RightLength * 8 - 7 + right.GetLastDecimalBitIndex())));
+					if (leftInt == rightInt)
+						return (int)SignFunctions.Multiply(left.Sign, right.Sign);
+					else if (rightInt == 1)
+						return left * (int)SignFunctions.Multiply(left.Sign, right.Sign);
+					else
+					{
+						LargeDecimal result = 0;
+						result.Sign = SignFunctions.Multiply(left.Sign, right.Sign);
+						long numBits = leftInt.Length * 8;
+						LargeInteger t, q, bit, d = 0;
+						LargeInteger remainder = 0;
+						while (remainder < rightInt)
+						{
+							bit = leftInt.GetBitAt(leftInt.Length * 8 - 1);
+							remainder = (remainder << 1) | bit;
+							d = leftInt.Clone();
+							leftInt <<= 1;
+							numBits--;
+						}
 
-                    /* The loop, above, always goes one iteration too far.
-                       To avoid inserting an "if" statement inside the loop
-                       the last iteration is simply reversed. */
+						/* The loop, above, always goes one iteration too far.
+						   To avoid inserting an "if" statement inside the loop
+						   the last iteration is simply reversed. */
 
-                    leftInt = d;
-                    remainder = remainder >> 1;
-                    numBits++;
+						leftInt = d;
+						remainder >>= 1;
+						numBits++;
 
-                    for (LargeInteger i = 0; i < numBits; i++)
-                    {
-                        bit = LargeInteger.ShiftRight(leftInt & LargeInteger.ShiftLeft(1, leftInt.Length * 8 - 1), leftInt.Length * 8 - 1);
-                        remainder = (remainder << 1) | bit;
-                        t = remainder - rightInt;
-                        q = ~LargeInteger.ShiftRight(t & LargeInteger.ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
-                        leftInt <<= 1;
-                        result = (result << 1) | q;
-                        if (q != 0)
-                            remainder = t;
-                        // Check here if the result is periodic
-                    }
-                    return result;
+						for (long i = 0; i < numBits; i++)
+						{
+							bit = LargeInteger.ShiftRight(leftInt & LargeInteger.ShiftLeft(1, leftInt.Length * 8 - 1), leftInt.Length * 8 - 1);
+							remainder = (remainder << 1) | bit;
+							t = remainder - rightInt;
+							q = ~LargeInteger.ShiftRight(t & LargeInteger.ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
+							leftInt <<= 1;
+							result = (result << 1) | q;
+							if (q != 0)
+								remainder = t;
+							// Check here if the result is periodic
+						}
+						while (remainder > 0)
+						{
+							
+						}
+						return result;
+					}
                 }
             }
             else throw new DivideByZeroException("Cannot divide by zero.");
