@@ -579,7 +579,7 @@ namespace EML.NumericTypes
 						while (remainder > 0 && l == -1)
 						{
 							// Calculate remainders and append them to the list
-							l = previousRemainders.GetIndexOf(remainder);
+							l = previousRemainders.IndexOf(remainder);
 							result.PeriodLength = (previousRemainders.Count - l) % (previousRemainders.Count + 1);
 							remainder <<= 1;
 						}
