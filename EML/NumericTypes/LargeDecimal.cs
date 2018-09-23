@@ -529,62 +529,58 @@ namespace EML.NumericTypes
         {
             if (right != 0)
             {
-                if (AbsoluteValue(left) == AbsoluteValue(right))
+                LargeInteger leftInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(left, left.RightLength * 8 - 7 + left.GetLastDecimalBitIndex())));
+                LargeInteger rightInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(right, right.RightLength * 8 - 7 + right.GetLastDecimalBitIndex())));
+                if (leftInt == rightInt)
                     return (int)SignFunctions.Multiply(left.Sign, right.Sign);
+                else if (rightInt == 1)
+                    return left * (int)SignFunctions.Multiply(left.Sign, right.Sign);
                 else
                 {
-                    LargeInteger leftInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(left, left.RightLength * 8 - 7 + left.GetLastDecimalBitIndex())));
-                    LargeInteger rightInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(right, right.RightLength * 8 - 7 + right.GetLastDecimalBitIndex())));
-					if (leftInt == rightInt)
-						return (int)SignFunctions.Multiply(left.Sign, right.Sign);
-					else if (rightInt == 1)
-						return left * (int)SignFunctions.Multiply(left.Sign, right.Sign);
-					else
-					{
-						LargeDecimal result = 0;
-						result.Sign = SignFunctions.Multiply(left.Sign, right.Sign);
-						long numBits = leftInt.Length * 8;
-						LargeInteger t, q, bit, d = 0;
-						LargeInteger remainder = 0;
-						while (remainder < rightInt)
-						{
-							bit = leftInt.GetBitAt(leftInt.Length * 8 - 1);
-							remainder = (remainder << 1) | bit;
-							d = leftInt.Clone();
-							leftInt <<= 1;
-							numBits--;
-						}
+                    LargeDecimal result = 0;
+                    result.Sign = SignFunctions.Multiply(left.Sign, right.Sign);
+                    long numBits = leftInt.Length * 8;
+                    long decBits = 0;
+                    LargeInteger t, q, remainder = 0;
+                    while (remainder < rightInt)
+                        remainder = (remainder << 1) | leftInt.GetBitAt(--numBits);
 
-						/* The loop, above, always goes one iteration too far.
-						   To avoid inserting an "if" statement inside the loop
-						   the last iteration is simply reversed. */
+                    /* The loop, above, always goes one iteration too far.
+                       To avoid inserting an "if" statement inside the loop
+                       the last iteration is simply reversed. */
+                    
+                    remainder >>= 1;
+                    numBits++;
 
-						leftInt = d;
-						remainder >>= 1;
-						numBits++;
-
-						for (long i = 0; i < numBits; i++)
-						{
-							bit = LargeInteger.ShiftRight(leftInt & LargeInteger.ShiftLeft(1, leftInt.Length * 8 - 1), leftInt.Length * 8 - 1);
-							remainder = (remainder << 1) | bit;
-							t = remainder - rightInt;
-							q = ~LargeInteger.ShiftRight(t & LargeInteger.ShiftLeft(1, t.Length * 8 - 1), t.Length * 8 - 1);
-							leftInt <<= 1;
-							result = (result << 1) | q;
-							if (q != 0)
-								remainder = t;
-						}
-						LongList<LargeInteger> previousRemainders = new List<LargeInteger>();
-						long l = -1; 
-						while (remainder > 0 && l == -1)
-						{
-							// Calculate remainders and append them to the list
-							l = previousRemainders.IndexOf(remainder);
-							result.PeriodLength = (previousRemainders.Count - l) % (previousRemainders.Count + 1);
-							remainder <<= 1;
-						}
-						return result;
-					}
+                    for (long i = 1; i <= numBits; i++)
+                    {
+                        remainder = (remainder << 1) | leftInt.GetBitAt(numBits - i);
+                        t = remainder - rightInt;
+                        result <<= 1;
+                        if (!t.BoolSign)
+                        {
+                            result.LeftBytes[0] |= (byte)1;
+                            remainder = LargeInteger.AbsoluteValue(t);
+                        }
+                    }
+                    LongList<LargeInteger> previousRemainders = new LongList<LargeInteger>(remainder);
+                    long l = -1;
+                    while (remainder > 0 && l == -1)
+                    {
+                        if (decBits % 8 == 0)
+                            result.RightBytes.Add((byte)0);
+                        remainder <<= 1;
+                        t = remainder - rightInt;
+                        if (!t.BoolSign)
+                        {
+                            result.RightBytes[decBits / 8] |= (byte)(1 << ((7 - decBits) % 8));
+                            remainder = LargeInteger.AbsoluteValue(t);
+                        }
+                        l = previousRemainders.IndexOf(remainder);
+                        result.PeriodLength = (previousRemainders.Count - l) % (previousRemainders.Count + 1);
+                        decBits++;
+                    }
+                    return result;
                 }
             }
             else throw new DivideByZeroException("Cannot divide by zero.");
