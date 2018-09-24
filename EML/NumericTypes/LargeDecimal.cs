@@ -220,6 +220,134 @@ namespace EML.NumericTypes
         public static implicit operator LargeDecimal(decimal a) => new LargeDecimal(a);
         public static implicit operator LargeDecimal(LargeInteger a) => new LargeDecimal(a);
         #endregion
+        #region Type Casts
+        public static explicit operator byte(LargeDecimal a)
+        {
+            if (a.LeftLength == 1)
+                return a.LeftBytes[0];
+            else
+                throw new OverflowException("The LargeDecimal was too big.");
+        }
+        public static explicit operator short(LargeDecimal a)
+        {
+            if (a.LeftLength <= 2)
+            {
+                LongList<byte> bytes = a.LeftBytes;
+                bytes.AddRange(new byte[2 - bytes.Count]);
+                return BitConverter.ToInt16(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeDecimal was too big.");
+        }
+        public static explicit operator int(LargeDecimal a)
+        {
+            if (a.LeftLength <= 4)
+            {
+                LongList<byte> bytes = a.LeftBytes;
+                bytes.AddRange(new byte[4 - bytes.Count]);
+                return BitConverter.ToInt32(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeDecimal was too big.");
+        }
+        public static explicit operator long(LargeDecimal a)
+        {
+            if (a.LeftLength <= 8)
+            {
+                LongList<byte> bytes = a.LeftBytes;
+                bytes.AddRange(new byte[8 - bytes.Count]);
+                return BitConverter.ToInt64(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeDecimal was too big.");
+        }
+        public static explicit operator sbyte(LargeDecimal a)
+        {
+            if (a.LeftLength == 1)
+                return (sbyte)a.LeftBytes[0];
+            else
+                throw new OverflowException("The LargeDecimal was too big.");
+        }
+        public static explicit operator ushort(LargeDecimal a)
+        {
+            if (a.LeftLength <= 2)
+            {
+                LongList<byte> bytes = a.LeftBytes;
+                bytes.AddRange(new byte[2 - bytes.Count]);
+                return BitConverter.ToUInt16(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeDecimal was too big.");
+        }
+        public static explicit operator uint(LargeDecimal a)
+        {
+            if (a.LeftLength <= 4)
+            {
+                LongList<byte> bytes = a.LeftBytes;
+                bytes.AddRange(new byte[4 - bytes.Count]);
+                return BitConverter.ToUInt32(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeDecimal was too big.");
+        }
+        public static explicit operator ulong(LargeDecimal a)
+        {
+            if (a.LeftLength <= 8)
+            {
+                LongList<byte> bytes = a.LeftBytes;
+                bytes.AddRange(new byte[8 - bytes.Count]);
+                return BitConverter.ToUInt64(bytes.ToArray(), 0);
+            }
+            else
+                throw new OverflowException("The LargeDecimal was too big.");
+        }
+        public static explicit operator float(LargeDecimal a)
+        {
+            try
+            {
+                float result = 0;
+                for (long i = a.LeftBytes.Count - 1; i > General.Max(a.LeftBytes.Count - 4, 0); i--)
+                    result += a.LeftBytes[i] * (float)General.Power(2, i * 8);
+                result *= (int)a.Sign;
+                return result;
+            }
+            catch
+            {
+                throw new OverflowException("The LargeDecimal was too big.");
+            }
+        }
+        public static explicit operator double(LargeDecimal a)
+        {
+            try
+            {
+                double result = 0;
+                for (long i = a.LeftBytes.Count - 1; i > General.Max(a.LeftBytes.Count - 8, 0); i--)
+                    result += a.LeftBytes[i] * General.Power(2, i * 8);
+                result *= (int)a.Sign;
+                return result;
+            }
+            catch
+            {
+                throw new OverflowException("The LargeDecimal was too big.");
+            }
+        }
+        public static explicit operator decimal(LargeDecimal a)
+        {
+            try
+            {
+                decimal result = 0;
+                for (long i = a.LeftBytes.Count - 1; i > General.Max(a.LeftBytes.Count - 12, 0); i--)
+                    result += a.LeftBytes[i] * (decimal)General.Power(2, i * 8);
+                result *= (int)a.Sign;
+                return result;
+            }
+            catch
+            {
+                throw new OverflowException("The LargeDecimal was too big.");
+            }
+        }   
+        // Add more casts
+        #endregion
         #region Operators
         public static LargeDecimal operator +(LargeDecimal left, LargeDecimal right)
         {
