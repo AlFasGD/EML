@@ -382,18 +382,30 @@ namespace EML.NumericTypes
         public static LargeDecimal operator -(LargeDecimal left, LargeDecimal right) => left + (-right);
         public static LargeDecimal operator *(LargeDecimal left, LargeDecimal right)
         {
-            // TODO: Work on this, add some details in the algorithm
             LargeDecimal result = 0;
             result.BoolSign = left.Sign == right.Sign;
             left = AbsoluteValue(left);
             right = AbsoluteValue(right);
-            while (right > 0)
+            ExtendPeriodToMatchDigitCounts(ref left, ref right, out result.PeriodLength);
+            
+            byte rightLastLeftBitIndex = right.GetLastLeftBitIndex();
+            long rightLastLeftIndex = (right.LeftLength - 1) * 8 + rightLastLeftBitIndex;
+            
+            byte leftLastRight = left.GetLastRightBitIndex();
+            byte rightLastRight = right.GetLastRightBitIndex();
+            
+            long leftDecimalCount = (left.RightLength - 1) * 8 + leftLastRight + 1;
+            long rightDecimalCount = (right.RightLength - 1) * 8 + rightLastRight + 1;
+            long resultDecimalCount = leftDecimalCount + rightDecimalCount;
+            
+            for (long i = -rightDecimalCount + 1; i <= rightLastLeftIndex; i++)
             {
-                LargeDecimal temp = (right >> 1) << 1;
-                if (temp != right) result += left;
-                left <<= 1;
-                right >>= 1;
+                byte bit = i < 0 ? right.GetRightBitAt(-i - 1) : right.GetLeftBitAt(i);
+                if (bit > 0)
+                    result += i < 0 ? LargeInteger.ShiftRight(left, -i - 1) : LargeInteger.ShiftLeft(left, i);
             }
+            
+            // TODO: Take care of the periodic part of the numbers
             return result;
         }
         /*
@@ -412,8 +424,8 @@ namespace EML.NumericTypes
         {
             if (right != 0)
             {
-                LargeInteger leftInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(left, left.RightLength * 8 - 7 + left.GetLastDecimalBitIndex())));
-                LargeInteger rightInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(right, right.RightLength * 8 - 7 + right.GetLastDecimalBitIndex())));
+                LargeInteger leftInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(left, left.RightLength * 8 - 7 + left.GetLastRightBitIndex())));
+                LargeInteger rightInt = LargeInteger.AbsoluteValue(new LargeInteger(ShiftLeft(right, right.RightLength * 8 - 7 + right.GetLastRightBitIndex())));
                 if (leftInt == rightInt)
                     return (int)SignFunctions.Multiply(left.Sign, right.Sign);
                 else if (rightInt == 1)
@@ -680,12 +692,21 @@ namespace EML.NumericTypes
                 period.Add((byte)((RightBytes[i] >> s) | (RightBytes[i + 1] << (8 - s))));
             return new LargeInteger(period);
         }
+        /// <summary>Gets the index of the last non-zero bit in the last byte of the left part of the <seealso cref="LargeDecimal"/>.</summary>
+        internal byte GetLastLeftBitIndex()
+        {
+            byte result = 7;
+            byte last = LeftBytes.Last();
+            while ((last << result) >> 7 == 0)
+                result--;
+            return result;
+        }
         /// <summary>Gets the index of the last non-zero bit in the last byte of the right part of the <seealso cref="LargeDecimal"/>.</summary>
-        internal byte GetLastDecimalBitIndex()
+        internal byte GetLastRightBitIndex()
         {
             byte result = 7;
             byte last = RightBytes.Last();
-            while ((last << result) >> 8 == 0)
+            while ((last << result) >> 7 == 0)
                 result--;
             return result;
         }
@@ -714,8 +735,8 @@ namespace EML.NumericTypes
             // If both numbers are repeating, expand them accordingly to calculate the repeating part
             if ((left.PeriodLength | right.PeriodLength) > 0)
             {
-                byte leftLast = left.GetLastDecimalBitIndex();
-                byte rightLast = right.GetLastDecimalBitIndex();
+                byte leftLast = left.GetLastRightBitIndex();
+                byte rightLast = right.GetLastRightBitIndex();
 
                 long leftCurrent = left.RightLength - 1;
                 long rightCurrent = right.RightLength - 1;
