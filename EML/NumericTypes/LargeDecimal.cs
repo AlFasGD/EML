@@ -363,8 +363,15 @@ namespace EML.NumericTypes
             {
                 throw new OverflowException("The LargeDecimal was too big.");
             }
-        }   
-        // Add more casts
+        }
+        public static explicit operator LargeInteger(LargeDecimal a) 
+        {
+            LargeInteger result = new LargeInteger(a.LeftBytes);
+            result.Sign = a.Sign;
+            // Uncomment once feature is implemented
+            //result.SignDirection = a.SignDirection
+            return result;
+        }
         #endregion
         #region Operators
         public static LargeDecimal operator +(LargeDecimal left, LargeDecimal right)
