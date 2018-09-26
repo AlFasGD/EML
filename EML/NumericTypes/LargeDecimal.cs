@@ -14,6 +14,7 @@ namespace EML.NumericTypes
     /// <summary>Represents an arbitrarily large decimal number.</summary>
     public struct LargeDecimal
     {
+        // TODO: Implement properties from LargeInteger regarding signs and directions.
         /// <summary>The <seealso cref="byte"/> list representing the digits on the left side of the number from the decimal point (the integral part).</summary>
         public LongList<byte> LeftBytes { get; set; }
         /// <summary>The <seealso cref="byte"/> list representing the digits on the right side of the number from the decimal point (the decimal part).</summary>
@@ -221,56 +222,67 @@ namespace EML.NumericTypes
         public static implicit operator LargeDecimal(LargeInteger a) => new LargeDecimal(a);
         #endregion
         #region Type Casts
+        // TODO: Create a class containing a function that returns the size of the value in bits depending on the structure
         public static explicit operator byte(LargeDecimal a)
         {
-            if (a.LeftLength == 1)
+            int size = sizeof(byte) * 8;
+            if (!a.BoolSign)
+                throw new InvalidOperationException("The LargeDecimal was negative, which value is unsupported by byte.");
+            if (a.GetLeftBitCount() <= size)
                 return a.LeftBytes[0];
             else
                 throw new OverflowException("The LargeDecimal was too big.");
         }
         public static explicit operator short(LargeDecimal a)
         {
-            if (a.LeftLength <= 2)
+            int size = sizeof(short) * 8 - 1;
+            if (a.GetLeftBitCount() <= size)
             {
                 LongList<byte> bytes = a.LeftBytes;
                 bytes.AddRange(new byte[2 - bytes.Count]);
-                return BitConverter.ToInt16(bytes.ToArray(), 0);
+                return ((BitConverter.ToInt16(bytes.ToArray(), 0) << 1) >> 1) | (!a.BoolSign ? 1 << size : 0);
             }
             else
                 throw new OverflowException("The LargeDecimal was too big.");
         }
         public static explicit operator int(LargeDecimal a)
         {
-            if (a.LeftLength <= 4)
+            int size = sizeof(int) * 8 - 1;
+            if (a.GetLeftBitCount() <= size)
             {
                 LongList<byte> bytes = a.LeftBytes;
                 bytes.AddRange(new byte[4 - bytes.Count]);
-                return BitConverter.ToInt32(bytes.ToArray(), 0);
+                return ((BitConverter.ToInt32(bytes.ToArray(), 0) << 1) >> 1) | (!a.BoolSign ? 1 << size : 0);
             }
             else
                 throw new OverflowException("The LargeDecimal was too big.");
         }
         public static explicit operator long(LargeDecimal a)
         {
-            if (a.LeftLength <= 8)
+            int size = sizeof(long) * 8 - 1;
+            if (a.GetLeftBitCount() <= size)
             {
                 LongList<byte> bytes = a.LeftBytes;
                 bytes.AddRange(new byte[8 - bytes.Count]);
-                return BitConverter.ToInt64(bytes.ToArray(), 0);
+                return ((BitConverter.ToInt64(bytes.ToArray(), 0) << 1) >> 1) | (!a.BoolSign ? 1 << size : 0);
             }
             else
                 throw new OverflowException("The LargeDecimal was too big.");
         }
         public static explicit operator sbyte(LargeDecimal a)
         {
-            if (a.LeftLength == 1)
-                return (sbyte)a.LeftBytes[0];
+            int size = sizeof(sbyte) * 8 - 1;
+            if (a.GetLeftBitCount() <= size)
+                return (((sbyte)a.LeftBytes[0] << 1) >> 1) | (!a.BoolSign ? 1 << size : 0);
             else
                 throw new OverflowException("The LargeDecimal was too big.");
         }
         public static explicit operator ushort(LargeDecimal a)
         {
-            if (a.LeftLength <= 2)
+            int size = sizeof(ushort) * 8;
+            if (!a.BoolSign)
+                throw new InvalidOperationException("The LargeDecimal was negative, which value is unsupported by ushort.");
+            if (a.GetLeftBitCount() <= size)
             {
                 LongList<byte> bytes = a.LeftBytes;
                 bytes.AddRange(new byte[2 - bytes.Count]);
@@ -281,7 +293,10 @@ namespace EML.NumericTypes
         }
         public static explicit operator uint(LargeDecimal a)
         {
-            if (a.LeftLength <= 4)
+            int size = sizeof(uint) * 8;
+            if (!a.BoolSign)
+                throw new InvalidOperationException("The LargeDecimal was negative, which value is unsupported by uint.");
+            if (a.GetLeftBitCount() <= size)
             {
                 LongList<byte> bytes = a.LeftBytes;
                 bytes.AddRange(new byte[4 - bytes.Count]);
@@ -292,7 +307,10 @@ namespace EML.NumericTypes
         }
         public static explicit operator ulong(LargeDecimal a)
         {
-            if (a.LeftLength <= 8)
+            int size = sizeof(ulong) * 8;
+            if (!a.BoolSign)
+                throw new InvalidOperationException("The LargeDecimal was negative, which value is unsupported by ulong.");
+            if (a.GetLeftBitCount() <= size)
             {
                 LongList<byte> bytes = a.LeftBytes;
                 bytes.AddRange(new byte[8 - bytes.Count]);
@@ -838,6 +856,10 @@ namespace EML.NumericTypes
                 result--;
             return result;
         }
+        /// <summary>Gets the count of the used bits (excluding unnecessary zeroes) on the left part of the <seealso cref="LargeDecimal"/>.</summary>
+        internal long GetLeftBitCount() => (LeftLength - 1) * 8 + GetLastLeftBitIndex() + 1;
+        /// <summary>Gets the count of the used bits (excluding unnecessary zeroes) on the right part of the <seealso cref="LargeDecimal"/>.</summary>
+        internal long GetRightBitCount() => (RightLength - 1) * 8 + GetLastRightBitIndex() + 1;
         /// <summary>Gets the selected bit at the specified index of the left bytes of this <seealso cref="LargeDecimal"/> as a <seealso cref="byte"/>.</summary>
         /// <param name="index">The index of the bit.</param>
         public byte GetLeftBitAt(long index) => (byte)((LeftBytes[index / 8] << (int)(8 - index % 8)) >> (int)(index % 8));
