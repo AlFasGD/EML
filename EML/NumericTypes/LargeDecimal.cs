@@ -326,8 +326,7 @@ namespace EML.NumericTypes
                 float result = 0;
                 for (long i = a.LeftLength - 1; i >= General.Max(a.LeftLength - 4, -a.RightLength); i--)
                     result += (i < 0 ? a.RightBytes[-i - 1] : a.LeftBytes[i]) * (float)General.Power(2, i * 8);
-                result *= (int)a.Sign;
-                return result;
+                return result * (int)a.Sign;
             }
             catch
             {
@@ -341,8 +340,7 @@ namespace EML.NumericTypes
                 double result = 0;
                 for (long i = a.LeftLength - 1; i >= General.Max(a.LeftLength - 8, -a.RightLength); i--)
                     result += (i < 0 ? a.RightBytes[-i - 1] : a.LeftBytes[i]) * General.Power(2, i * 8);
-                result *= (int)a.Sign;
-                return result;
+                return result * (int)a.Sign;
             }
             catch
             {
@@ -356,8 +354,7 @@ namespace EML.NumericTypes
                 decimal result = 0;
                 for (long i = a.LeftLength - 1; i >= General.Max(a.LeftLength - 12, -a.RightLength); i--)
                     result += (i < 0 ? a.RightBytes[-i - 1] : a.LeftBytes[i]) * (decimal)General.Power(2, i * 8);
-                result *= (int)a.Sign;
-                return result;
+                return result * (int)a.Sign;
             }
             catch
             {
