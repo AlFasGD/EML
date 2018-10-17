@@ -1059,11 +1059,9 @@ namespace EML.NumericTypes
         {
             if (min > max)
                 throw new ArgumentException("Maximum value cannot be greater than minimum value.");
-            if (min == max)
+            if (min >= value)
                 return min;
-            if (min > value)
-                return min;
-            if (value > max)
+            if (value >= max)
                 return max;
             return value;
         }
