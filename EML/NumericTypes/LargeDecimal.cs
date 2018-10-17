@@ -532,30 +532,33 @@ namespace EML.NumericTypes
         public static LargeDecimal operator -(LargeDecimal left, LargeDecimal right) => left + (-right);
         public static LargeDecimal operator *(LargeDecimal left, LargeDecimal right)
         {
+            if (left == 0 || right == 0)
+                return 0;
+            
             LargeDecimal result = 0;
             result.BoolSign = left.Sign == right.Sign;
-            left = AbsoluteValue(left);
-            right = AbsoluteValue(right);
+            left.BoolSign = right.BoolSign = true;
             ExtendPeriodToMatchDigitCounts(ref left, ref right, out result.PeriodLength);
             
-            byte rightLastLeftBitIndex = right.GetLastLeftBitIndex();
-            long rightLastLeftIndex = (right.LeftLength - 1) * 8 + rightLastLeftBitIndex;
+            long shifts = (right.LeftLength - 1) * 8 + right.GetLastLeftBitIndex() - result.PeriodLength;
+            LargeInteger l = new LargeInteger(ShiftLeft(left, shifts));
+            LargeInteger r = new LargeInteger(ShiftLeft(right, shifts));
+            result |= ShiftRight(new LargeDecimal(l * r), shifts * 2);
             
-            byte leftLastRight = left.GetLastRightBitIndex();
-            byte rightLastRight = right.GetLastRightBitIndex();
+            var leftPeriod = left.GetPeriod();
+            var rightPeriod = right.GetPeriod();
             
-            long leftDecimalCount = (left.RightLength - 1) * 8 + leftLastRight + 1;
-            long rightDecimalCount = (right.RightLength - 1) * 8 + rightLastRight + 1;
-            long resultDecimalCount = leftDecimalCount + rightDecimalCount;
+            // TODO: Validate for non-periodical instances of numbers
+            var leftPeriodFraction = new Fraction(LargeInteger.Max(1, leftPeriod), ShiftLeft(1, LargeInteger.Max(1, left.PeriodLength)) - 1);
+            var rightPeriodFraction = new Fraction(LargeInteger.Max(1, rightPeriod), ShiftLeft(1, LargeInteger.Max(1, right.PeriodLength)) - 1);
+            var resultPeriodFraction = leftPeriodFraction * rightPeriodFraction;
+            resultPeriodFraction.Simplify();
             
-            for (long i = -rightDecimalCount + 1; i <= rightLastLeftIndex; i++)
-            {
-                byte bit = i < 0 ? right.GetRightBitAt(-i - 1) : right.GetLeftBitAt(i);
-                if (bit > 0)
-                    result += i < 0 ? LargeInteger.ShiftRight(left, -i - 1) : LargeInteger.ShiftLeft(left, i);
-            }
+            for (LargeInteger i = 1; i % resultPeriodFraction.Denominator != 0; (i <<= 1).Bytes[0] |= 1);
             
-            // TODO: Take care of the periodic part of the numbers
+            LargeInteger p = resultPeriodFraction.Nominator * (i / resultPeriodFraction.Denominator);
+            result |= ShiftRight(new LargeDecimal(p), shifts * 2 + result.PeriodLength);
+            
             return result;
         }
         /*
@@ -772,37 +775,29 @@ namespace EML.NumericTypes
         public static bool operator <=(LargeDecimal left, LargeDecimal right) => right >= left;
         public static bool operator ==(LargeDecimal left, LargeDecimal right)
         {
-            if (left.LeftLength != right.LeftLength)
+            if (left.LeftLength != right.LeftLength || left.RightLength != right.RightLength)
                 return false;
-            else if (left.RightLength != right.RightLength)
-                return false;
-            else
-            {
-                for (long i = 0; i < left.LeftLength; i++)
-                    if (left.LeftBytes[i] != right.LeftBytes[i])
-                        return false;
-                for (long i = 0; i < left.RightLength; i++)
-                    if (left.RightBytes[i] != right.RightBytes[i])
-                        return false;
-                return left.PeriodLength == left.RightLength;
-            }
+            
+            for (long i = 0; i < left.LeftLength; i++)
+                if (left.LeftBytes[i] != right.LeftBytes[i])
+                    return false;
+            for (long i = 0; i < left.RightLength; i++)
+                if (left.RightBytes[i] != right.RightBytes[i])
+                    return false;
+            return left.PeriodLength == left.RightLength;
         }
         public static bool operator !=(LargeDecimal left, LargeDecimal right)
         {
-            if (left.LeftLength != right.LeftLength)
+            if (left.LeftLength != right.LeftLength || left.RightLength != right.RightLength)
                 return true;
-            else if (left.RightLength != right.RightLength)
-                return true;
-            else
-            {
-                for (long i = 0; i < left.LeftLength; i++)
-                    if (left.LeftBytes[i] != right.LeftBytes[i])
-                        return true;
-                for (long i = 0; i < left.RightLength; i++)
-                    if (left.RightBytes[i] != right.RightBytes[i])
-                        return true;
-                return left.PeriodLength != left.RightLength;
-            }
+           
+            for (long i = 0; i < left.LeftLength; i++)
+                if (left.LeftBytes[i] != right.LeftBytes[i])
+                    return true;
+            for (long i = 0; i < left.RightLength; i++)
+                if (left.RightBytes[i] != right.RightBytes[i])
+                    return true;
+            return left.PeriodLength != left.RightLength;
         }
         #endregion
         #region Constants
@@ -1392,6 +1387,21 @@ namespace EML.NumericTypes
         /// <param name="b">The number whose square root to find.</param>
         /// <param name="decimalDigits">The number of decimal digits of the approximation.</param>
         public static LargeDecimal SquareRoot(LargeDecimal b, int decimalDigits) => Root(b, 2, decimalDigits);
+        #endregion
+        #region Accessors
+        /// <summary>Returns the byte at the specified index in the appropriate collection.</summary>
+        /// <param name="index">The index of the byte. A non-negative index ([0, <seealso cref="long.MaxValue"/>]) will access the left bytes while a strictly negative index ([<seealso cref="long.MinValue"/>, -1]) will return the byte at the respective index of the right bytes.</param>
+        public byte this[long index]
+        {
+            get => index < 0 ? RightBytes[-index - 1] : LeftBytes[index];
+            set
+            {
+                if (index < 0)
+                    RightBytes[-index - 1] = value;
+                else
+                    LeftBytes[index] = value;
+            }
+        }
         #endregion
         #region Overrides
         /// <summary>Returns the <seealso cref="string"/> representation of the <seealso cref="LargeDecimal"/>.</summary>
