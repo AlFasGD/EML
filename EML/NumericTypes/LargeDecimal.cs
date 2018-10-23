@@ -1412,14 +1412,15 @@ namespace EML.NumericTypes
             rightIntPart.Bytes = RightBytes;
             LargeInteger leftIntPart = new LargeInteger();
             leftIntPart.Bytes = LeftBytes;
-            LargeInteger currentIntPart = leftIntPart;
+            LargeInteger currentIntPart;
             for (LargeInteger i = 1; (currentIntPart = leftIntPart / i) > 0; i *= 10)
                 result.Insert(0, (char)((currentIntPart % 10) + 48));
             if (rightIntPart > 0)
             {
                 result.Append(".");
+                long index = result.Length;
                 for (LargeInteger i = 1; (currentIntPart = rightIntPart / i) > 0; i *= 10)
-                    result.Append((char)((currentIntPart % 10) + 48));
+                    result.Insert(index, (char)((currentIntPart % 10) + 48));
             }
             return result.ToString();
         }
