@@ -1411,7 +1411,7 @@ namespace EML.NumericTypes
             LargeInteger rightIntPart = new LargeInteger();
             rightIntPart.Bytes = RightBytes;
             LargeInteger leftIntPart = new LargeInteger();
-            rightIntPart.Bytes = LeftBytes;
+            leftIntPart.Bytes = LeftBytes;
             LargeInteger currentIntPart = leftIntPart;
             for (LargeInteger i = 1; (currentIntPart = leftIntPart / i) > 0; i *= 10)
                 result.Insert(0, (char)((currentIntPart % 10) + 48));
