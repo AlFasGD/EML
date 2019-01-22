@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Expressions\Constant.cs" />
     <Compile Include="Expressions\Constants\e.cs" />
+    <Compile Include="Expressions\Constants\RealConstant.cs" />
     <Compile Include="Expressions\NumberExpressions\RealNumber.cs" />
     <Compile Include="Expressions\Operations\Advanced\ConditionalSummation.cs" />
     <Compile Include="Expressions\Operations\Advanced\Limit.cs" />
