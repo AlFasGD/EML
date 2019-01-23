@@ -49,6 +49,8 @@
     <Compile Include="Expressions\Constant.cs" />
     <Compile Include="Expressions\Constants\e.cs" />
     <Compile Include="Expressions\Constants\RealConstant.cs" />
+    <Compile Include="Expressions\IVariable.cs" />
+    <Compile Include="Expressions\IConstant.cs" />
     <Compile Include="Expressions\NumericExpression.cs" />
     <Compile Include="Expressions\IRealNumericExpression.cs" />
     <Compile Include="Expressions\Operations\Advanced\ConditionalSummation.cs" />
