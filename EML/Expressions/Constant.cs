@@ -6,5 +6,7 @@ namespace EML.Expressions
     public abstract class Constant : Expression, INumericExpression
     {
         public override Expression Differentiate(Expression expression) => new RealConstant(0);
+
+        public override Expression Integrate(Expression expression) => this * expression;
     }
 }
