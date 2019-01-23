@@ -12,6 +12,7 @@ using EML.Expressions.Operations.Basic;
 
 namespace EML.Expressions
 {
+    /// <summary>Represents a mathematical expression.</summary>
     public abstract class Expression
     {
         public static Addition operator +(Expression left, Expression right) => new Addition(left, right);
