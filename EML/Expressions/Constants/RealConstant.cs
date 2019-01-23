@@ -15,6 +15,9 @@ namespace EML.Expressions.Constants
 
         /// <summary>Initializes a new instance of the <seealso cref="RealConstant"/> class.<</summary>
         /// <param name="value">The value of the <seealso cref="RealConstant"/>.</param>
+        public RealConstant(LargeDecimal value) : this(null, value) { }
+        /// <summary>Initializes a new instance of the <seealso cref="RealConstant"/> class.<</summary>
+        /// <param name="value">The value of the <seealso cref="RealConstant"/>.</param>
         public RealConstant(string name, LargeDecimal value)
             : base(name)
         {
