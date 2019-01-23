@@ -33,7 +33,7 @@ namespace EML.NumericTypes.Vectors
                     v[i] = end[i] - start[i];
                 Values = v;
             }
-            else throw new ArgumentException();
+            throw new ArgumentException();
         }
         
         public static Vector operator +(Vector left, Vector right)
@@ -45,7 +45,7 @@ namespace EML.NumericTypes.Vectors
                     v[i] = left[i] + right[i];
                 return v;
             }
-            else throw new ArgumentException();
+            throw new ArgumentException();
         }
         public static Vector operator -(Vector left, Vector right)
         {
@@ -56,7 +56,7 @@ namespace EML.NumericTypes.Vectors
                     v[i] = left[i] - right[i];
                 return v;
             }
-            else throw new ArgumentException();
+            throw new ArgumentException();
         }
 
         /// <summary>Gets the value of the vector at the specified dimension.</summary>

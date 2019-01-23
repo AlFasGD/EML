@@ -51,7 +51,7 @@ namespace EML.Sets
         {
             if (target.IntervalDomain == container.IntervalDomain)
                 return container.IsCompleteIntervalDomain || container.Left <= target.Left && container.Right >= target.Right;
-            else return false;
+            return false;
         }
 
         public static bool operator ==(RealNumberInterval left, RealNumberInterval right)
@@ -60,8 +60,7 @@ namespace EML.Sets
             {
                 if (left.IsCompleteIntervalDomain == right.IsCompleteIntervalDomain)
                     return true;
-                else
-                    return left.Left == right.Left && left.Right == right.Right && left.ClosedLeft == right.ClosedLeft && left.ClosedRight == right.ClosedRight;
+                return left.Left == right.Left && left.Right == right.Right && left.ClosedLeft == right.ClosedLeft && left.ClosedRight == right.ClosedRight;
             }
             return false;
         }
@@ -71,8 +70,7 @@ namespace EML.Sets
             {
                 if (left.IsCompleteIntervalDomain != right.IsCompleteIntervalDomain)
                     return true;
-                else
-                    return left.Left != right.Left && left.Right != right.Right && left.ClosedLeft != right.ClosedLeft && left.ClosedRight != right.ClosedRight;
+                return left.Left != right.Left && left.Right != right.Right && left.ClosedLeft != right.ClosedLeft && left.ClosedRight != right.ClosedRight;
             }
             return false;
         }
