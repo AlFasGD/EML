@@ -11,7 +11,7 @@ namespace EML.Expressions.Constants
     public sealed class RealConstant : RealNumericExpression, IConstant
     {
         /// <summary>The name of the constant.</summary>
-        public string Name { get; set; }
+        public string Name { get; }
         /// <summary>The value of the real number constant.</summary>
         public LargeDecimal Value { get; }
 

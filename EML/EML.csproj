@@ -96,6 +96,7 @@
     <Compile Include="Expressions\Operations\Basic\Addition.cs" />
     <Compile Include="Expressions\Operations\Basic\Subtraction.cs" />
     <Compile Include="Expressions\Variable.cs" />
+    <Compile Include="Expressions\Variables\RealVariable.cs" />
     <Compile Include="Extensions\GenericExtensions.cs" />
     <Compile Include="Extensions\LongList.cs" />
     <Compile Include="Sets\Operations\CartesianProduct.cs" />
