@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EML.Expressions;
+using EML.Expressions.Constants;
 using EML.Expressions.Operations;
 using EML.Expressions.Operations.Basic;
 
@@ -60,7 +61,7 @@ namespace EML.NumericTypes.Vectors
         /// <param name="v">The vector to get the inner product of.</param>
         public static IRealNumericExpression InnerProduct(Vector2D v)
         {
-            return new IRealNumericExpression("iv", new Multiplication(v.X, v.Y));
+            return new RealConstant("iv", new Multiplication(v.X, v.Y));
         }
 
         /// <summary>Converts the vector to its string representation.</summary>

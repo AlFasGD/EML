@@ -1,4 +1,5 @@
-﻿using EML.Expressions.Operations.Basic;
+﻿using EML.Expressions.Constants;
+using EML.Expressions.Operations.Basic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,6 @@ namespace EML.Expressions.Operations.Functions.Trigonometric
 
         /// <summary>Differentiates the current expression.</summary>
         /// <param name="expression">The expression that will be regarded when differentiating.</param>
-        public override Expression Differentiate(Expression expression) => Argument.Differentiate(expression) / new Exponentation(new Cosine(Argument as INumericExpression), new RealNumber(2));
+        public override Expression Differentiate(Expression expression) => Argument.Differentiate(expression) / new Exponentation(new Cosine(Argument as INumericExpression), new RealConstant(2));
     }
 }

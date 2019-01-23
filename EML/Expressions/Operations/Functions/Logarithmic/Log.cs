@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EML.Expressions.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,6 @@ namespace EML.Expressions.Operations.Functions.Logarithmic
 
         /// <summary>Differentiates the current expression.</summary>
         /// <param name="expression">The expression that will be regarded when differentiating.</param>
-        public override Expression Differentiate(Expression expression) => (new Ln(Argument) / new Ln(new RealNumber(10))).Differentiate(expression);
+        public override Expression Differentiate(Expression expression) => (new Ln(Argument) / new Ln(new RealConstant(10))).Differentiate(expression);
     }
 }
