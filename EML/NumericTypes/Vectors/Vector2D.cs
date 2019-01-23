@@ -14,16 +14,16 @@ namespace EML.NumericTypes.Vectors
     public struct Vector2D
     {
         /// <summary>The X value of the vector.</summary>
-        public IRealNumericExpression X;
+        public RealNumericExpression X;
         /// <summary>The Y value of the vector.</summary>
-        public IRealNumericExpression Y;
+        public RealNumericExpression Y;
         /// <summary>The length of the vector.</summary>
-        public IRealNumericExpression Length => X * X + Y * Y;
+        public RealNumericExpression Length => X * X + Y * Y;
 
         /// <summary>Creates a new instance of <seealso cref="Vector2D"/>.</summary>
         /// <param name="x">The X value of the vector.</param>
         /// <param name="y">The Y value of the vector.</param>
-        public Vector2D(IRealNumericExpression x, IRealNumericExpression y)
+        public Vector2D(RealNumericExpression x, RealNumericExpression y)
         {
             X = x;
             Y = y;
@@ -33,14 +33,14 @@ namespace EML.NumericTypes.Vectors
         /// <param name="startingY">The Y value of the starting point in the plane.</param>
         /// <param name="endingX">The X value of the ending point in the plane.</param>
         /// <param name="endingY">The Y value of the ending point in the plane.</param>
-        public Vector2D(IRealNumericExpression startingX, IRealNumericExpression startingY, IRealNumericExpression endingX, IRealNumericExpression endingY)
+        public Vector2D(RealNumericExpression startingX, RealNumericExpression startingY, RealNumericExpression endingX, RealNumericExpression endingY)
         {
             X = endingX - startingX;
             Y = endingY - startingY;
         }
         /// <summary>Creates a new instance of <seealso cref="Vector2D"/>.</summary>
         /// <param name="v">The value tuple containing the coordinations of the vector.</param>
-        public Vector2D((IRealNumericExpression, IRealNumericExpression) v)
+        public Vector2D((RealNumericExpression, RealNumericExpression) v)
         {
             X = v.Item1;
             Y = v.Item2;
@@ -48,7 +48,7 @@ namespace EML.NumericTypes.Vectors
         /// <summary>Creates a new instance of <seealso cref="Vector2D"/>.</summary>
         /// <param name="start">The value tuple containing the starting coordinations of the vector.</param>
         /// <param name="end">The value tuple containing the ending coordinations of the vector.</param>
-        public Vector2D((IRealNumericExpression, IRealNumericExpression) start, (IRealNumericExpression, IRealNumericExpression) end)
+        public Vector2D((RealNumericExpression, RealNumericExpression) start, (RealNumericExpression, RealNumericExpression) end)
         {
             X = end.Item1 - start.Item1;
             Y = end.Item2 - start.Item2;
@@ -59,7 +59,7 @@ namespace EML.NumericTypes.Vectors
 
         /// <summary>Returns the inner product of the vector.</summary>
         /// <param name="v">The vector to get the inner product of.</param>
-        public static IRealNumericExpression InnerProduct(Vector2D v)
+        public static RealNumericExpression InnerProduct(Vector2D v)
         {
             return new RealConstant("iv", new Multiplication(v.X, v.Y));
         }

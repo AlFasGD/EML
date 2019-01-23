@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace EML.Expressions.Constants
 {
     /// <summary>Represents a real number constant.</summary>
-    public sealed class RealConstant : Constant
+    public sealed class RealConstant : RealNumericExpression
     {
         /// <summary>The value of the real number constant.</summary>
         public LargeDecimal Value { get; }

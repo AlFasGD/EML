@@ -3,7 +3,7 @@ using EML.Expressions.Constants;
 namespace EML.Expressions
 {
     /// <summary>Represents a constant.</summary>
-    public abstract class Constant : Expression, INumericExpression
+    public abstract class Constant : NumericExpression
     {
         /// <summary>The name of the constant.</summary>
         public string Name { get; set; }

@@ -7,25 +7,20 @@ using System.Threading.Tasks;
 namespace EML.Expressions
 {
     /// <summary>Represents a real numeric expression.</summary>
-    public interface IRealNumericExpression : INumericExpression
+    public abstract class RealNumericExpression : NumericExpression
     {
-        /// <summary>Compares the current expression with another expression and returns <see langword="true"/> if this experssion is greater than the other, otherwise <see langword="false"/>.</summary>
-        /// <param name="expression">The expression to compare the current one with.</param>
-        bool GreaterThan(INumericExpression expression);
-        /// <summary>Compares the current expression with another expression and returns <see langword="true"/> if this experssion is greater than or equal to the other, otherwise <see langword="false"/>.</summary>
-        /// <param name="expression">The expression to compare the current one with.</param>
-        bool GreaterThanOrEqualTo(INumericExpression expression);
-        /// <summary>Compares the current expression with another expression and returns <see langword="true"/> if this experssion is equal to the other, otherwise <see langword="false"/>.</summary>
-        /// <param name="expression">The expression to compare the current one with.</param>
-        bool EqualTo(INumericExpression expression);
-        /// <summary>Compares the current expression with another expression and returns <see langword="true"/> if this experssion is less than or equal to the other, otherwise <see langword="false"/>.</summary>
-        /// <param name="expression">The expression to compare the current one with.</param>
-        bool LessThanOrEqualTo(INumericExpression expression);
-        /// <summary>Compares the current expression with another expression and returns <see langword="true"/> if this experssion is less than the other, otherwise <see langword="false"/>.</summary>
-        /// <param name="expression">The expression to compare the current one with.</param>
-        bool LessThan(INumericExpression expression);
-        /// <summary>Compares the current expression with another expression and returns <see langword="true"/> if this experssion is different than the other, otherwise <see langword="false"/>.</summary>
-        /// <param name="expression">The expression to compare the current one with.</param>
-        bool DifferentThan(INumericExpression expression);
+        public static bool operator >(RealNumericExpression left, RealNumericExpression right) => left.GreaterThan(right);
+        public static bool operator >=(RealNumericExpression left, RealNumericExpression right) => left.GreaterThanOrEqualTo(right);
+        public static bool operator ==(RealNumericExpression left, RealNumericExpression right) => left.EqualTo(right);
+        public static bool operator <=(RealNumericExpression left, RealNumericExpression right) => left.LessThanOrEqualTo(right);
+        public static bool operator <(RealNumericExpression left, RealNumericExpression right) => left.LessThan(right);
+        public static bool operator !=(RealNumericExpression left, RealNumericExpression right) => left.DifferentThan(right);
+
+        protected abstract bool GreaterThan(RealNumericExpression expression);
+        protected abstract bool GreaterThanOrEqualTo(RealNumericExpression expression);
+        protected abstract bool EqualTo(RealNumericExpression expression);
+        protected abstract bool LessThanOrEqualTo(RealNumericExpression expression);
+        protected abstract bool LessThan(RealNumericExpression expression);
+        protected abstract bool DifferentThan(RealNumericExpression expression);
     }
 }

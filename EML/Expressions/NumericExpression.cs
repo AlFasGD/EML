@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace EML.Expressions
 {
     /// <summary>Represents a numeric expression.</summary>
-    public interface INumericExpression
+    public class NumericExpression : Expression
     {
     }
 }
