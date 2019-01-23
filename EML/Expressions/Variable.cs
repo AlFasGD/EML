@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EML.Expressions
 {
     /// <summary>Represents a variable.</summary>
-    public class Variable : Expression
+    public class Variable : Expression, INumericExpression
     {
         /// <summary>The name of the variable.</summary>
         public string Name { get; set; }
