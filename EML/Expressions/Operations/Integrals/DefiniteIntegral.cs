@@ -11,16 +11,16 @@ namespace EML.Expressions.Operations.Integrals
     public class DefiniteIntegral : Integral
     {
         /// <summary>The start of the definite integral.</summary>
-        public RealNumberExpression Start;
+        public RealINumericExpression Start;
         /// <summary>The end of the definite integral.</summary>
-        public RealNumberExpression End;
+        public RealINumericExpression End;
 
         /// <summary>Creates a new instance of <seealso cref="DefiniteIntegral"/>.</summary>
         /// <param name="start">The start of the definite integral.</param>
         /// <param name="end">The end of the definite integral.</param>
         /// <param name="function">The function of the definite integral.</param>
         /// <param name="variableName">The variable to take into account while performing the integration.</param>
-        public DefiniteIntegral(RealNumberExpression start, RealNumberExpression end, Function function, string variableName)
+        public DefiniteIntegral(RealINumericExpression start, RealINumericExpression end, Function function, string variableName)
             : base(function, variableName)
         {
             Start = start;

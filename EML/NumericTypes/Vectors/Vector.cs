@@ -11,24 +11,24 @@ namespace EML.NumericTypes.Vectors
     public struct Vector
     {
         /// <summary>The values of the vector.</summary>
-        public RealNumberExpression[] Values;
+        public RealINumericExpression[] Values;
         /// <summary>Gets the number of dimensions of the vector.</summary>
         public int Dimensions => Values.Length;
 
         /// <summary>Creates a new instance of <seealso cref="Vector"/>.</summary>
         /// <param name="v">The values of the vector.</param>
-        public Vector(params RealNumberExpression[] v)
+        public Vector(params RealINumericExpression[] v)
         {
             Values = v;
         }
         /// <summary>Creates a new instance of <seealso cref="Vector"/>.</summary>
         /// <param name="start">The coordinates of the starting point.</param>
         /// <param name="end">The coordinates of the ending point.</param>
-        public Vector(RealNumberExpression[] start, RealNumberExpression[] end)
+        public Vector(RealINumericExpression[] start, RealINumericExpression[] end)
         {
             if (start.Length == end.Length)
             {
-                RealNumberExpression[] v = new RealNumberExpression[start.Length];
+                RealINumericExpression[] v = new RealINumericExpression[start.Length];
                 for (int i = 0; i < v.Length; i++)
                     v[i] = end[i] - start[i];
                 Values = v;
@@ -40,7 +40,7 @@ namespace EML.NumericTypes.Vectors
         {
             if (left.Dimensions == right.Dimensions)
             {
-                Vector v = new Vector(new RealNumberExpression[left.Dimensions]);
+                Vector v = new Vector(new RealINumericExpression[left.Dimensions]);
                 for (int i = 0; i < v.Dimensions; i++)
                     v[i] = left[i] + right[i];
                 return v;
@@ -51,7 +51,7 @@ namespace EML.NumericTypes.Vectors
         {
             if (left.Dimensions == right.Dimensions)
             {
-                Vector v = new Vector(new RealNumberExpression[left.Dimensions]);
+                Vector v = new Vector(new RealINumericExpression[left.Dimensions]);
                 for (int i = 0; i < v.Dimensions; i++)
                     v[i] = left[i] - right[i];
                 return v;
@@ -61,7 +61,7 @@ namespace EML.NumericTypes.Vectors
 
         /// <summary>Gets the value of the vector at the specified dimension.</summary>
         /// <param name="i">The dimension to get the value of the vector.</param>
-        public RealNumberExpression this[int i]
+        public RealINumericExpression this[int i]
         {
             get => Values[i];
             set => Values[i] = value;

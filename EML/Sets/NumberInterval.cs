@@ -14,12 +14,12 @@ namespace EML.Sets
     {
         public ISpecialNumberSet IntervalDomain { get; set; }
         public bool IsCompleteIntervalDomain { get; set; }
-        public NumberExpression Left { get; set; }
-        public NumberExpression Right { get; set; }
+        public INumericExpression Left { get; set; }
+        public INumericExpression Right { get; set; }
         public bool ClosedLeft { get; set; }
         public bool ClosedRight { get; set; }
 
-        public RealNumberInterval(NumberExpression left, NumberExpression right, bool closedLeft, bool closedRight)
+        public RealNumberInterval(INumericExpression left, INumericExpression right, bool closedLeft, bool closedRight)
         {
             IntervalDomain = new Real();
             IsCompleteIntervalDomain = false;
@@ -28,7 +28,7 @@ namespace EML.Sets
             ClosedLeft = closedLeft;
             ClosedRight = closedRight;
         }
-        public RealNumberInterval(NumberExpression left, NumberExpression right, bool closedLeft, bool closedRight, ISpecialNumberSet s)
+        public RealNumberInterval(INumericExpression left, INumericExpression right, bool closedLeft, bool closedRight, ISpecialNumberSet s)
         {
             IntervalDomain = s;
             IsCompleteIntervalDomain = false;
