@@ -50,6 +50,7 @@
     <Compile Include="Expressions\Constants\e.cs" />
     <Compile Include="Expressions\Constants\RealConstant.cs" />
     <Compile Include="Expressions\INumericExpression.cs" />
+    <Compile Include="Expressions\IRealNumericExpression.cs" />
     <Compile Include="Expressions\Operations\Advanced\ConditionalSummation.cs" />
     <Compile Include="Expressions\Operations\Advanced\Limit.cs" />
     <Compile Include="Expressions\Operations\Advanced\SequentialProduct.cs" />
